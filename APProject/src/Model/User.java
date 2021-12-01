@@ -1,58 +1,95 @@
 package Model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
 public class User {
-    private String password ;
-    private String username ;
-    private String email ;
-    private int id ;
-    private ArrayList<Team> userTeams ;
-    private ArrayList<Task> userTasks ;
+    private Integer id;
+    private String username;
+    private String password;
+    private String email;
+    private String role;
+    private List<Log> logs = new ArrayList<>();
+    private List<Team> teams = new ArrayList<>();
+    private List<Message> messages = new ArrayList<>();
+    private List<Task> tasks = new ArrayList<>();
 
-    public ArrayList<Team> getUserTeams() {
-        return userTeams;
-    }
-
-    public ArrayList<Task> getUserTasks() {
-        return userTasks;
-    }
-
-    private ArrayList<String> notifications ;
-    public ArrayList<String> showUserNotifications() {
-        return notifications ;
-    }
-    private ArrayList<String> logs;
-    public ArrayList<String> showUserLogs() {return logs;}
-    public void addUserToTask(Task task) {
-
-    }
-    public void addUserToTeam(Team team) {
-
-    }
-    public User(String password, String username, String email) {
-        this.password = password;
+    public User(String username, String password, String email) {
         this.username = username;
+        this.password = password;
         this.email = email;
     }
 
-    public int generateId() {
-        return id ;
+    public Integer getId() {
+        return id;
     }
-    public String getPassword() {
-        return password;
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getUsername() {
         return username;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getEmail() {
         return email;
     }
 
-    public int getId() {
-        return id;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public List<Log> getLogs() {
+        return logs;
+    }
+
+    public void setLogs(List<Log> logs) {
+        this.logs = logs;
+    }
+
+    public List<Team> getTeams() {
+        return teams;
+    }
+
+    public void setTeams(List<Team> teams) {
+        this.teams = teams;
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
     }
 }
+
