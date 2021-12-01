@@ -1,21 +1,39 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Board {
-  BoardType boardType ;
-  private ArrayList<Task> taskList ;
-  private void addTask(Task task) {
+    private Integer id;
+    private String name;
+    private Team team;
+    private List<Category> categories = new ArrayList<>();
+    private Map<Integer, Integer> tasksCategory = new HashMap<>();
 
+    public Board(String name, Team team) {
+        this.name = name;
+        this.team = team;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+  public List<Category> getCategories() {
+    return categories;
   }
-  private String showTasks(ArrayList<Task> tasks) {
 
-  }
-  private void showTasksDone() {
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
 
-  }
-  private void showTasksFail() {
+    public Map<Integer, Integer> getTasksCategory() {
+        return tasksCategory;
+    }
 
-  }
-
+    public void setTasksCategory(Map<Integer, Integer> tasksCategory) {
+        this.tasksCategory = tasksCategory;
+    }
 }

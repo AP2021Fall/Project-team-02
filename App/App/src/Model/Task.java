@@ -1,94 +1,93 @@
 package Model;
 
-import java.lang.reflect.Array;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
 public class Task {
-    private int id ;
-    private Board taskBoard ;
-    private String title ;
+    private Integer id;
+    private String title;
     private String description;
-    private Priority taskPriority ;
-    private LocalDateTime taskCreationDate ;
-    private LocalDateTime taskDeadLineDate ;
-    private ArrayList<String> assignedUsersList;
-    private HashMap<String, String> commentsList;
+    private String priority;
+    private String creationDate;
+    private String deadLine;
+    private List<User> users = new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
+    private Category category;
 
-    public void foceTaskNext() {
-
-    }
-
-    public void forceTask() {
-
-    }
-
-    public void addUser(String user) {
-
-    }
-
-    public void setTitle(String title) {
+    public Task(String title) {
         this.title = title;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setTaskPriority(Priority taskPriority) {
-        this.taskPriority = taskPriority;
-    }
-
-    public void setTaskCreationDate(LocalDateTime taskCreationDate) {
-        this.taskCreationDate = taskCreationDate;
-    }
-
-    public void setTaskDeadLineDate(LocalDateTime taskDeadLineDate) {
-        this.taskDeadLineDate = taskDeadLineDate;
-    }
-
-    public void setAssignedUsersList(ArrayList<String> assignedUsersList) {
-        this.assignedUsersList = assignedUsersList;
-    }
-
-    public void setCommentsList(HashMap<String, String> commentsList) {
-        this.commentsList = commentsList;
-    }
-
-    private int generateId() {
-
-    }
-
-    public int getId() {
+    public Integer getId() {
         return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getTitle() {
         return title;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public String getDescription() {
         return description;
     }
 
-    public Priority getTaskPriority() {
-        return taskPriority;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public LocalDateTime getTaskCreationDate() {
-        return taskCreationDate;
+    public String getPriority() {
+        return priority;
     }
 
-    public LocalDateTime getTaskDeadLineDate() {
-        return taskDeadLineDate;
+    public void setPriority(String priority) {
+        this.priority = priority;
     }
 
-    public ArrayList<String> getAssignedUsersList() {
-        return assignedUsersList;
+    public String getCreationDate() {
+        return creationDate;
     }
 
-    public HashMap<String, String> getCommentsList() {
-        return commentsList;
+    public void setCreationDate(String creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public String getDeadLine() {
+        return deadLine;
+    }
+
+    public void setDeadLine(String deadLine) {
+        this.deadLine = deadLine;
+    }
+
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }
+
