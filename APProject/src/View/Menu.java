@@ -29,7 +29,7 @@ public class Menu {
         this.scanner = scanner;
     }
     public void show(){
-        System.out.println("salam ");
+        System.out.println("salam   ");
     }
     public void execute(){
 
