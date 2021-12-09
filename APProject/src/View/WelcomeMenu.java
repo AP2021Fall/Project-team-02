@@ -20,11 +20,11 @@ public class WelcomeMenu extends Menu {
         String input = getInput();
         String[] inputParse = parseInput(input);
         if (inputParse[1].equalsIgnoreCase("create")) {
-            System.out.println(create(username, password, password));
+            System.out.println(createUser(inputParse[2], inputParse[3], inputParse[4] , inputParse[5]));
             // if on create to see its successfully done or not
         }
         else if(inputParse[1].equalsIgnoreCase("login")) {
-            System.out.println(login(username, password, password));
+            System.out.println(login(inputParse[2], inputParse[3]));
             // if on create to see its successfully done or not
         }
         nextMenu.show();
