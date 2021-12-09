@@ -1,13 +1,27 @@
 package Controller;
 
+import Controller.dto.ChangePasswordResponse;
+import Controller.dto.ChangeUsernameResponse;
 import Model.*;
+import Repository.*;
+
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Controller {
+    public static BoardRepository boardRepository = new BoardRepository();
+    public static CategoryRepository categoryRepository = new CategoryRepository();
+    public static CommentRepository CommentRepository = new CommentRepository();
+    public static LogRepository logRepository = new LogRepository();
+    public static MessageRepository messageRepository = new MessageRepository();
+    public static TaskRepository taskRepository = new TaskRepository();
+    public static TeamRepository teamRepository = new TeamRepository();
+    public static UserRepository userRepository = new UserRepository();
 
-//    public void getInput(String input) {
+    //    public void getInput(String input) {
 //
 //
 //    }
@@ -223,31 +237,92 @@ public class Controller {
 //    public String showTeams(User activeUser) {
 //
 //    }
-//    public void changeUsername(String oldUsername , String newUsername) {
-//
-//    }
-//
-//    public void changePassword(String username , String oldPassword ,
-//                               String newPassword ) {
-//
-//    }
-//
-//
-//    public void createUser(String username ,String password , String email) {
-//
-//    }
-//    public boolean checkPasswordFormat(String username) {
-//
-//    }
-//    public boolean checkEmailFormat(String email) {
-//
-//    }
-//    public boolean checkUserNameFormat(String username) {
-//
-//    }
-//    public boolean checkUsernameExists(String username) {
-//
-//    }
+    public ChangeUsernameResponse changeUsername(String oldUsername , String newUsername) {
+        User user = userRepository.findByUsername(oldUsername);
+        if(user != null) {
+            if (newUsername.length() < 4)
+                return new ChangeUsernameResponse(false, "");
+
+            if (userRepository.findByUsername(newUsername) != null)
+                return new ChangeUsernameResponse(false, "Username already taken!");
+
+            if (checkUserNameFormat(newUsername)) {
+                if (user.getUsername().equals(newUsername))
+                    return new ChangeUsernameResponse(false, "");
+                user.setUsername(newUsername);
+                return new ChangeUsernameResponse(true, "");
+            } else
+                return new ChangeUsernameResponse(false, "");
+        }
+        return null;
+    }
+
+    public ChangePasswordResponse changePassword(String username , String oldPassword ,
+                                                 String newPassword ) {
+        User user = userRepository.findByUsername(username);
+        if(user != null) {
+            if(user.getPassword().equals(oldPassword)) {
+                if(oldPassword.equals(newPassword)){
+                    return new ChangePasswordResponse(false, "Please type a new password!");
+                }
+                if (checkPasswordFormat(newPassword)) {
+                    user.setPassword(newPassword);
+                    return  new ChangePasswordResponse(true, "");
+                } else
+                    return new ChangePasswordResponse(false, "Please choose a strong password (Containing at least 8 characters including 1 digit and 1 capital letter)");
+            } else
+                return new ChangePasswordResponse(false, "wrong old password!");
+        }
+        return null;
+    }
+
+    public String createUser(String username, String password, String confirmPassword, String email) {
+        if (checkUsernameExists(username)) {
+            if (password.equals(confirmPassword)) {
+                if (CheckEmailExists(email)) {
+                    if (checkUserNameFormat(username)) {
+                        if (checkEmailFormat(email)) {
+                            if (checkPasswordFormat(password)) {
+                                User user = new User(username, password, email);
+                                userRepository.createUser(user);
+                                return "User created successfully!";
+                            } else
+                                return "Please choose a strong password (Containing at least 8 characters including 1 digit and 1 capital letter)";
+                        } else
+                            return "Email address is invalid!";
+                    } else
+                        return ""; //????????
+                } else
+                    return "User with this email already exists!";
+            } else
+                return "Your passwords are not the same!";
+        } else
+            return ""; //?????????
+    }
+
+    public boolean checkPasswordFormat(String password) {
+        Pattern passwordPattern = Pattern.compile(""); //????????
+        return passwordPattern.matcher(password).matches() && password.length() >= 8;
+    }
+
+    public boolean checkEmailFormat(String email) {
+        Pattern gmailPattern = Pattern.compile("^[\\w]+gmail.com$");
+        Pattern yahooPattern = Pattern.compile("^[\\w]+yahoo.com$");
+        return yahooPattern.matcher(email).matches() || gmailPattern.matcher(email).matches();
+    }
+
+    public boolean checkUserNameFormat(String username) {
+        Pattern usernamePattern = Pattern.compile("^[\\w]$");
+        return usernamePattern.matcher(username).matches();
+    }
+
+    public boolean checkUsernameExists(String username) {
+        return userRepository.existUsername(username);
+    }
+
+    public boolean CheckEmailExists(String email) {
+        return userRepository.existEmail(email);
+    }
 //    public boolean checkPassword(String username ,String password) {
 //
 //    }
