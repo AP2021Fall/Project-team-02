@@ -19,6 +19,12 @@ public class Team {
         this.name = name;
     }
 
+    public Team(Integer id, String name, boolean active) {
+        this.id = id;
+        this.name = name;
+        this.active = active;
+    }
+
     public Integer getId() {
         return id;
     }

@@ -18,6 +18,15 @@ public class Task {
         this.title = title;
     }
 
+    public Task(Integer id, String title, String description, String priority, String creationDate, String deadLine) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.priority = priority;
+        this.creationDate = creationDate;
+        this.deadLine = deadLine;
+    }
+
     public Integer getId() {
         return id;
     }

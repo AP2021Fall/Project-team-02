@@ -12,6 +12,13 @@ public class Comment {
         this.message = message;
     }
 
+    public Comment(Integer id, Integer userId, Integer taskId, String message) {
+        this.id = id;
+        this.userId = userId;
+        this.taskId = taskId;
+        this.message = message;
+    }
+
     public Integer getTaskId() {
         return taskId;
     }

@@ -5,11 +5,20 @@ public class Message {
     private String txt;
     private String type;
     private Integer senderId;
+    private Integer receiverId;
 
-    public Message(String message, String type, Integer senderId) {
-        this.txt = message;
+    public Message(String txt, String type, Integer senderId) {
+        this.txt = txt;
         this.type = type;
         this.senderId = senderId;
+    }
+
+    public Message(Integer id, String txt, String type, Integer senderId, Integer receiverId) {
+        this.id = id;
+        this.txt = txt;
+        this.type = type;
+        this.senderId = senderId;
+        this.receiverId = receiverId;
     }
 
     public Integer getId() {
@@ -43,5 +52,14 @@ public class Message {
     public void setSenderId(Integer senderId) {
         this.senderId = senderId;
     }
-}
 
+    public Integer getReceiverId() {
+        return receiverId;
+    }
+
+    public void setReceiverId(Integer receiverId) {
+        this.receiverId = receiverId;
+    }
+
+
+}

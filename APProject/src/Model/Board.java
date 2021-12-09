@@ -17,13 +17,38 @@ public class Board {
         this.team = team;
     }
 
+    public Board(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Integer getId() {
         return id;
     }
 
-  public List<Category> getCategories() {
-    return categories;
-  }
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
 
     public void setCategories(List<Category> categories) {
         this.categories = categories;
@@ -37,3 +62,4 @@ public class Board {
         this.tasksCategory = tasksCategory;
     }
 }
+

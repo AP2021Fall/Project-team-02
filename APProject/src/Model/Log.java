@@ -10,6 +10,12 @@ public class Log {
         this.userId = userId;
     }
 
+    public Log(Integer id, String date, Integer userId) {
+        this.id = id;
+        this.date = date;
+        this.userId = userId;
+    }
+
     public Integer getId() {
         return id;
     }

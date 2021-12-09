@@ -1,5 +1,7 @@
 package Model;
 
+import Controller.dto.ShowProfileResponse;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +11,9 @@ public class User {
     private String password;
     private String email;
     private String role;
+    private String fullName;
+    private Boolean isLeader;
+    private String birthDate;
     private List<Log> logs = new ArrayList<>();
     private List<Team> teams = new ArrayList<>();
     private List<Message> messages = new ArrayList<>();
@@ -18,6 +23,17 @@ public class User {
         this.username = username;
         this.password = password;
         this.email = email;
+    }
+
+    public User(Integer id, String username, String password, String email, String role, String fullName, Boolean isLeader, String birthDate) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.fullName = fullName;
+        this.isLeader = isLeader;
+        this.birthDate = birthDate;
     }
 
     public Integer getId() {
@@ -60,6 +76,30 @@ public class User {
         this.role = role;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public Boolean getLeader() {
+        return isLeader;
+    }
+
+    public void setLeader(Boolean leader) {
+        isLeader = leader;
+    }
+
+    public String getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
+    }
+
     public List<Log> getLogs() {
         return logs;
     }
@@ -90,6 +130,12 @@ public class User {
 
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    public ShowProfileResponse profile() {
+        Integer totalScore = teams.stream().map(t -> (t.getUsersScore().getOrDefault(id, 0))).mapToInt(Integer::intValue).sum();
+
+        return new ShowProfileResponse(fullName, username, birthDate, email, role, totalScore);
     }
 }
 
