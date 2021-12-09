@@ -5,8 +5,9 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class Menu {
+    protected Menu nextMenu = this;
     protected Scanner scanner = new Scanner(System.in) ;
-    private String name;
+    protected String name;
     protected Menu parent;
     protected HashMap<Integer , Menu> subMenus ;
     static protected ArrayList<Menu> allMenus;
@@ -45,6 +46,9 @@ public class Menu {
     protected String[] parseInput(String input) {
         return input.split("\\s+");
     }
+    public void setNextMenu(Menu nextMenu) {
+        this.nextMenu = nextMenu;
+    }
     public void show(){
         System.out.println("--------" + this.name + "--------");
         if (this.parent != null) {
@@ -55,7 +59,6 @@ public class Menu {
         }
     }
     public void execute() {
-        Menu nextMenu = this;
         String input = getInput() ;
         String[] inputParse = parseInput(input) ;
         if (inputParse[0].equalsIgnoreCase("exit")) {
