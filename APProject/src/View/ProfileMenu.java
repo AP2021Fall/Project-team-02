@@ -29,7 +29,13 @@ public class ProfileMenu extends Menu{
         if(inputParse[0].trim().equalsIgnoreCase("back")) {
             this.nextMenu = parent ;
         }
-        // ...
+        else if(inputParse[1].trim().equalsIgnoreCase("change") && (inputParse.length == 4)) {
+            System.out.println(changePassword(inputParse[2] , inputParse[3]));
+            // ..
+        }
+        else if(inputParse[1].trim().equalsIgnoreCase("change")) {
+            System.out.println(changeUsername(inputParse[2]));
+        }
         else if(inputParse[1].trim().equalsIgnoreCase("showTeams")) {
             System.out.println(showTeams());
             this.nextMenu = parent ;
