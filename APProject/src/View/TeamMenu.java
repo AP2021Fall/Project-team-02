@@ -27,6 +27,7 @@ public class TeamMenu extends Menu{
             // ifs
         }
         System.out.println("Use to see team info :") ;
+        System.out.println("board Menu");
         System.out.println("scoreboard show");
         System.out.println("roadmap show");
         System.out.println("chatroom show");
