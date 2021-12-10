@@ -35,6 +35,7 @@ public class ProfileMenu extends Menu{
         }
         else if(inputParse[1].trim().equalsIgnoreCase("change")) {
             System.out.println(changeUsername(inputParse[2]));
+            // ..
         }
         else if(inputParse[1].trim().equalsIgnoreCase("showTeams")) {
             System.out.println(showTeams());
