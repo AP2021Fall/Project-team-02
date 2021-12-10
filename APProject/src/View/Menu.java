@@ -46,6 +46,9 @@ public class Menu {
     protected String[] parseInput(String input) {
         return input.split("\\s+");
     }
+    protected String[] parseInputUsernames(String input) {
+        return input.split(",") ;
+    }
     public void setNextMenu(Menu nextMenu) {
         this.nextMenu = nextMenu;
     }
