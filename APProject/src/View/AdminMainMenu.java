@@ -17,7 +17,8 @@ public class AdminMainMenu extends Menu {
         System.out.println("send notification <notification> team <teamName>");
         System.out.println("show scoreboard team <team>");
         System.out.println("show pendingTeams") ;
-        // Code
+        System.out.println("accept teams <team names>");
+        System.out.println("reject teams <team names>");
         System.out.println("exit to close the program");
     }
 
@@ -25,6 +26,6 @@ public class AdminMainMenu extends Menu {
     public void execute() {
         String input = getInput() ;
         String[] inputParse = parseInput(input) ;
-
+       // ...
     }
 }
