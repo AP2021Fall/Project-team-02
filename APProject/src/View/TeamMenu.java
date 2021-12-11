@@ -33,6 +33,12 @@ public class TeamMenu extends Menu{
         System.out.println("chatroom show");
         System.out.println("show tasks");
         System.out.println("show task id <id>");
+        if(userAdmin()) {
+            System.out.println("Admin menu: ");
+            System.out.println("-------------------------------");
+            System.out.println("sudo show all tasks");
+            System.out.println();
+        }
         String input2 = getInput() ;
         String[] inputParse2 = parseInput(input2) ;
         if(inputParse2[0].trim().equalsIgnoreCase("back")) {

@@ -13,6 +13,13 @@ public class MainMenu extends Menu{
         System.out.println("Tasks Page");
         System.out.println("Calendar Menu");
         System.out.println("Notification Bar");
+        if(userAdmin()) {
+            System.out.println("-----------------------------------");
+            System.out.println("admin commands: ");
+            System.out.println("show teams");
+            System.out.println("show team <team name or team number>");
+            System.out.println("create team <teamName>");
+        }
     }
 
     public void execute() {
@@ -35,6 +42,16 @@ public class MainMenu extends Menu{
         }
         else if(inputParse[1].trim().equalsIgnoreCase("notification")) {
             this.nextMenu = NotificationBar ;
+        }
+        else if(inputParse[1].trim().equalsIgnoreCase("teams")) {
+            System.out.println(showAllTeams());
+            // if
+        }
+        else if(inputParse[1].trim().equalsIgnoreCase("team")) {
+            // bug!
+        }
+        else if(inputParse[0].trim().equalsIgnoreCase("create")) {
+            System.out.println(createTeam(inputParse[2]));
         }
         else {
             System.out.println("Your input is not valid");
