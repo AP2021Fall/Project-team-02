@@ -152,14 +152,24 @@ public class Regex {
         return matcher.find();
     }
     public static boolean signUp(String input) {
-        pattern = Pattern.compile("^(User create username .+ password .+ confirmPassword .+ email .+)$");
+        pattern = Pattern.compile("^(User create username .+ password .+ confirmPassword .+ email .+)$" , Pattern.CASE_INSENSITIVE);
         matcher = pattern.matcher(input) ;
         return matcher.find();
     }
     public static boolean logIn(String input) {
-        pattern = Pattern.compile("^(user login username .+ password .+)$");
+        pattern = Pattern.compile("^(user login username .+ password .+)$" , Pattern.CASE_INSENSITIVE);
         matcher = pattern.matcher(input) ;
         return matcher.find();
+    }
+    public static boolean errorUsernameExists(String input) {
+        pattern = Pattern.compile("^(user with username .+ already exists!)$" , Pattern.CASE_INSENSITIVE) ;
+        matcher = pattern.matcher(input) ;
+        return matcher.find();
+    }
+    public static boolean errorUsernameNotExists(String input) {
+        pattern = Pattern.compile("^(There is not any user with username: .+!)$");
+        matcher = pattern.matcher(input) ;
+        return matcher.find() ;
     }
 
 }

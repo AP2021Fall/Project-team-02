@@ -20,12 +20,36 @@ public class WelcomeMenu extends Menu {
         String input = getInput();
         String[] inputParse = parseInput(input);
         if (Regex.SignUp(input)) {
-            System.out.println(createUser(inputParse[3], inputParse[5], inputParse[7] , inputParse[9]));
-            // if on create to see its successfully done or not
+            String outPut = createUser(inputParse[3], inputParse[5], inputParse[7] , inputParse[9]) ;
+            System.out.println(outPut) ;
+            if(outPut.equalsIgnoreCase("user created successfully!")) {
+                nextMenu = new MainMenu("mainMenu" , this) ;
+            }
+            else if(Regex.errorUsernameExists(outPut)) {
+                nextMenu = this ;
+            }
+            else if(outPut.equalsIgnoreCase("Your passwords are not the same!")) {
+                nextMenu = this ;
+            }
+            else if(outPut.equalsIgnoreCase("User with this email already exists!")) {
+                nextMenu = this ;
+            }
+            else if(outPut.equalsIgnoreCase("Email address is invalid!")) {
+                nextMenu = this ;
+            }
         }
         else if(Regex.logIn(input)) {
-            System.out.println(login(inputParse[3] , inputParse[5]));
-            // if on create to see its successfully done or not
+            String outPut = login(inputParse[3] , inputParse[5]);
+            System.out.println(outPut);
+            if(outPut.equalsIgnoreCase("user logged in successfully!")) {
+                nextMenu = new MainMenu("mainMenu" , this) ;
+            }
+            if(Regex.errorUsernameExists(outPut)) {
+                nextMenu = this ;
+            }
+            if(outPut.equalsIgnoreCase("Username and password didn't match!")) {
+                nextMenu = this ;
+            }
         }
         nextMenu.show();
         nextMenu.execute();
