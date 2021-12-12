@@ -5,7 +5,9 @@ import Repository.table.CategoryTable;
 
 import java.sql.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class CategoryRepository extends AbstractDataBaseConnector{
 
@@ -59,4 +61,13 @@ public class CategoryRepository extends AbstractDataBaseConnector{
     String getTableName() {
         return "categories";
     }
+
+    public void removeByBoard(Integer boardId) {
+        List<Category> toRemove = categoriesById.values().stream().filter(c -> c.getBoard().getId().equals(boardId)).collect(Collectors.toList());
+        toRemove.forEach(c -> {
+            categoriesById.remove(c.getId());
+            categoryTablesById.remove(c.getId());
+        });
+    }
+
 }

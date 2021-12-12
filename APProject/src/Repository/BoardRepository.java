@@ -61,4 +61,10 @@ public class BoardRepository extends AbstractDataBaseConnector{
     String getTableName() {
         return "boards";
     }
+
+    public void remove(Board board) {
+        boarsById.remove(board.getId());
+        boarTablesById.remove(board.getId());
+    }
+
 }
