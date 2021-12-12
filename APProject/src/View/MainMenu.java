@@ -30,32 +30,33 @@ public class MainMenu extends Menu{
         }
         else if(Regex.mainMenuEnterMenu(input)) {
             if(inputParse[1].trim().equalsIgnoreCase("profile")) {
-                this.nextMenu = ProfileMenu ;
+                this.nextMenu = new ProfileMenu("profileMenu" , this) ;
             }
             else if(inputParse[1].trim().equalsIgnoreCase("team")) {
-                this.nextMenu = TeamMenu ;
+                this.nextMenu = new TeamMenu("profileMenu" , this) ;
             }
             else if(inputParse[1].trim().equalsIgnoreCase("tasks")) {
-                this.nextMenu = TasksPage ;
+                this.nextMenu = new TasksPage("taskMenu" , this) ;
             }
             else if(inputParse[1].trim().equalsIgnoreCase("calender")) {
-                this.nextMenu = CalendarMenu ;
+                this.nextMenu = new CalendarMenu("calendarMenu" , this) ;
             }
             else if(inputParse[1].trim().equalsIgnoreCase("notification")) {
-                this.nextMenu = NotificationBar ;
+                this.nextMenu = new NotificationBar("notifications" , this) ;
             }
         }
         else if(Regex.leaderShowTeam(input)) {
             System.out.println(showTeams());
-            // if
+            this.nextMenu = this ;
         }
         else if(Regex.leaderShowTeams(input)) {
-            System.out.println(showTeam(inputParse[2]));
-            // if
+            String outPut = showTeam(inputParse[2]) ;
+            System.out.println(outPut);
+            this.nextMenu = this ;
         }
         else if(Regex.leaderCreateTeam(input)) {
             System.out.println(createTeam(inputParse[2]));
-            // if
+            this.nextMenu = this ;
         }
         else {
             System.out.println("Your input is not valid");
