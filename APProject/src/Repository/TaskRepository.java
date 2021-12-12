@@ -7,7 +7,9 @@ import Repository.table.TaskTable;
 
 import java.sql.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class TaskRepository extends AbstractDataBaseConnector{
 
@@ -81,4 +83,14 @@ public class TaskRepository extends AbstractDataBaseConnector{
     public Task findById(int taskId) {
         return tasksById.get(taskId);
     }
+
+    public List<Integer> removeByBoard(Integer boardId) {
+        List<Task> toRemove = tasksById.values().stream().filter(t -> t.getCategory().getBoard().getId().equals(boardId)).collect(Collectors.toList());
+        toRemove.forEach(t -> {
+            tasksById.remove(t.getId());
+            taskTablesById.remove(t.getId());
+        });
+        return toRemove.stream().map(Task::getId).collect(Collectors.toList());
+    }
+
 }
