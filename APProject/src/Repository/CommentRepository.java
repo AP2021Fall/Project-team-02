@@ -6,7 +6,9 @@ import Model.User;
 
 import java.sql.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class CommentRepository extends AbstractDataBaseConnector{
 
@@ -54,4 +56,12 @@ public class CommentRepository extends AbstractDataBaseConnector{
     String getTableName() {
         return "comments";
     }
+
+    public void removeByTaskId(List<Integer> taskIds) {
+        List<Integer> toRemove = commentsById.values().stream().filter(c -> taskIds.contains(c.getTaskId()))
+                .map(Comment::getId).collect(Collectors.toList());
+
+        commentsById.remove(toRemove);
+    }
+
 }
