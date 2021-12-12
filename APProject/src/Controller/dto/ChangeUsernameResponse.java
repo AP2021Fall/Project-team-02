@@ -2,10 +2,12 @@ package Controller.dto;
 
 public class ChangeUsernameResponse {
     private boolean successful;
+    private String newUsername;
     private String message;
 
-    public ChangeUsernameResponse(boolean successful, String message) {
+    public ChangeUsernameResponse(boolean successful, String newUsername, String message) {
         this.successful = successful;
+        this.newUsername = newUsername;
         this.message = message;
     }
 
@@ -17,6 +19,14 @@ public class ChangeUsernameResponse {
         this.successful = successful;
     }
 
+    public String getNewUsername() {
+        return newUsername;
+    }
+
+    public void setNewUsername(String newUsername) {
+        this.newUsername = newUsername;
+    }
+
     public String getMessage() {
         return message;
     }
@@ -24,4 +34,5 @@ public class ChangeUsernameResponse {
     public void setMessage(String message) {
         this.message = message;
     }
+
 }
