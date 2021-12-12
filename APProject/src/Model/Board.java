@@ -11,6 +11,7 @@ public class Board {
     private Team team;
     private List<Category> categories = new ArrayList<>();
     private Map<Integer, Integer> tasksCategory = new HashMap<>();
+    private Boolean isActive;
 
     public Board(String name, Team team) {
         this.name = name;
@@ -60,6 +61,14 @@ public class Board {
 
     public void setTasksCategory(Map<Integer, Integer> tasksCategory) {
         this.tasksCategory = tasksCategory;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 }
 
