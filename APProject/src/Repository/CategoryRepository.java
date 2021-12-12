@@ -69,5 +69,9 @@ public class CategoryRepository extends AbstractDataBaseConnector{
             categoryTablesById.remove(c.getId());
         });
     }
+    public void createCategory(Category category) {
+        category.setId(IdGenerator.getNewId());
+        categoriesById.put(category.getId(), category);
+    }
 
 }
