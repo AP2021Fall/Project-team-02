@@ -29,6 +29,7 @@ public class MainMenu extends Menu{
             this.nextMenu = parent ;
         }
         else if(Regex.mainMenuEnterMenu(input)) {
+
             if(inputParse[1].trim().equalsIgnoreCase("profile")) {
                 this.nextMenu = new ProfileMenu("profileMenu" , this) ;
             }
