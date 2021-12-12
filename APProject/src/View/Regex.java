@@ -117,8 +117,49 @@ public class Regex {
         return matcher.find();
     }
     public static boolean calenderMenu(String input) {
-        pattern = Pattern.compile("^(calendar show deadline)$") ;
+        pattern = Pattern.compile("^(calendar show deadline)$" , Pattern.CASE_INSENSITIVE) ;
         matcher = pattern.matcher(input) ;
         return matcher.find();
     }
+    public static boolean changeTitle(String input) {
+        pattern = Pattern.compile("^(edit task id <id> newtitle)$" , Pattern.CASE_INSENSITIVE) ;
+        matcher = pattern.matcher(input) ;
+        return matcher.find();
+    }
+    public static boolean changeDescription(String input) {
+        pattern = Pattern.compile("^(edit task id .+ description .+)$" , Pattern.CASE_INSENSITIVE) ;
+        matcher = pattern.matcher(input) ;
+        return matcher.find();
+    }
+    public static boolean changePriority(String input) {
+        pattern = Pattern.compile("^(edit task id .+ priority .+)$" , Pattern.CASE_INSENSITIVE) ;
+        matcher = pattern.matcher(input) ;
+        return matcher.find();
+    }
+    public static boolean changeDeadline(String input) {
+        pattern = Pattern.compile("^(edit task id .+ deadLine .+)$" , Pattern.CASE_INSENSITIVE) ;
+        matcher = pattern.matcher(input) ;
+        return matcher.find();
+    }
+    public static boolean removeUser(String input) {
+        pattern = Pattern.compile("^(edit task id .+ assignedUsers .+ remove)$" , Pattern.CASE_INSENSITIVE) ;
+        matcher = pattern.matcher(input) ;
+        return matcher.find();
+    }
+    public static boolean addUser(String input) {
+        pattern = Pattern.compile("^(edit task id .+ assignedUsers .+ add)$" , Pattern.CASE_INSENSITIVE) ;
+        matcher = pattern.matcher(input) ;
+        return matcher.find();
+    }
+    public static boolean signUp(String input) {
+        pattern = Pattern.compile("^(User create username .+ password .+ confirmPassword .+ email .+)$");
+        matcher = pattern.matcher(input) ;
+        return matcher.find();
+    }
+    public static boolean logIn(String input) {
+        pattern = Pattern.compile("^(user login username .+ password .+)$");
+        matcher = pattern.matcher(input) ;
+        return matcher.find();
+    }
+
 }

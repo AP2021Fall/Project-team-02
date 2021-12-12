@@ -108,7 +108,7 @@ public class TeamMenu extends Menu{
             System.out.println(sendNotificationToMember(inputParse2[2],inputParse2[4]));
             this.nextMenu = this ;
         }
-        else if(inputParse[0].trim().equalsIgnoreCase("notification") && inputParse[3].trim().equalsIgnoreCase("teamname")) {
+        else if(inputParse[0].trim().equalsIgnoreCase("notification") && inputParse[3].trim().equalsIgnoreCase("teamName")) {
             System.out.println(sendNotificationToMember(inputParse2[2],inputParse2[4]));
             this.nextMenu = this ;
         }

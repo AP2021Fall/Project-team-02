@@ -11,20 +11,20 @@ public class WelcomeMenu extends Menu {
         System.out.println("I Hope You Enjoy");
         System.out.println("--------------" + this.name + "--------------");
         System.out.println("Use This Format To SignUp: " +
-                "User create <username> <password> <Confirm password> <email>");
+                "User create username <username> password <password> confirmPassword <Confirm password> email <email>");
         System.out.println("Use This Format To Login : " +
-                "user login <username> <password>");
+                "user login username <username> password <password>");
         System.out.println("Use Exit To Exit the Program");
     }
     public void execute() {
         String input = getInput();
         String[] inputParse = parseInput(input);
-        if (inputParse[1].equalsIgnoreCase("create")) {
-            System.out.println(createUser(inputParse[2], inputParse[3], inputParse[4] , inputParse[5]));
+        if (Regex.SignUp(input)) {
+            System.out.println(createUser(inputParse[3], inputParse[5], inputParse[7] , inputParse[9]));
             // if on create to see its successfully done or not
         }
-        else if(inputParse[1].equalsIgnoreCase("login")) {
-            System.out.println(login(inputParse[2], inputParse[3]));
+        else if(Regex.logIn(input)) {
+            System.out.println(login(inputParse[3] , inputParse[5]));
             // if on create to see its successfully done or not
         }
         nextMenu.show();
