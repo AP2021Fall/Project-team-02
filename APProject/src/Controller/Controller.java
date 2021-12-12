@@ -1,20 +1,18 @@
 package Controller;
 
-import Controller.dto.ChangePasswordResponse;
-import Controller.dto.ChangeUsernameResponse;
+import Controller.dto.*;
 import Model.*;
 import Repository.*;
 
-import java.text.NumberFormat;
-import java.time.LocalDateTime;
-import java.util.Scanner;
-import java.util.regex.Matcher;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Controller {
     public static BoardRepository boardRepository = new BoardRepository();
     public static CategoryRepository categoryRepository = new CategoryRepository();
-    public static CommentRepository CommentRepository = new CommentRepository();
+    public static CommentRepository commentRepository = new CommentRepository();
     public static LogRepository logRepository = new LogRepository();
     public static MessageRepository messageRepository = new MessageRepository();
     public static TaskRepository taskRepository = new TaskRepository();
@@ -88,25 +86,106 @@ public class Controller {
 //    public void addTaskToBoard(int taskId ,String boardName) {
 //
 //    }
-//    public void BoardDone(String BoardName) {
-//
-//    }
-//    public void removeActiveBoard(String activeBoard) {
+    public String doneBoard(String username, String teamName, String boardName) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            if (user.getLeader()) {
+                Team team = teamRepository.findByTeamName(teamName);
+                Optional<Board> teamBoard = team.getBoards().stream().filter(b -> b.getName().equals(boardName)).findAny();
+                if (teamBoard.isPresent()) {
+                    Board board = teamBoard.get();
+                    board.setActive(true);
+                } else {
+                    return "There is no board with this name";
+                }
+            }
+            return "You do not have the permission to do this action!";
+        }
+        return "user not found";
+    }
+
+    public String addCategoryToBoard(String username, String teamName, String boardName, String categoryName, Integer index) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            if (user.getLeader()) {
+                Team team = teamRepository.findByTeamName(teamName);
+                Optional<Board> teamBoard = team.getBoards().stream().filter(b -> b.getName().equals(boardName)).findAny();
+                if (teamBoard.isPresent()) {
+                    Board board = teamBoard.get();
+                    Optional<Category> categoryOptional = board.getCategories().stream().filter(c -> c.getName().equals(categoryName)).findAny();
+                    if (categoryOptional.isPresent())
+                        return "The name is already taken for a category!";
+
+                    Category category = new Category(categoryName, board);
+                    categoryRepository.createCategory(category);
+                    if (index == null)
+                        board.getCategories().add(category);
+                    else {
+                        if (board.getCategories().size() - 1 < index)
+                            return "wrong column!";
+                        board.getCategories().add(index, category);
+                    }
+                } else {
+                    return "There is no board with this name";
+                }
+            }
+            return "You do not have the permission to do this action!";
+        }
+        return "user not found";
+    }
+
+
+    //    public void removeActiveBoard(String activeBoard) {
 //
 //    }
 //    public void selectBoard(String activeBoard) {
 //
 //    }
-//    public void removeBoard(String boardName) {
+    public String removeBoard(String username, String teamName, String boardName) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            if (user.getLeader()) {
+                Team team = teamRepository.findByTeamName(teamName);
+                Optional<Board> teamBoard = team.getBoards().stream().filter(b -> b.getName().equals(boardName)).findAny();
+                if (teamBoard.isPresent()) {
+                    Board board = teamBoard.get();
+                    team.getBoards().remove(board);
+                    boardRepository.remove(board);
+                    categoryRepository.removeByBoard(board.getId());
+                    List<Integer> taskIds = taskRepository.removeByBoard(board.getId());
+                    commentRepository.removeByTaskId(taskIds);
+                } else {
+                    return "There is no board with this name";
+                }
+            }
+            return "You do not have the permission to do this action!";
+        }
+        return "user not found";
+    }
+
+    //    public boolean checkBoardExists(String boardName) {
 //
 //    }
-//    public boolean checkBoardExists(String boardName) {
-//
-//    }
-//    public Board createBoard(String boardName) {
-//
-//    }
-//    public boolean rejectTeams(String teamNames) {
+    public String createBoard(String username, String teamName, String boardName) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            if (user.getLeader()) {
+                Team team = teamRepository.findByTeamName(teamName);
+                Optional<Board> teamBoard = team.getBoards().stream().filter(b -> b.getName().equals(boardName)).findAny();
+                if (teamBoard.isPresent())
+                    return "There is already a board with this name";
+
+                Board board = new Board(boardName, team);
+                team.getBoards().add(board);
+                boardRepository.createBoard(board);
+                return null;
+            }
+            return "You do not have the permission to do this action!";
+        }
+        return "user not found";
+    }
+
+    //    public boolean rejectTeams(String teamNames) {
 //
 //    }
 //    public boolean checkIsPending(String teamNames) {
@@ -184,135 +263,391 @@ public class Controller {
 //    public String showTaskById(Team team, int id) {
 //
 //    }
-//    public String showTasks(Team team) {
-//
-//    }
-//    public void sendMessage(String message){
-//
-//    }
-//    public String showChatRoom(Team team) {
-//
-//    }
-//    public String showRoadMap(Team team) {
-//
-//    }
-//    public String showScoreBoard(Team team) {
-//
-//    }
-//    public boolean removeUserFromTask(int id, String Username) {
-//
-//    }
-//    public boolean addUserToTask(int id , String Username ) {
-//
-//    }
-//    public boolean removeUserFromTask(int id , String Username ) {
-//
-//    }
-//
-//    public void editTaskDeadline(int id, LocalDateTime newDeadline) {
-//
-//    }
-//    public void editTaskPriority(int id, Priority newPriority) {
-//
-//    }
-//    public void editTaskDescription(int id , String discription) {
-//
-//    }
-//    public void editTaskTitle(int id , String title) {
-//
-//    }
-//
-//    public String showNotification(User activeUser) {
-//
-//    }
-//    public String showLog(User activeUser) {
-//
-//    }
-//    public void showProfile(User activeUser) {
-//
-//    }
-//    public void showTeam() {
-//
-//    }
-//    public String showTeams(User activeUser) {
-//
-//    }
-    public ChangeUsernameResponse changeUsername(String oldUsername , String newUsername) {
-        User user = userRepository.findByUsername(oldUsername);
-        if(user != null) {
-            if (newUsername.length() < 4)
-                return new ChangeUsernameResponse(false, "");
+    public ShowTaskResponse showTask(String username, int taskId) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            Task task = taskRepository.findById(taskId);
+            if (task.getCategory() != null) {
+                if (user.getTeams().contains(task.getCategory().getBoard().getTeam())) {
+                    return new ShowTaskResponse(task);
+                } else {
+                    return new ShowTaskResponse("403");
+                }
+            }
+            return new ShowTaskResponse("task not found");
 
-            if (userRepository.findByUsername(newUsername) != null)
-                return new ChangeUsernameResponse(false, "Username already taken!");
-
-            if (checkUserNameFormat(newUsername)) {
-                if (user.getUsername().equals(newUsername))
-                    return new ChangeUsernameResponse(false, "");
-                user.setUsername(newUsername);
-                return new ChangeUsernameResponse(true, "");
-            } else
-                return new ChangeUsernameResponse(false, "");
         }
         return null;
     }
+
+
+    public ShowTaskListResponse showTasks(String teamName) {
+        Team team = teamRepository.findByTeamName(teamName);
+        if (team != null) {
+            List<Task> tasks = team.getBoards().stream().flatMap(b -> b.getCategories().stream())
+                    .flatMap(c -> c.getTasks().stream())
+                    .sorted(Comparator.comparing(Task::getDeadLine))
+                    .collect(Collectors.toList());
+
+            if (tasks.size() == 0)
+                return new ShowTaskListResponse("no task yet");
+            return new ShowTaskListResponse(tasks);
+        } else {
+            return new ShowTaskListResponse("team not found");
+        }
+    }
+
+
+    public void sendMessage(String username, String teamName, String message) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            Team team = teamRepository.findByTeamName(teamName);
+            if (team != null) {
+                Message newMessage = new Message(message, MessageType.TEAM, user.getId());
+                team.getMessages().add(newMessage);
+            }
+        }
+    }
+
+
+    public ChatRoomResponse showChatRoom(String teamName) {
+        Team team = teamRepository.findByTeamName(teamName);
+        if (team != null) {
+            List<String> messages = new ArrayList<>();
+            List<String> usernames = new ArrayList<>();
+
+            for (Message message : team.getMessages()) {
+                messages.add(message.getTxt());
+                usernames.add(userRepository.getById(message.getSenderId()).getUsername());
+            }
+
+            if (messages.size() == 0)
+                return new ChatRoomResponse("no message yet");
+
+            return new ChatRoomResponse(usernames, messages);
+        } else {
+            return new ChatRoomResponse("team not found");
+        }
+    }
+
+    public RoadMapResponse showRoadMap(String teamName) {
+        Team team = teamRepository.findByTeamName(teamName);
+        if (team != null) {
+            Map<String, Integer> response = team.getBoards().stream().flatMap(board -> board.getCategories().stream())
+                    .flatMap(category -> category.getTasks().stream()).collect(Collectors.toMap(t -> t.getTitle(), t -> t.getId()));
+
+            if (response.size() == 0) {
+                return new RoadMapResponse(false, "no task yet");
+            }
+            return new RoadMapResponse(true, response);
+
+        } else {
+            return new RoadMapResponse(false, "team not found");
+        }
+    }
+
+
+    public ScoreBoardResponse showScoreBoard(String teamName) {
+        Team team = teamRepository.findByTeamName(teamName);
+        if (team != null) {
+            Map<String, Integer> usersScore = new HashMap<>();
+            for (Integer userId : team.getUsersScore().keySet()) {
+                String name = userRepository.getById(userId).getUsername();
+                usersScore.put(name, team.getUsersScore().get(userId));
+            }
+            return new ScoreBoardResponse(true, usersScore);
+
+        } else {
+            return new ScoreBoardResponse(false, "team not found");
+        }
+
+    }
+
+    public List<String> showTeamMenu(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            return user.getTeams().stream().map(Team::getName).collect(Collectors.toList());
+        }
+        return new ArrayList<>();
+    }
+
+    public String removeUserFromTask(String username, int taskId, String targetUsername) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            Task task = taskRepository.findById(taskId);
+            if (task.getCategory() != null) {
+                if (user.getTeams().contains(task.getCategory().getBoard().getTeam()) && user.getLeader()) {
+                    User targetUser = userRepository.findByUsername(targetUsername);
+                    if (targetUser != null) {
+                        task.getUsers().remove(targetUser);
+                        targetUser.getTasks().remove(task);
+                        return "User " + targetUsername + " removed successfully!";
+                    }
+                    return "There is not any user with this username " + targetUsername + "  in list!";
+                }
+                return "You Don’t Have Access To Do This Action!";
+            }
+            return "task not found";
+        }
+        return "user not found";
+    }
+
+    public String addUserToTask(String username, int taskId, String targetUsername) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            Task task = taskRepository.findById(taskId);
+            if (task.getCategory() != null) {
+                if (user.getTeams().contains(task.getCategory().getBoard().getTeam()) && user.getLeader()) {
+                    User targetUser = userRepository.findByUsername(targetUsername);
+                    if (targetUser != null) {
+                        if (!task.getUsers().contains(targetUser)) {
+                            task.getUsers().add(targetUser);
+                            targetUser.getTasks().add(task);
+                        }
+                        return "User " + targetUsername + " added successfully!";
+                    }
+                    return "There is not any user with this username " + targetUsername + "  in list!";
+                }
+                return "You Don’t Have Access To Do This Action!";
+            }
+            return "task not found";
+        }
+        return "user not found";
+    }
+
+
+    public String editTaskDeadline(String username, int taskId, String newDate) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            Task task = taskRepository.findById(taskId);
+            if (task.getCategory() != null) {
+                if (user.getTeams().contains(task.getCategory().getBoard().getTeam()) && user.getLeader()) {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD|HH:mm");
+                    dateFormat.setLenient(false);
+                    try {
+                        Date date = dateFormat.parse(newDate);
+                        if (task.getCreationDate().compareTo(newDate) <= 0) {
+                            task.setDeadLine(newDate);
+                            return "Deadline updated successfully!";
+                        }
+
+                    } catch (Exception e) {
+
+                    }
+                    return "New deadline is invalid!";
+                }
+                return "You Don’t Have Access To Do This Action!";
+
+            }
+            return "task not found";
+        }
+        return "user not found";
+    }
+
+    public String editTaskPriority(String username, int taskId, String priority) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            Task task = taskRepository.findById(taskId);
+            if (task.getCategory() != null) {
+                if (user.getTeams().contains(task.getCategory().getBoard().getTeam()) && user.getLeader()) {
+                    task.setPriority(priority);
+                    return "Priority updated successfully!";
+                }
+                return "You Don’t Have Access To Do This Action!";
+            }
+            return "task not found";
+        }
+        return "user not found";
+    }
+
+    public String editTaskDescription(String username, int taskId, String description) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            Task task = taskRepository.findById(taskId);
+            if (task.getCategory() != null) {
+                if (user.getTeams().contains(task.getCategory().getBoard().getTeam()) && user.getLeader()) {
+                    task.setDescription(description);
+                    return "Description updated successfully!";
+                }
+                return "You Don’t Have Access To Do This Action!";
+            }
+            return "task not found";
+        }
+        return "user not found";
+    }
+
+    public String editTaskTitle(String username, int taskId, String title) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            Task task = taskRepository.findById(taskId);
+            if (task.getCategory() != null) {
+                if (user.getTeams().contains(task.getCategory().getBoard().getTeam()) && user.getLeader()) {
+                    task.setTitle(title);
+                    return "Title updated successfully!";
+                }
+                return "You Don’t Have Access To Do This Action!";
+            }
+            return "task not found";
+        }
+        return "user not found";
+    }
+
+    public List<Message> showNotification(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            return messageRepository.findByReceiverIdAndType(user.getId(), MessageType.TEAM_LEADER);
+        }
+        return null;
+    }
+
+    public List<Log> showLog(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            return logRepository.getLogsByUserId(user.getId());
+        }
+        return null;
+    }
+
+    public ShowProfileResponse showProfile(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            return user.profile();
+        }
+        return null;
+    }
+
+    public List<String> showTeam(String username, String teamName) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            Team team = user.getTeams().stream().filter(t -> t.getName().equals(teamName)).findAny().orElse(null);
+            if (team != null) {
+                List<String> response = new ArrayList<>();
+                response.add(team.getName());
+                response.add(team.getLeader().getUsername());
+                team.getMembers().stream().map(User::getUsername).sorted(String::compareTo).forEach(name -> response.add(username));
+                return response;
+            }
+        }
+        return null;
+    }
+
+    public List<String> showTeams(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            if (user.getRole().equals(Role.TEAM_MEMBER) || user.getRole().equals(Role.TEAM_LEADER)) {
+                return user.getTeams().stream().sorted(Comparator.comparingInt(Team::getId)).map(Team::getName).collect(Collectors.toList());
+            }
+        }
+        return null;
+    }
+
+    public ChangeUsernameResponse changeUsername(String username, String newUsername) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            if (newUsername.length() < 4)
+                return new ChangeUsernameResponse(false, null, "Your new username must include at least 4 characters!");
+
+            if (userRepository.findByUsername(newUsername) != null)
+                return new ChangeUsernameResponse(false, null, "username already taken!");
+
+            if (checkUserNameFormat(newUsername)) {
+                if (user.getUsername().equals(newUsername))
+                    return new ChangeUsernameResponse(false, null, "you already have this username!");
+                user.setUsername(newUsername);
+                return new ChangeUsernameResponse(true, newUsername, null);
+
+            } else
+                return new ChangeUsernameResponse(false, null, "New username contains Special Characters! Please remove them and try again");
+        }
+        return null;
+
+    }
+
 
     public ChangePasswordResponse changePassword(String username , String oldPassword ,
                                                  String newPassword ) {
         User user = userRepository.findByUsername(username);
         if(user != null) {
-            if(user.getPassword().equals(oldPassword)) {
+            if(user.getPassword().equals(oldPassword)){
                 if(oldPassword.equals(newPassword)){
-                    return new ChangePasswordResponse(false, "Please type a new password!");
+                    return new ChangePasswordResponse(false, "Please type a New Password !");
                 }
                 if (checkPasswordFormat(newPassword)) {
                     user.setPassword(newPassword);
-                    return  new ChangePasswordResponse(true, "");
-                } else
-                    return new ChangePasswordResponse(false, "Please choose a strong password (Containing at least 8 characters including 1 digit and 1 capital letter)");
-            } else
+                    return new ChangePasswordResponse(true, "");  //??????????
+                }
+                return new ChangePasswordResponse(false, "Please Choose A strong Password (Containing at least 8 characters including 1 digit and 1 Capital Letter)");
+
+            }else{
                 return new ChangePasswordResponse(false, "wrong old password!");
+            }
         }
         return null;
     }
 
-    public String createUser(String username, String password, String confirmPassword, String email) {
-        if (checkUsernameExists(username)) {
-            if (password.equals(confirmPassword)) {
-                if (CheckEmailExists(email)) {
-                    if (checkUserNameFormat(username)) {
+
+    public String createUser(String username ,String password , String confirmPassword, String email) {
+        if(checkUsernameExists(username)) {
+            if(password.equals(confirmPassword)) {
+                if(checkEmailExists(email)) {
+                    if(checkUserNameFormat(username)) {
                         if (checkEmailFormat(email)) {
                             if (checkPasswordFormat(password)) {
                                 User user = new User(username, password, email);
                                 userRepository.createUser(user);
-                                return "User created successfully!";
-                            } else
-                                return "Please choose a strong password (Containing at least 8 characters including 1 digit and 1 capital letter)";
-                        } else
+                                return "user created successfully!";
+                            } else {
+                                return "Please Choose A strong Password (Containing at least 8 characters including 1 digit and 1 Capital Letter)";
+                            }
+
+                        } else {
                             return "Email address is invalid!";
-                    } else
-                        return ""; //????????
-                } else
+                        }
+                    }else
+                        return "Your new username must include at least 4 characters!";
+
+                }else {
                     return "User with this email already exists!";
-            } else
+                }
+            }else {
                 return "Your passwords are not the same!";
-        } else
-            return ""; //?????????
+            }
+        }else{
+            return "user with username " + username + " already exists!";
+        }
     }
 
+
+    public LoginResponse loginUser(String username, String password) {
+        User user = userRepository.findByUsername(username);
+        if(user != null) {
+            if(user.getPassword().equals(password)){
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                Log log = new Log(dateFormat.format(new Date()), user.getId());
+                logRepository.createLog(log);
+                return new LoginResponse(user.getId(),user.getUsername(), user.getRole(), "user logged in successfully!");
+            }else {
+                return new LoginResponse("Username and password didn't match!");
+            }
+        }else{
+            return new LoginResponse("There is not any user with username: " + username +"!");
+        }
+    }
+
+
     public boolean checkPasswordFormat(String password) {
-        Pattern passwordPattern = Pattern.compile(""); //????????
+        Pattern passwordPattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$");
         return passwordPattern.matcher(password).matches() && password.length() >= 8;
     }
 
     public boolean checkEmailFormat(String email) {
-        Pattern gmailPattern = Pattern.compile("^[\\w]+gmail.com$");
-        Pattern yahooPattern = Pattern.compile("^[\\w]+yahoo.com$");
+        Pattern gmailPattern = Pattern.compile("^[A-Za-z0-9+.]+@gmail.com$");
+        Pattern yahooPattern = Pattern.compile("^[A-Za-z0-9+.]+@yahoo.com$");
         return yahooPattern.matcher(email).matches() || gmailPattern.matcher(email).matches();
     }
 
     public boolean checkUserNameFormat(String username) {
-        Pattern usernamePattern = Pattern.compile("^[\\w]$");
+        Pattern usernamePattern = Pattern.compile("^[a-zA-Z0-9-]*$");
         return usernamePattern.matcher(username).matches();
     }
 
@@ -320,7 +655,7 @@ public class Controller {
         return userRepository.existUsername(username);
     }
 
-    public boolean CheckEmailExists(String email) {
+    public boolean checkEmailExists(String email) {
         return userRepository.existEmail(email);
     }
 //    public boolean checkPassword(String username ,String password) {
