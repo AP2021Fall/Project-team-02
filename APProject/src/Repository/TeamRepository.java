@@ -70,4 +70,8 @@ public class TeamRepository extends AbstractDataBaseConnector{
     String getTableName() {
         return "teams";
     }
+
+    public Team findByTeamName(String teamName) {
+        return teamsById.values().stream().filter(team -> team.getName().equals(teamName)).findAny().orElse(null);
+    }
 }

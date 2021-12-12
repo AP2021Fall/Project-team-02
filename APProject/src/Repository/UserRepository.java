@@ -99,4 +99,7 @@ public class UserRepository extends AbstractDataBaseConnector{
     public User findByUsername(String username) {
         return usersById.values().stream().filter(u -> u.getUsername().equals(username)).findAny().orElse(null);
     }
+    public User getById(Integer id) {
+        return usersById.get(id);
+    }
 }
