@@ -62,6 +62,12 @@ public class BoardRepository extends AbstractDataBaseConnector{
         return "boards";
     }
 
+    public void createBoard(Board board) {
+        board.setId(IdGenerator.getNewId());
+        boarsById.put(board.getId(), board);
+    }
+
+
     public void remove(Board board) {
         boarsById.remove(board.getId());
         boarTablesById.remove(board.getId());
