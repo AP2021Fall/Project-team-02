@@ -9,9 +9,9 @@ public class ProfileMenu extends Menu{
     public void show() {
         super.show();
         System.out.println("Use this format to change your password: " + "" +
-                "profile change <old password> <new password>");
+                "profile change oldPassword <old password> newPassword <new password>");
         System.out.println("Use this format to change username : " +
-                "profile change <username>");
+                "profile change userName <username>");
         System.out.println("Use this format to see teams: " +
                 "profile showTeams");
         System.out.println("Use this format to see specific team :" +
@@ -29,35 +29,30 @@ public class ProfileMenu extends Menu{
         if(inputParse[0].trim().equalsIgnoreCase("back")) {
             this.nextMenu = parent ;
         }
-        else if(inputParse[1].trim().equalsIgnoreCase("change") && (inputParse.length == 4)) {
-            System.out.println(changePassword(inputParse[2] , inputParse[3]));
-            // ..
+        else if(Regex.changePassword(input)) {
+            System.out.println(changePassword1(inputParse[3],inputParse[5]));
+            // if
         }
-        else if(inputParse[1].trim().equalsIgnoreCase("change")) {
-            System.out.println(changeUsername(inputParse[2]));
-            // ..
+        else if(Regex.changeUsername(input)) {
+            System.out.println(changeUsername1(inputParse[3]));
+            // if
         }
-        else if(inputParse[1].trim().equalsIgnoreCase("showTeams")) {
+        else if(Regex.profileShowTeams(input)) {
             System.out.println(showTeams());
-            this.nextMenu = parent ;
         }
-        else if(inputParse[1].trim().equalsIgnoreCase("showTeam")) {
+        else if(Regex.profileShowTeam(input)) {
             System.out.println(showTeam(inputParse[2]));
-            this.nextMenu = parent ;
+            // if
         }
-        else if(inputParse[2].trim().equalsIgnoreCase("myProfile")) {
+        else if(Regex.showMyProfile(input)) {
             System.out.println(showMyProfile());
-            this.nextMenu = parent ;
         }
-        else if(inputParse[2].trim().equalsIgnoreCase("logs")) {
-            System.out.println(showLog());
-            this.nextMenu = parent ;
+        else if((Regex.profileShowLogs(input))) {
+            System.out.println(showLogs());
         }
-        else if(inputParse[2].trim().equalsIgnoreCase("notifications")) {
-            System.out.println(showNotif());
-            this.nextMenu = parent ;
+        else if(Regex.showNotifications(input)) {
+            System.out.println(showNotification());
         }
-
         nextMenu.show();
         nextMenu.execute();
     }

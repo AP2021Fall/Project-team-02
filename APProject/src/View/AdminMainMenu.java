@@ -28,7 +28,7 @@ public class AdminMainMenu extends Menu {
         else if(Regex.adminShowProfile(input)) {
             showProfile(inputParse[3]) ;
         }
-        else if(Regex.banUser(input)) {
+        else if(Regex.adminBanUser(input)) {
             banUser(inputParse[3]) ;
         }
         else if(Regex.adminChangeRole(input)) {

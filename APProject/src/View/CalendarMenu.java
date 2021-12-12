@@ -7,7 +7,7 @@ public class CalendarMenu extends Menu{
 
     public void show() {
         super.show();
-        System.out.println("Use this to see your calendar: calendar show deadline");
+        System.out.println("Use this to see your calendar:calendar show deadline");
     }
 
     public void execute() {
@@ -18,9 +18,9 @@ public class CalendarMenu extends Menu{
             nextMenu.show();
             nextMenu.execute();
         }
-        if(inputParse[2].trim().equalsIgnoreCase("deadLines")) {
-            System.out.println(showDeadlines());
-            this.nextMenu = parent ;
+        else if(Regex.calenderMenu(input)) {
+            System.out.println(calender());
+            // if
         }
         nextMenu.show();
         nextMenu.execute();

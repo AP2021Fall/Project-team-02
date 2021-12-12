@@ -1,10 +1,11 @@
 package View;
 
-public class ChatRoom extends TeamMenu{
-    private String team ;
-    public ChatRoom(String name, Menu parent , String teamName) {
+public class ChatRoom extends TeamMenu {
+    private String team;
+
+    public ChatRoom(String name, Menu parent, String teamName) {
         super(name, parent);
-        this.team = teamName ;
+        this.team = teamName;
     }
 
     public void show() {
@@ -15,19 +16,19 @@ public class ChatRoom extends TeamMenu{
     }
 
     public void execute() {
-        String input = getInput() ;
-        while(!input.equalsIgnoreCase("back")) {
-            String[] inputParse = parseInput(input) ;
-            if(inputParse[0].trim().equalsIgnoreCase("send")) {
-                sendMessage(inputParse[2]) ;
+        String input = getInput();
+        while (!input.equalsIgnoreCase("back")) {
+            String[] inputParse = parseInput(input);
+            if (Regex.chatRoom(input)) {
+              sendMessage(inputParse[2]) ;
             }
             else {
-                System.out.println("wrong input!");
+                System.out.println("invalid input!");
+                // ..
             }
-            input = getInput() ;
+            this.nextMenu = parent;
+            nextMenu.show();
+            nextMenu.execute();
         }
-        this.nextMenu = parent ;
-        nextMenu.show();
-        nextMenu.execute();
     }
 }

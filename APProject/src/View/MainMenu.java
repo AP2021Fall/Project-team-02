@@ -13,7 +13,7 @@ public class MainMenu extends Menu{
         System.out.println("Tasks Page");
         System.out.println("Calendar Menu");
         System.out.println("Notification Bar");
-        if(userAdmin()) {
+        if(userLeader()) {
             System.out.println("-----------------------------------");
             System.out.println("admin commands: ");
             System.out.println("show teams");
@@ -28,30 +28,34 @@ public class MainMenu extends Menu{
         if(inputParse[0].trim().equalsIgnoreCase("back")) {
             this.nextMenu = parent ;
         }
-        else if(inputParse[1].trim().equalsIgnoreCase("profile")) {
-            this.nextMenu = ProfileMenu ;
+        else if(Regex.mainMenuEnterMenu(input)) {
+            if(inputParse[1].trim().equalsIgnoreCase("profile")) {
+                this.nextMenu = ProfileMenu ;
+            }
+            else if(inputParse[1].trim().equalsIgnoreCase("team")) {
+                this.nextMenu = TeamMenu ;
+            }
+            else if(inputParse[1].trim().equalsIgnoreCase("tasks")) {
+                this.nextMenu = TasksPage ;
+            }
+            else if(inputParse[1].trim().equalsIgnoreCase("calender")) {
+                this.nextMenu = CalendarMenu ;
+            }
+            else if(inputParse[1].trim().equalsIgnoreCase("notification")) {
+                this.nextMenu = NotificationBar ;
+            }
         }
-        else if(inputParse[1].trim().equalsIgnoreCase("team")) {
-            this.nextMenu = TeamMenu ;
-        }
-        else if(inputParse[1].trim().equalsIgnoreCase("tasks")) {
-            this.nextMenu = TasksPage ;
-        }
-        else if(inputParse[1].trim().equalsIgnoreCase("calender")) {
-            this.nextMenu = CalendarMenu ;
-        }
-        else if(inputParse[1].trim().equalsIgnoreCase("notification")) {
-            this.nextMenu = NotificationBar ;
-        }
-        else if(inputParse[1].trim().equalsIgnoreCase("teams")) {
-            System.out.println(showAllTeams());
+        else if(Regex.leaderShowTeam(input)) {
+            System.out.println(showTeams());
             // if
         }
-        else if(inputParse[1].trim().equalsIgnoreCase("team")) {
-            // bug!
+        else if(Regex.leaderShowTeams(input)) {
+            System.out.println(showTeam(inputParse[2]));
+            // if
         }
-        else if(inputParse[0].trim().equalsIgnoreCase("create")) {
+        else if(Regex.leaderCreateTeam(input)) {
             System.out.println(createTeam(inputParse[2]));
+            // if
         }
         else {
             System.out.println("Your input is not valid");

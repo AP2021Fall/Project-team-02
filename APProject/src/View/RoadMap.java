@@ -10,7 +10,7 @@ public class RoadMap extends TeamMenu {
 
     public void show() {
         super.show();
-        System.out.println(showScoreBoard(team));
+        System.out.println(showRoadMap(team));
     }
 
     public void execute() {

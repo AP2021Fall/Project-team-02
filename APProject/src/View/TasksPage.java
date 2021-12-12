@@ -29,30 +29,7 @@ import Model.Task;
                 nextMenu.show();
                 nextMenu.execute();
             }
-            else if(inputParse[4].trim().equalsIgnoreCase("title")) {
-                System.out.println(changeTitle(inputParse[3] , inputParse[5]));
-                this.nextMenu = this ;
-            }
-            else if(inputParse[4].trim().equalsIgnoreCase("description")) {
-                System.out.println(changeDiscription(inputParse[3] , inputParse[5]));
-                this.nextMenu = this ;
-            }
-            else if(inputParse[4].trim().equalsIgnoreCase("priority")) {
-                System.out.println(changePriority(inputParse[3] , inputParse[5]));
-            }
-            else if(inputParse[4].trim().equalsIgnoreCase("deadLine")) {
-                System.out.println(changeDeadLine(inputParse[3] , inputParse[5]));
-            }
-            else if(inputParse.length == 7 && inputParse[6].trim().equalsIgnoreCase("add")) {
-                String[] userNames = parseInputUsernames(inputParse[5]) ;
-                System.out.println(addToTask(inputParse[3] , userNames));
-                this.nextMenu = this ;
-            }
-            else if(inputParse.length == 7 && inputParse[6].trim().equalsIgnoreCase("remove")) {
-                String[] userNames = parseInputUsernames(inputParse[5]) ;
-                System.out.println(removeFromTask(inputParse[3] , userNames));
-                this.nextMenu = this ;
-            }
+
             nextMenu.show();
             nextMenu.execute();
         }
