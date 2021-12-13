@@ -247,6 +247,4 @@ public class Regex {
         matcher = pattern.matcher(input) ;
         return matcher.find() ;
     }
-
-
 }
