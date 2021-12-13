@@ -63,6 +63,7 @@ public class TeamMenu extends Menu{
         if(inputParse2[0].trim().equalsIgnoreCase("back")) {
             this.nextMenu = parent ;
         }
+
         else if (inputParse2[0].trim().equalsIgnoreCase("scoreboard")) {
             this.nextMenu = new ScoreBoard("scoreBoard" , this , inputParse[2]) ;
         }

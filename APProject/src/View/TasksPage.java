@@ -4,7 +4,7 @@ import Model.Task;
 
     public class TasksPage extends Menu{
         String team ;
-        public TasksPage(String name, Menu parent) {
+        public TasksPage(String name, Menu parentd) {
             super(name, parent);
         }
         public void show() {

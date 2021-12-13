@@ -167,28 +167,86 @@ public class Regex {
         return matcher.find();
     }
     public static boolean errorUsernameNotExists(String input) {
-        pattern = Pattern.compile("^(There is not any user with username: .+!)$");
+        pattern = Pattern.compile("^(There is not any user with username: .+!)$" , Pattern.CASE_INSENSITIVE);
         matcher = pattern.matcher(input) ;
         return matcher.find() ;
     }
     public static boolean boardMenuCreate(String input) {
-        pattern = Pattern.compile("^(board new name .+)$");
+        pattern = Pattern.compile("^(board new name .+)$" , Pattern.CASE_INSENSITIVE);
         matcher = pattern.matcher(input) ;
         return matcher.find() ;
     }
     public static boolean boardMenuRemove(String input) {
-        pattern = Pattern.compile("^(board remove name .+)$");
+        pattern = Pattern.compile("^(board remove name .+)$ , Pattern.CASE_INSENSITIVE");
         matcher = pattern.matcher(input) ;
         return matcher.find() ;
     }
     public static boolean boardMenuSelect(String input) {
-        pattern = Pattern.compile("^(board select name .+)$");
+        pattern = Pattern.compile("^(board select name .+)$ , Pattern.CASE_INSENSITIVE");
         matcher = pattern.matcher(input) ;
         return matcher.find() ;
     }
     public static boolean boardMenuDeSelect(String input) {
-        pattern = Pattern.compile("^(board deselect)$");
+        pattern = Pattern.compile("^(board deselect)$" , Pattern.CASE_INSENSITIVE);
         matcher = pattern.matcher(input) ;
         return matcher.find() ;
     }
+    public static boolean boardShow(String input) {
+        pattern = Pattern.compile("^(Board show name .+)$" , Pattern.CASE_INSENSITIVE);
+        matcher = pattern.matcher(input) ;
+        return matcher.find() ;
+    }
+    public static boolean boardAddTask(String input) {
+        pattern = Pattern.compile("^(Board add .+ name .+)$" , Pattern.CASE_INSENSITIVE);
+        matcher = pattern.matcher(input) ;
+        return matcher.find() ;
+    }
+    public static boolean boardAssign(String input) {
+        pattern = Pattern.compile("^(board assign .+ task .+ name .+)$" , Pattern.CASE_INSENSITIVE);
+        matcher = pattern.matcher(input) ;
+        return matcher.find() ;
+    }
+    public static boolean boardForce(String input) {
+        pattern = Pattern.compile("^(board force category .+ task .+ name .+)$" , Pattern.CASE_INSENSITIVE);
+        matcher = pattern.matcher(input) ;
+        return matcher.find() ;
+    }
+    public static boolean boardDoneFail(String input) {
+        pattern = Pattern.compile("^(board show .+ name board .+)$" , Pattern.CASE_INSENSITIVE);
+        matcher = pattern.matcher(input) ;
+        return matcher.find() ;
+    }
+    public static boolean boardCategory(String input) {
+        pattern = Pattern.compile("^(board new category .+ name .+)$" , Pattern.CASE_INSENSITIVE);
+        matcher = pattern.matcher(input) ;
+        return matcher.find() ;
+    }
+    public static boolean boardCategoryColumn(String input) {
+        pattern = Pattern.compile("^(board category .+ columan .+ name .+)$" , Pattern.CASE_INSENSITIVE);
+        matcher = pattern.matcher(input) ;
+        return matcher.find() ;
+    }
+    public static boolean boardDone(String input) {
+        pattern = Pattern.compile("^(board done name .+)$" , Pattern.CASE_INSENSITIVE);
+        matcher = pattern.matcher(input) ;
+        return matcher.find() ;
+    }
+    public static boolean boardShowDoneFail(String input) {
+        pattern = Pattern.compile("^(board show (done|fail) name board .+)$" , Pattern.CASE_INSENSITIVE);
+        matcher = pattern.matcher(input) ;
+        return matcher.find() ;
+    }
+    public static boolean changeTaskToNotFail(String input) {
+        pattern = Pattern.compile("^(board open task .+( assign .+)? deadline .+( category .+)?" +
+                " name .+)$" , Pattern.CASE_INSENSITIVE);
+        matcher = pattern.matcher(input) ;
+        return matcher.find() ;
+    }
+    public static boolean boardCategoryNext(String input) {
+        pattern = Pattern.compile("^(board category next task .+ name .+)$" , Pattern.CASE_INSENSITIVE);
+        matcher = pattern.matcher(input) ;
+        return matcher.find() ;
+    }
+
+
 }
