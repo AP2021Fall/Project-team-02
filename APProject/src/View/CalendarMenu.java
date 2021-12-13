@@ -20,7 +20,7 @@ public class CalendarMenu extends Menu{
         }
         else if(Regex.calenderMenu(input)) {
             System.out.println(calender());
-            // if
+            this.nextMenu = parent ;
         }
         nextMenu.show();
         nextMenu.execute();

@@ -21,12 +21,12 @@ public class ChatRoom extends TeamMenu {
             String[] inputParse = parseInput(input);
             if (Regex.chatRoom(input)) {
               sendMessage(inputParse[2]) ;
+              this.nextMenu = this ;
             }
             else {
                 System.out.println("invalid input!");
-                // ..
+                this.nextMenu = parent ;
             }
-            this.nextMenu = parent;
             nextMenu.show();
             nextMenu.execute();
         }

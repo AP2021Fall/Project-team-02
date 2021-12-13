@@ -14,7 +14,6 @@ public class RoadMap extends TeamMenu {
     }
 
     public void execute() {
-        super.execute();
         String input = getInput();
         if(input.equals("back")) {
             this.nextMenu = parent;

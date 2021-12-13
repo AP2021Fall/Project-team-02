@@ -4,7 +4,6 @@ public class BoardMenu extends TeamMenu{
     public BoardMenu(String name, Menu parent) {
         super(name, parent);
     }
-
     public void show() {
         super.show();
         System.out.println("Use to create board: " +
@@ -15,9 +14,7 @@ public class BoardMenu extends TeamMenu{
                 "board select name <board name>");
         System.out.println("Use to deselect " +
                 "board deselect");
-        
     }
-
     public void execute() {
 
     }

@@ -3,12 +3,13 @@ package View;
 import Model.Task;
 
     public class TasksPage extends Menu{
+        String team ;
         public TasksPage(String name, Menu parent) {
             super(name, parent);
         }
         public void show() {
             super.show();
-            System.out.println(showTasks());
+            System.out.println(showTasks(team));
             if(userLeader()) {
                 System.out.println("------------------------------------------");
                 System.out.println("Use this formats : ");

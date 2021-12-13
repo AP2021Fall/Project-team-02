@@ -171,5 +171,24 @@ public class Regex {
         matcher = pattern.matcher(input) ;
         return matcher.find() ;
     }
-
+    public static boolean boardMenuCreate(String input) {
+        pattern = Pattern.compile("^(board new name .+)$");
+        matcher = pattern.matcher(input) ;
+        return matcher.find() ;
+    }
+    public static boolean boardMenuRemove(String input) {
+        pattern = Pattern.compile("^(board remove name .+)$");
+        matcher = pattern.matcher(input) ;
+        return matcher.find() ;
+    }
+    public static boolean boardMenuSelect(String input) {
+        pattern = Pattern.compile("^(board select name .+)$");
+        matcher = pattern.matcher(input) ;
+        return matcher.find() ;
+    }
+    public static boolean boardMenuDeSelect(String input) {
+        pattern = Pattern.compile("^(board deselect)$");
+        matcher = pattern.matcher(input) ;
+        return matcher.find() ;
+    }
 }

@@ -17,5 +17,11 @@ public class NotificationBar extends Menu{
             nextMenu.show();
             nextMenu.execute();
         }
+        else {
+            System.out.println("invalid input!");
+            this.nextMenu = this ;
+        }
+        nextMenu.show();
+        nextMenu.execute();
     }
 }

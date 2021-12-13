@@ -23,8 +23,19 @@ public class TeamMenu extends Menu{
             nextMenu.execute();
         }
         else if(inputParse[1].trim().equalsIgnoreCase("team")) {
-            System.out.println(Team(inputParse[2]));
-            // ifs
+            String outPut = Team(inputParse[2]) ;
+            System.out.println(outPut);
+            if(outPut.equalsIgnoreCase("this team not exist")) {
+                this.nextMenu = this ;
+                nextMenu.show();
+                nextMenu.execute();
+            }
+        }
+        else  {
+            System.out.println("invalid input!");
+            this.nextMenu = this ;
+            nextMenu.show();
+            nextMenu.execute();
         }
         System.out.println("Use to see team info :") ;
         System.out.println("board Menu");
@@ -53,23 +64,20 @@ public class TeamMenu extends Menu{
             this.nextMenu = parent ;
         }
         else if (inputParse2[0].trim().equalsIgnoreCase("scoreboard")) {
-            System.out.println(scoreBoard(inputParse[2]));
-            this.nextMenu = this ;
+            this.nextMenu = new ScoreBoard("scoreBoard" , this , inputParse[2]) ;
         }
         else if(inputParse2[0].trim().equalsIgnoreCase("roadmap")) {
-            System.out.println(roadmap(inputParse[2]));
-            this.nextMenu = this ;
+            this.nextMenu = new RoadMap("roadMap" , this , inputParse[2]) ;
         }
         else if(inputParse2[0].trim().equalsIgnoreCase("chatroom")) {
-            System.out.println(chatroom(inputParse[2]));
-            this.nextMenu = this ;
+            this.nextMenu = new ChatRoom("chatroom" , this , inputParse[2]) ;
         }
         else if(inputParse2[1].trim().equalsIgnoreCase("tasks")) {
-            System.out.println(showTasksTeam(inputParse[2]));
-            this.nextMenu = this ;
+            this.nextMenu = new TasksPage("taskPage" , this ) ;
         }
         else if(inputParse2[1].trim().equalsIgnoreCase("task")) {
-            System.out.println(showTaskById(inputParse[2]) , inputParse2[3]);
+            String outPut = showTaskById(inputParse[2] , inputParse2[3]) ;
+            System.out.println(outPut);
             this.nextMenu = this ;
         }
         else if(inputParse2[0].trim().equalsIgnoreCase("sudo")) {
