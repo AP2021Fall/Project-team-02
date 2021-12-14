@@ -4,7 +4,7 @@ import Model.Task;
 
     public class TasksPage extends Menu{
         String team ;
-        public TasksPage(String name, Menu parentd) {
+        public TasksPage(String name, Menu parent) {
             super(name, parent);
         }
         public void show() {
@@ -32,26 +32,32 @@ import Model.Task;
             else if(Regex.changeTitle(input)) {
                 System.out.println(changeTitle1(inputParse[3] , inputParse[5]));
                 this.nextMenu = this ;
+                nextMenu.execute();
             }
             else if(Regex.changeDescription(input)) {
                 System.out.println(changeDescription1(inputParse[3] , inputParse[5]));
                 this.nextMenu = this ;
+                nextMenu.execute();
             }
             else if(Regex.changePriority(input)) {
                 System.out.println(changePriority1(inputParse[3] , inputParse[5]));
                this.nextMenu = this ;
+                nextMenu.execute();
             }
             else if(Regex.changeDeadline(input)) {
                 System.out.println(changeDeadline1(inputParse[3] , inputParse[5]));
                 this.nextMenu = this ;
+                nextMenu.execute();
             }
             else if(Regex.removeUser(input)) {
                 System.out.println(removeUser1(inputParse[3] , inputParse[5]));
                 this.nextMenu = this ;
+                nextMenu.execute();
             }
             else if(Regex.addUser(input)) {
                 System.out.println(addUser1(inputParse[3] , inputParse[5]));
                 this.nextMenu = this ;
+                nextMenu.execute();
             }
             nextMenu.show();
             nextMenu.execute();

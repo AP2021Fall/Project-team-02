@@ -25,6 +25,7 @@ public class TeamMenu extends Menu{
         else if(inputParse[1].trim().equalsIgnoreCase("team")) {
             String outPut = Team(inputParse[2]) ;
             System.out.println(outPut);
+            show2(inputParse[2]);
             if(outPut.equalsIgnoreCase("this team not exist")) {
                 this.nextMenu = this ;
                 nextMenu.show();
@@ -36,7 +37,9 @@ public class TeamMenu extends Menu{
             this.nextMenu = this ;
             nextMenu.show();
             nextMenu.execute();
-        }
+        }}
+
+        public void show2(String team) {
         System.out.println("Use to see team info :") ;
         System.out.println("board Menu");
         System.out.println("scoreboard show");
@@ -44,7 +47,7 @@ public class TeamMenu extends Menu{
         System.out.println("chatroom show");
         System.out.println("show tasks");
         System.out.println("show task id <id>");
-        if(userAdmin(inputParse[2])) {
+        if(userLeader(team)) {
             System.out.println("Admin menu: ");
             System.out.println("-------------------------------");
             System.out.println("sudo show all tasks");
@@ -58,74 +61,87 @@ public class TeamMenu extends Menu{
             System.out.println("send notification <notification> username <username>");
             System.out.println("send notification <notification> teammember <teammember>");
         }
+        execute2(team);
+    }
+        public void execute2(String team) {
         String input2 = getInput() ;
         String[] inputParse2 = parseInput(input2) ;
         if(inputParse2[0].trim().equalsIgnoreCase("back")) {
             this.nextMenu = parent ;
         }
-
         else if (inputParse2[0].trim().equalsIgnoreCase("scoreboard")) {
-            this.nextMenu = new ScoreBoard("scoreBoard" , this , inputParse[2]) ;
+            this.nextMenu = new ScoreBoard("scoreBoard" , this , team) ;
         }
         else if(inputParse2[0].trim().equalsIgnoreCase("roadmap")) {
-            this.nextMenu = new RoadMap("roadMap" , this , inputParse[2]) ;
+            this.nextMenu = new RoadMap("roadMap" , this , team) ;
         }
         else if(inputParse2[0].trim().equalsIgnoreCase("chatroom")) {
-            this.nextMenu = new ChatRoom("chatroom" , this , inputParse[2]) ;
+            this.nextMenu = new ChatRoom("chatroom" , this , team) ;
         }
         else if(inputParse2[1].trim().equalsIgnoreCase("tasks")) {
             this.nextMenu = new TasksPage("taskPage" , this ) ;
         }
         else if(inputParse2[1].trim().equalsIgnoreCase("task")) {
-            String outPut = showTaskById(inputParse[2] , inputParse2[3]) ;
+            String outPut = showTaskById(team , inputParse2[3]) ;
             System.out.println(outPut);
             this.nextMenu = this ;
+            this.execute2(team);
         }
         else if(inputParse2[0].trim().equalsIgnoreCase("sudo")) {
             System.out.println(showAllTasks());
             this.nextMenu = this ;
+            this.execute2(team);
         }
         else if(inputParse2[0].trim().equalsIgnoreCase("create")) {
             System.out.println(createTask(inputParse2[2] ,inputParse2[4] , inputParse2[6]));
             this.nextMenu = this ;
+            this.execute2(team);
         }
         else if(inputParse2[1].trim().equalsIgnoreCase("members")) {
-            System.out.println(showMembersTeam(inputParse[2]));
+            System.out.println(showMembersTeam(team));
             this.nextMenu = this ;
+            this.execute2(team);
         }
         else if(inputParse2[0].trim().equalsIgnoreCase("Add")) {
-            System.out.println(addMember(inputParse2[3] , inputParse[2]));
+            System.out.println(addMember(inputParse2[3] , team));
             this.nextMenu = this ;
+            this.execute2(team);
         }
         else if(inputParse2[0].trim().equalsIgnoreCase("delete")) {
-            System.out.println(deleteMember(inputParse2[3] , inputParse[2]));
+            System.out.println(deleteMember(inputParse2[3] , team));
             this.nextMenu = this ;
+            this.execute2(team);
         }
         else if(inputParse2[0].trim().equalsIgnoreCase("suspend")) {
-            System.out.println(suspendMember(inputParse2[3] , inputParse[2]));
+            System.out.println(suspendMember(inputParse2[3] , team));
             this.nextMenu = this ;
+            this.execute2(team);
         }
         else if(inputParse2[0].trim().equalsIgnoreCase("promote")) {
-            System.out.println(promoteMember(inputParse2[2] , inputParse[4] ,inputParse[2]));
+            System.out.println(promoteMember(inputParse2[2] , inputParse[4] ,team));
             this.nextMenu = this ;
+            this.execute2(team);
         }
         else if(inputParse2[0].trim().equalsIgnoreCase("assign")) {
-            System.out.println(assignMember(inputParse2[3] , inputParse2[5] , inputParse[2]));
+            System.out.println(assignMember(inputParse2[3] , inputParse2[5] , team));
             this.nextMenu = this ;
+            this.execute2(team);
         }
-        else if(inputParse[0].trim().equalsIgnoreCase("notification") && inputParse[3].trim().equalsIgnoreCase("username")) {
+        else if(inputParse2[0].trim().equalsIgnoreCase("notification") && inputParse2[3].trim().equalsIgnoreCase("username")) {
             System.out.println(sendNotificationToMember(inputParse2[2],inputParse2[4]));
             this.nextMenu = this ;
+            this.execute2(team);
         }
-        else if(inputParse[0].trim().equalsIgnoreCase("notification") && inputParse[3].trim().equalsIgnoreCase("teamName")) {
+        else if(inputParse2[0].trim().equalsIgnoreCase("notification") && inputParse2[3].trim().equalsIgnoreCase("teamName")) {
             System.out.println(sendNotificationToMember(inputParse2[2],inputParse2[4]));
             this.nextMenu = this ;
+            this.execute2(team);
         }
         else {
             System.out.println("Invalid input try again");
             this.nextMenu = this ;
+            this.execute2(team);
         }
         nextMenu.show();
         nextMenu.execute();
-    }
-}
+    }}

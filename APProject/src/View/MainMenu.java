@@ -48,20 +48,24 @@ public class MainMenu extends Menu{
         }
         else if(Regex.leaderShowTeam(input)) {
             System.out.println(showTeams());
-            this.nextMenu = this ;
+            this.nextMenu = this;
+            nextMenu.execute();
         }
         else if(Regex.leaderShowTeams(input)) {
             String outPut = showTeam(inputParse[2]) ;
             System.out.println(outPut);
-            this.nextMenu = this ;
+            this.nextMenu = this;
+            nextMenu.execute();
         }
         else if(Regex.leaderCreateTeam(input)) {
             System.out.println(createTeam(inputParse[2]));
-            this.nextMenu = this ;
+            this.nextMenu = this;
+            nextMenu.execute();
         }
         else {
             System.out.println("Your input is not valid");
-            this.nextMenu = this ;
+            this.nextMenu = this;
+            nextMenu.execute();
         }
         nextMenu.show();
         nextMenu.execute();

@@ -19,12 +19,18 @@ public class WelcomeMenu extends Menu {
     public void execute() {
         String input = getInput();
         String[] inputParse = parseInput(input);
-        if (Regex.SignUp(input)) {
+        if(input.equalsIgnoreCase("exit")) {
+            System.exit(1);
+        }
+        else if (Regex.SignUp(input)) {
             String outPut = createUser(inputParse[3], inputParse[5], inputParse[7] , inputParse[9]) ;
             System.out.println(outPut) ;
             if(outPut.equalsIgnoreCase("user created successfully!")) {
-                nextMenu = new MainMenu("mainMenu" , this) ;
-            }
+                if(!userAdmin)
+                    nextMenu = new MainMenu("mainMenu" , this) ;
+                else
+                    nextMenu = new AdminMainMenu("adminMainMenu" , this) ;
+            }}
             else if(Regex.errorUsernameExists(outPut)) {
                 nextMenu = this ;
             }
@@ -37,12 +43,14 @@ public class WelcomeMenu extends Menu {
             else if(outPut.equalsIgnoreCase("Email address is invalid!")) {
                 nextMenu = this ;
             }
-        }
         else if(Regex.logIn(input)) {
             String outPut = login(inputParse[3] , inputParse[5]);
             System.out.println(outPut);
             if(outPut.equalsIgnoreCase("user logged in successfully!")) {
-                nextMenu = new MainMenu("mainMenu" , this) ;
+                if(!userAdmin)
+                    nextMenu = new MainMenu("mainMenu" , this) ;
+                else
+                    nextMenu = new AdminMainMenu("adminMainMenu" , this) ;
             }
             if(Regex.errorUsernameExists(outPut)) {
                 nextMenu = this ;

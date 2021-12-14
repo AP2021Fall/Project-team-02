@@ -27,29 +27,45 @@ public class AdminMainMenu extends Menu {
         }
         else if(Regex.adminShowProfile(input)) {
             showProfile(inputParse[3]) ;
+            this.nextMenu = this;
+            nextMenu.execute();
         }
         else if(Regex.adminBanUser(input)) {
             banUser(inputParse[3]) ;
+            this.nextMenu = this;
+            nextMenu.execute();
         }
         else if(Regex.adminChangeRole(input)) {
             changeRole(inputParse[3] , inputParse[5]) ;
+            this.nextMenu = this;
+            nextMenu.execute();
         }
         else if(Regex.adminSendNotificationAll(input)) {
            sendNotificationAll(inputParse[2]) ;
+            this.nextMenu = this;
+            nextMenu.execute();
         }
         else if(Regex.adminSendNotification(input)) {
             showProfile(inputParse[2] , inputParse[4]) ;
+            this.nextMenu = this;
+            nextMenu.execute();
         }
         else if(Regex.adminNotificationTeam(input)) {
             showProfile(inputParse[2] , inputParse[4]) ;
+            this.nextMenu = this;
+            nextMenu.execute();
         }
         else if(Regex.adminAccept(input)) {
             String[] parseInputUsernames1 = parseInputUsernames(inputParse[2]) ;
             adminAccept(parseInputUsernames1) ;
+            this.nextMenu = this;
+            nextMenu.execute();
         }
         else if(Regex.adminReject(input)) {
             String[] parseInputUsernames1 = parseInputUsernames(inputParse[2]);
             adminreject(parseInputUsernames1);
+            this.nextMenu = this;
+            nextMenu.execute();
         }
         nextMenu.show();
         nextMenu.execute();
