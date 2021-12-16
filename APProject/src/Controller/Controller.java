@@ -4,6 +4,7 @@ import Controller.dto.*;
 import Model.*;
 import Repository.*;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -18,6 +19,51 @@ public class Controller {
     public static TaskRepository taskRepository = new TaskRepository();
     public static TeamRepository teamRepository = new TeamRepository();
     public static UserRepository userRepository = new UserRepository();
+
+    public ShowCalenderResponse showCalender(String username, String teamName) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            if (user.getTeams().stream().anyMatch(t -> t.getName().equals(teamName))) {
+                Team team = teamRepository.findByTeamName(teamName);
+                List<String> sortedDeadlines = user.getTasks().stream().filter(t -> t.teamName().equals(teamName))
+                        .filter(t -> !(t.isFailed() || t.isDone() || t.taskTimeFinished()))
+                        .map(Task::getDeadLine)
+                        .sorted(String::compareTo)
+                        .collect(Collectors.toList());
+
+                if(sortedDeadlines.isEmpty())
+                    return new ShowCalenderResponse("no deadlines");
+
+                List<String> responseDeadLines = new ArrayList<>();
+                for (String deadline : sortedDeadlines) {
+                    int days = Task.getDeadlineDays(deadline);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    if(days < 4)
+                        stringBuilder.append("***");
+                    else if (days <= 10)
+                        stringBuilder.append("**");
+                    else
+                        stringBuilder.append("*");
+
+                    int dateIndex = deadline.indexOf("|");
+                    if(dateIndex <0)
+                        dateIndex = 10;
+
+                    stringBuilder.append(deadline.substring(0, dateIndex));
+                    stringBuilder.append("__remaining days:");
+                    stringBuilder.append(days);
+                    responseDeadLines.add(stringBuilder.toString());
+
+                }
+
+                return new ShowCalenderResponse(responseDeadLines, teamName);
+
+            }
+        }
+        return null;
+
+    }
+
 
     //    public void getInput(String input) {
 //
@@ -35,15 +81,124 @@ public class Controller {
 //    public String showTasks(String BoardName) {
 //
 //    }
-//    public String showBoard(String BoardName) {
-//
-//    }
-//    public void openTask() {
-//
-//    }
-//    public String showFailedTask(String BoardName) {
-//
-//    }
+    public ShowBoardResponse showBoard(String username, String teamName, String boardName) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            if (user.getTeams().stream().anyMatch(t -> t.getName().equals(teamName))) {
+                Team team = teamRepository.findByTeamName(teamName);
+                Optional<Board> teamBoard = team.getBoards().stream().filter(b -> b.getName().equals(boardName)).findAny();
+                if (teamBoard.isPresent()) {
+                    Board board = teamBoard.get();
+
+                    ShowBoardResponse response = new ShowBoardResponse(board.getName(), team.getLeader().getUsername());
+
+                    List<Task> tasks = board.getCategories().stream().flatMap(c -> c.getTasks().stream()).collect(Collectors.toList());;
+
+                    long doneCount = tasks.stream().filter(Task::isDone).count();
+                    long failedCount = tasks.stream().filter(t -> (t.isFailed() || t.taskTimeFinished())).count();
+
+                    if (tasks.size() != 0) {
+                        response.setCompletionPercentage((int) (doneCount / tasks.size()) * 100);
+                        response.setFailedPercentage((int) (failedCount / tasks.size()) * 100);
+                    }
+                    return response;
+                }
+            }
+        }
+        return null;
+    }
+
+    public String openTask(String username, String teamName, String boardName, String taskTitle, String deadLine, String assignUsername, String categoryName) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            if (user.getLeader()) {
+                Team team = teamRepository.findByTeamName(teamName);
+                Optional<Board> teamBoard = team.getBoards().stream().filter(b -> b.getName().equals(boardName)).findAny();
+                if (teamBoard.isPresent()) {
+                    Board board = teamBoard.get();
+                    if (board.getActive()) {
+                        Task task = board.getCategories().stream().flatMap(c -> c.getTasks().stream()).filter(t -> t.getTitle().equals(taskTitle)).findAny().orElse(null);
+                        if (task == null)
+                            return "Invalid task";
+
+                        if(!task.isFailed())
+                            return " This task is not in failed section";
+
+                        Category category = null;
+                        if(categoryName != null) {
+
+                            Optional<Category> categoryOptional = board.getCategories().stream().filter(c -> c.getName().equals(categoryName)).findAny();
+                            if (categoryOptional.isPresent()) {
+                                category = categoryOptional.get();
+                            } else {
+                                return "Invalid category";
+                            }
+                        }else {
+                            category = board.getCategories().get(0);
+                        }
+
+                        Category oldCategory = task.getCategory();
+                        if (oldCategory != null) {
+                            oldCategory.getTasks().remove(task);
+                        }
+                        task.setCategory(category);
+                        category.getTasks().add(task);
+
+                        if(assignUsername != null) {
+                            User assignUser = team.findByUsername(assignUsername);
+                            if(assignUser == null)
+                                return "Invalid teammember";
+                            task.getUsers().add(assignUser);
+                            assignUser.getTasks().add(task);
+                        }
+
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD|HH:mm");
+                        dateFormat.setLenient(false);
+                        try {
+                            Date date = dateFormat.parse(deadLine);
+                            if (task.getCreationDate().compareTo(deadLine) <= 0 && date.compareTo(new Date()) >= 0) {
+                                task.setDeadLine(deadLine);
+                            }else{
+                                return  "invalid deadline";
+                            }
+
+                        } catch (Exception e) {
+                            return  "invalid deadline";
+                        }
+
+                    }
+                    return null;
+                } else {
+                    return "There is no board with this name";
+                }
+            } else
+                return "You do not have the permission to do this action!";
+        } else
+            return "user not found";
+    }
+
+
+    public List<String> showDoneFailedTasks(String username, String teamName, String boardName, String categoryName) {
+        //category name should be done or failed
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            Team team = teamRepository.findByTeamName(teamName);
+            Optional<Board> teamBoard = team.getBoards().stream().filter(b -> b.getName().equals(boardName)).findAny();
+            if (teamBoard.isPresent()) {
+                Board board = teamBoard.get();
+                if (board.getActive()) {
+                    Category category = board.getCategories().stream().filter(c -> c.getName().equals(categoryName)).findAny().orElse(null);
+                    if(category != null){
+                        return category.getTasks().stream().map(Task::getTitle).collect(Collectors.toList());
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+
 //    public String showDoneTasks(String BoardName) {
 //
 //    }
@@ -59,9 +214,43 @@ public class Controller {
 //    public String showTasks (String category , String BoardName) {
 //
 //    }
-//    public void addTaskToBoard(String boardName , int id) {
-//
-//    }
+
+    public String addTaskToBoard(String username, String teamName, String boardName, Integer taskId) throws ParseException {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            if (user.getLeader()) {
+                Team team = teamRepository.findByTeamName(teamName);
+                Optional<Board> teamBoard = team.getBoards().stream().filter(b -> b.getName().equals(boardName)).findAny();
+                if (teamBoard.isPresent()) {
+                    Board board = teamBoard.get();
+                    if (board.getActive()) {
+                        Task task = taskRepository.findById(taskId);
+                        if (task == null)
+                            return "Invalid task id!";
+
+                        if (task.getCategory() != null && task.getCategory().getBoard().getId().equals(board.getId()))
+                            return "This task has already been added to this board";
+
+                        if (task.taskTimeFinished())
+                            return "The deadline of this task has already passed";
+
+                        if (task.getUsers().isEmpty())
+                            return "Please assign this task to someone first";
+
+                        Category fistCategory = board.getCategories().get(0);
+                        task.setCategory(fistCategory);
+                        fistCategory.getTasks().add(task);
+                    }
+                    return null;
+                } else {
+                    return "There is no board with this name";
+                }
+            } else
+                return "You do not have the permission to do this action!";
+        } else
+            return "user not found";
+    }
+
 //    public void checkCategoryExists(String category) {
 //
 //    }
@@ -134,6 +323,126 @@ public class Controller {
         return "user not found";
     }
 
+    public String moveTaskToNextCategory(String username, String teamName, String boardName, String taskTitle) throws ParseException {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            Team team = teamRepository.findByTeamName(teamName);
+            Optional<Board> teamBoard = team.getBoards().stream().filter(b -> b.getName().equals(boardName)).findAny();
+            if (teamBoard.isPresent()) {
+                Board board = teamBoard.get();
+                if (board.getActive()) {
+                    Task task = board.getCategories().stream().flatMap(c -> c.getTasks().stream()).filter(t -> t.getTitle().equals(taskTitle)).findAny().orElse(null);
+                    if (task == null)
+                        return "Invalid task!";
+
+                    Optional<User> userOption = task.getUsers().stream().filter(u -> u.getUsername().equals(username)).findAny();
+                    if(userOption.isPresent() || user.getLeader()) {
+                        Category category = task.getCategory();
+                        int categoryIndex = board.getCategories().indexOf(category);
+                        if(categoryIndex < board.getCategories().size() - 2) {
+                            category.getTasks().remove(task);
+                            Category nextCategory = board.getCategories().get(categoryIndex + 1);
+                            nextCategory.getTasks().add(task);
+                            task.setCategory(nextCategory);
+                            Integer userScore = team.getUsersScore().get(user.getId());
+                            if (task.isDone()) {
+                                userScore += 10;
+                            }else if(task.isFailed()){
+                                userScore -= 5;
+                            }else if(task.taskTimeFinished()){
+                                userScore -= 5;
+                                Category failedCategory = board.getCategories().stream().filter(c -> c.getName().equals("failed")).findAny().orElse(null);
+                                if(failedCategory != null) {
+                                    Category oldCategory = task.getCategory();
+                                    oldCategory.getTasks().remove(task);
+                                    task.setCategory(failedCategory);
+
+                                }
+                            }
+                            team.getUsersScore().put(user.getId(), userScore);
+                        }
+                    }else {
+                        return "This task is not assigned to you";
+                    }
+                }
+                return null;
+            } else {
+                return "There is no board with this name";
+            }
+        } else
+            return "user not found";
+    }
+
+    public String forceUpdateTaskCategory(String username, String teamName, String boardName, String categoryName, String taskTitle) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            if (user.getLeader()) {
+                Team team = teamRepository.findByTeamName(teamName);
+                Optional<Board> teamBoard = team.getBoards().stream().filter(b -> b.getName().equals(boardName)).findAny();
+                if (teamBoard.isPresent()) {
+                    Board board = teamBoard.get();
+                    if (board.getActive()) {
+                        Task task = board.getCategories().stream().flatMap(c -> c.getTasks().stream()).filter(t -> t.getTitle().equals(taskTitle)).findAny().orElse(null);
+                        if (task == null)
+                            return "There is no task with given information";
+
+                        Optional<Category> categoryOptional = board.getCategories().stream().filter(c -> c.getName().equals(categoryName)).findAny();
+                        if (categoryOptional.isPresent()) {
+                            Category category = categoryOptional.get();
+
+                            Category oldCategory = task.getCategory();
+                            if (oldCategory != null) {
+                                oldCategory.getTasks().remove(task);
+                            }
+                            task.setCategory(category);
+                            category.getTasks().add(task);
+                        } else {
+                            return "Invalid category";
+                        }
+                    }
+                    return null;
+                } else {
+                    return "There is no board with this name";
+                }
+            } else
+                return "You do not have the permission to do this action!";
+        } else
+            return "user not found";
+    }
+
+    public String assignTaskToMember(String username, String teamName, String memberUsername, String boardName, Integer taskId) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            if (user.getLeader()) {
+                Team team = teamRepository.findByTeamName(teamName);
+                Optional<Board> teamBoard = team.getBoards().stream().filter(b -> b.getName().equals(boardName)).findAny();
+                if (teamBoard.isPresent()) {
+                    Board board = teamBoard.get();
+                    if (board.getActive()) {
+                        Task task = taskRepository.findById(taskId);
+                        if (task == null)
+                            return "Invalid task id!";
+
+                        Optional<User> memberOption = team.getMembers().stream().filter(u -> u.getUsername().equals(memberUsername)).findAny();
+                        if (memberOption.isPresent()) {
+                            if (task.isDone())
+                                return "This task has already finished";
+                            User member = memberOption.get();
+                            task.getUsers().add(member);
+                            member.getTasks().add(task);
+                        } else {
+                            return "Invalid teammate";
+                        }
+                    }
+                    return null;
+                } else {
+                    return "There is no board with this name";
+                }
+            } else
+                return "You do not have the permission to do this action!";
+        } else
+            return "user not found";
+    }
 
     //    public void removeActiveBoard(String activeBoard) {
 //
