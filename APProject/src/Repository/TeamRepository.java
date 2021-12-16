@@ -1,15 +1,15 @@
 package Repository;
 
-import Model.Board;
 import Model.Team;
-import Repository.table.BoardTable;
 import Repository.table.TeamTable;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class TeamRepository extends AbstractDataBaseConnector{
+public class TeamRepository extends AbstractDataBaseConnector {
 
     private static Map<Integer, Team> teamsById = new HashMap<>();
     private static Map<Integer, TeamTable> teamTablesById = new HashMap<>();
@@ -40,11 +40,11 @@ public class TeamRepository extends AbstractDataBaseConnector{
     }
 
     public void initData() {
-        try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT id, name, leaderId, active, usersScore, members, messages, boards  FROM teams");
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT id, name, leaderId, active, usersScore, members, messages, boards  FROM teams");
         ) {
-            while(rs.next()){
+            while (rs.next()) {
                 Team team = new Team(rs.getInt("id"),
                         rs.getString("name"),
                         rs.getBoolean("active"));
@@ -66,6 +66,7 @@ public class TeamRepository extends AbstractDataBaseConnector{
             e.printStackTrace();
         }
     }
+
     @Override
     String getTableName() {
         return "teams";
@@ -74,4 +75,19 @@ public class TeamRepository extends AbstractDataBaseConnector{
     public Team findByTeamName(String teamName) {
         return teamsById.values().stream().filter(team -> team.getName().equals(teamName)).findAny().orElse(null);
     }
+
+    public Team createTeam(Team team) {
+        team.setId(IdGenerator.getNewId());
+        return teamsById.put(team.getId(), team);
+    }
+
+    public List<Team> findAll() {
+        return new ArrayList<>(teamsById.values());
+    }
+
+    public void remove(Team t) {
+        teamsById.remove(t.getId());
+        teamTablesById.remove(t.getId());
+    }
+
 }
