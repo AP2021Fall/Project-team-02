@@ -4,10 +4,12 @@ import Model.User;
 import Repository.table.UserTable;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class UserRepository extends AbstractDataBaseConnector{
+public class UserRepository extends AbstractDataBaseConnector {
 
     private static Map<Integer, User> usersById = new HashMap<>();
     private static Map<Integer, UserTable> userTablesById = new HashMap<>();
@@ -42,11 +44,11 @@ public class UserRepository extends AbstractDataBaseConnector{
     }
 
     public void initData() {
-        try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT id, username, password, email, role, logs, teams, messages, tasks, leader, fullName, birthDate  FROM users");
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT id, username, password, email, role, logs, teams, messages, tasks, leader, fullName, birthDate  FROM users");
         ) {
-            while(rs.next()){
+            while (rs.next()) {
                 User user = new User(rs.getInt("id"),
                         rs.getString("username"),
                         rs.getString("password"),
@@ -99,7 +101,18 @@ public class UserRepository extends AbstractDataBaseConnector{
     public User findByUsername(String username) {
         return usersById.values().stream().filter(u -> u.getUsername().equals(username)).findAny().orElse(null);
     }
+
     public User getById(Integer id) {
         return usersById.get(id);
     }
+
+    public void deleteUser(User user) {
+        usersById.remove(user.getId());
+        userTablesById.remove(user.getId());
+    }
+
+    public List<User> findAll() {
+        return new ArrayList<>(usersById.values());
+    }
+
 }
