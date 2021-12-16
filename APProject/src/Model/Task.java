@@ -1,6 +1,13 @@
 package Model;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Task {
@@ -98,5 +105,46 @@ public class Task {
     public void setCategory(Category category) {
         this.category = category;
     }
+
+    public boolean isDone() {
+        return category != null && category.getName().equals("done");
+    }
+
+    public boolean isFailed() {
+        return category != null && category.getName().equals("failed");
+    }
+
+    public boolean taskTimeFinished(){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD|HH:mm");
+        Date date = null;
+        try {
+            date = dateFormat.parse(deadLine);
+            return date.compareTo(new Date()) < 0;
+        } catch (ParseException e) {
+            return false;
+        }
+    }
+
+    public static int getDeadlineDays(String deadLine) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD|HH:mm");
+        Date date = null;
+        try {
+            date = dateFormat.parse(deadLine);
+
+            LocalDate deadLineLocalDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+            return Period.between(LocalDate.now(), deadLineLocalDate).getDays();
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    public String teamName() {
+        if(getCategory()!= null){
+            return category.getBoard().getTeam().getName();
+        }
+        return "";
+    }
+
 }
 

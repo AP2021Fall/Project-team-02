@@ -88,5 +88,10 @@ public class Team {
     public void setActive(boolean active) {
         this.active = active;
     }
+
+    public User findByUsername(String username) {
+        return members.stream().filter(u -> u.getUsername().equals(username)).findAny().orElse(null);
+    }
+
 }
 

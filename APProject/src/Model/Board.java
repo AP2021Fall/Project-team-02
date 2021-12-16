@@ -16,6 +16,7 @@ public class Board {
     public Board(String name, Team team) {
         this.name = name;
         this.team = team;
+        isActive = false;
     }
 
     public Board(Integer id, String name) {
@@ -70,5 +71,6 @@ public class Board {
     public void setActive(Boolean active) {
         isActive = active;
     }
+
 }
 
