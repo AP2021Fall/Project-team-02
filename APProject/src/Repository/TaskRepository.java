@@ -1,8 +1,6 @@
 package Repository;
 
-import Model.Board;
 import Model.Task;
-import Repository.table.BoardTable;
 import Repository.table.TaskTable;
 
 import java.sql.*;
@@ -11,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class TaskRepository extends AbstractDataBaseConnector{
+public class TaskRepository extends AbstractDataBaseConnector {
 
     private static Map<Integer, Task> tasksById = new HashMap<>();
     private static Map<Integer, TaskTable> taskTablesById = new HashMap<>();
@@ -42,13 +40,12 @@ public class TaskRepository extends AbstractDataBaseConnector{
         }
     }
 
-
     public void initData() {
-        try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT id, title, categoryId, description, priority, creationDate, deadLine, users, comments FROM tasks");
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT id, title, categoryId, description, priority, creationDate, deadLine, users, comments FROM tasks");
         ) {
-            while(rs.next()){
+            while (rs.next()) {
                 Task task = new Task(rs.getInt("id"),
                         rs.getString("title"),
                         rs.getString("description"),
@@ -93,4 +90,8 @@ public class TaskRepository extends AbstractDataBaseConnector{
         return toRemove.stream().map(Task::getId).collect(Collectors.toList());
     }
 
+    public Task createTask(Task task) {
+        task.setId(IdGenerator.getNewId());
+        return tasksById.put(task.getId(), task);
+    }
 }
