@@ -41,11 +41,11 @@ public class TaskRepository extends AbstractDataBaseConnector {
     }
 
     public void initData() {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT id, title, categoryId, description, priority, creationDate, deadLine, users, comments FROM tasks");
+        try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT id, title, categoryId, description, priority, creationDate, deadLine, users, comments FROM tasks");
         ) {
-            while (rs.next()) {
+            while(rs.next()){
                 Task task = new Task(rs.getInt("id"),
                         rs.getString("title"),
                         rs.getString("description"),

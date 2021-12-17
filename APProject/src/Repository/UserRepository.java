@@ -44,11 +44,11 @@ public class UserRepository extends AbstractDataBaseConnector {
     }
 
     public void initData() {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT id, username, password, email, role, logs, teams, messages, tasks, leader, fullName, birthDate  FROM users");
+        try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT id, username, password, email, role, logs, teams, messages, tasks, leader, fullName, birthDate  FROM users");
         ) {
-            while (rs.next()) {
+            while(rs.next()){
                 User user = new User(rs.getInt("id"),
                         rs.getString("username"),
                         rs.getString("password"),

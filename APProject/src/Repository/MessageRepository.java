@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MessageRepository extends AbstractDataBaseConnector {
-
     private static List<Message> messages = new ArrayList<>();
 
     public void creatTable() throws SQLException {
@@ -33,11 +32,11 @@ public class MessageRepository extends AbstractDataBaseConnector {
     }
 
     public void initData() {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT id, senderId,receiverId, type, txt FROM messages");
+        try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT id, senderId,receiverId, type, txt FROM messages");
         ) {
-            while (rs.next()) {
+            while(rs.next()){
                 Message message = new Message(rs.getInt("id"),
                         rs.getString("txt"),
                         rs.getString("type"),
@@ -65,4 +64,5 @@ public class MessageRepository extends AbstractDataBaseConnector {
         messages.add(message);
         return message;
     }
+
 }

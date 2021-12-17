@@ -40,11 +40,11 @@ public class TeamRepository extends AbstractDataBaseConnector {
     }
 
     public void initData() {
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT id, name, leaderId, active, usersScore, members, messages, boards  FROM teams");
+        try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT id, name, leaderId, active, usersScore, members, messages, boards  FROM teams");
         ) {
-            while (rs.next()) {
+            while(rs.next()){
                 Team team = new Team(rs.getInt("id"),
                         rs.getString("name"),
                         rs.getBoolean("active"));
@@ -66,7 +66,6 @@ public class TeamRepository extends AbstractDataBaseConnector {
             e.printStackTrace();
         }
     }
-
     @Override
     String getTableName() {
         return "teams";
