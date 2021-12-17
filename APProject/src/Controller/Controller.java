@@ -1100,5 +1100,17 @@ public String adminRejectTeams(String adminUsername, List<String> pendingTeamsNa
         }
         return  "You do not have access to this section";
     }
+    public AdminShowProfileResponse adminShowProfile(String adminUsername, String memberUsername){
+        if(adminUsername.equals("admin")){
+            User user  = userRepository.findByUsername(memberUsername);
+
+            if(user == null)
+                return new AdminShowProfileResponse("There is no user with this username");
+
+            return new AdminShowProfileResponse(user);
+
+        }
+        return new AdminShowProfileResponse( "You do not have access to this section");
+    }
 
 }
