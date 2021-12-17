@@ -1361,5 +1361,7 @@ public class Controller {
             return new LoginResponse("There is not any user with username: " + username + "!");
         }
     }
-
+    public boolean checkUEmailExists(String email) {
+        return userRepository.existEmail(email);
+    }
 }
