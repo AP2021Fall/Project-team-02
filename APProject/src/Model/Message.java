@@ -21,6 +21,13 @@ public class Message {
         this.receiverId = receiverId;
     }
 
+    public Message(String txt, String type, Integer senderId, Integer receiverId) {
+        this.txt = txt;
+        this.type = type;
+        this.senderId = senderId;
+        this.receiverId = receiverId;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -60,6 +67,5 @@ public class Message {
     public void setReceiverId(Integer receiverId) {
         this.receiverId = receiverId;
     }
-
 
 }
