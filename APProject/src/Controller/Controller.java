@@ -995,5 +995,20 @@ public String adminRejectTeams(String adminUsername, List<String> pendingTeamsNa
     return "You do not have access to this section";
 
 }
+    public String adminAcceptTeams(String adminUsername, List<String> pendingTeamsName) {
+        if(adminUsername.equals("admin")){
+            List<Team> pendingTeams = teamRepository.findAll().stream().sorted((t1, t2) -> t2.getId().compareTo(t1.getId()))
+                    .filter(t -> !t.isActive())
+                    .collect(Collectors.toList());
 
+            if(!pendingTeams.stream().map(Team::getName).collect(Collectors.toList()).containsAll(pendingTeamsName)){
+                return "Some teams are not in pending status! Try again";
+            }
+
+            pendingTeams.stream().filter(t -> pendingTeamsName.contains(t.getName())).forEach(t -> t.setActive(true));
+            return "teams accepted successfully!";
+        }
+        return "You do not have access to this section";
+
+    }
 }
