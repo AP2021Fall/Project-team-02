@@ -1057,5 +1057,27 @@ public String adminRejectTeams(String adminUsername, List<String> pendingTeamsNa
         }
         return "You do not have access to this section";
     }
+    public String adminChangeUserRole(String adminUsername, String memberUsername, String role) {
+        if(adminUsername.equals("admin")){
+            User user  = userRepository.findByUsername(memberUsername);
 
+            if(user == null)
+                return "There is no user with this username";
+
+            user.setRole(role);
+
+            if (role.equals(Role.TEAM_LEADER)) {
+                user.setLeader(true);
+                for (Team teamMemberTeam : user.getTeams()) {
+                    teamMemberTeam.getMembers().remove(user);
+                }
+
+                user.setTeams(new ArrayList<>());
+            }else
+                user.setLeader(false);
+
+            return "user role change successfully!";
+        }
+        return  "You do not have access to this section";
+    }
 }
