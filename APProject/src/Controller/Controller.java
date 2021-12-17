@@ -1150,5 +1150,52 @@ public String adminRejectTeams(String adminUsername, List<String> pendingTeamsNa
 
         return null;
     }
+    public String assignTaskToMember(String username, String teamName, String memberName, int taskId){
+        User user = userRepository.findByUsername(username);
+        if (user != null && user.getLeader()){
+            Team team = user.getTeams().stream().filter(t -> t.getName().equals(teamName)).findAny().orElse(null);
+            if(team != null){
+                User member = team.findByUsername(memberName);
+                if(member == null)
+                    return "No user exists with this username!";
 
+                Task task = team.getTask().stream().filter(t -> t.getId() == taskId).findAny().orElse(null);
+                if(task == null)
+                    return "No Task exists with this id!";
+
+                task.getUsers().remove(member);
+                task.getUsers().add(member);
+                member.getTasks().remove(task);
+                member.getTasks().add(task);
+                return "Member Assigned Successfully!";
+            }
+            return "team not found!";
+        }
+        return "You do not have the permission to do this action!";
+    }
+
+    public String promoteTeamMember(String username, String teamName, String memberName){
+        User user = userRepository.findByUsername(username);
+        if(user != null && user.getLeader()){
+            Team team = user.getTeams().stream().filter(t -> t.getName().equals(teamName))
+                    .findAny().orElse(null);
+            if(team != null){
+                User teamMember = team.findByUsername(memberName);
+                if(teamMember == null)
+                    return "No user exists with this username!";
+
+                teamMember.setLeader(true);
+                for (Team teamMemberTeam : teamMember.getTeams()) {
+                    teamMemberTeam.getMembers().remove(teamMember);
+                }
+
+                team.setLeader(teamMember);
+                teamMember.setTeams(new ArrayList<>());
+                teamMember.getTeams().add(team);
+                return "user: "+ memberName + " 's role change to leader";
+            }
+            return "team not found!";
+        }
+        return "You do not have the permission to do this action!";
+    }
 }
