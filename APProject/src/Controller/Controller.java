@@ -1112,5 +1112,43 @@ public String adminRejectTeams(String adminUsername, List<String> pendingTeamsNa
         }
         return new AdminShowProfileResponse( "You do not have access to this section");
     }
+    public String sendMessageToTeam(String username, String teamName, String messageTxt){
+        User user = userRepository.findByUsername(username);
+        if(user != null && user.getLeader()){
+            Team team = user.getTeams().stream().filter(t -> t.getName().equals(teamName)).findAny().orElse(null);
+            if(team != null){
+
+                Message message = new Message(messageTxt, MessageType.TEAM_LEADER, user.getId());
+                team.getMessages().add(message);
+                messageRepository.createMessage(message);
+                return "message sent successfully!";
+            }
+
+            return "No team exists with this name!";
+        }
+
+        return null;
+    }
+
+    public String sendMessageToMember(String username, String teamName, String memberName, String messageTxt){
+        User user = userRepository.findByUsername(username);
+        if(user != null && user.getLeader()){
+            Team team = user.getTeams().stream().filter(t -> t.getName().equals(teamName)).findAny().orElse(null);
+            if(team != null){
+                User member = team.findByUsername(memberName);
+                if(member== null)
+                    return  "No user exists with this username!";
+
+                Message message = new Message(messageTxt, MessageType.TEAM_LEADER, user.getId(), member.getId());
+                member.getMessages().add(message);
+                messageRepository.createMessage(message);
+                return "message sent successfully!";
+            }
+
+            return "No team exists with this name!";
+        }
+
+        return null;
+    }
 
 }
