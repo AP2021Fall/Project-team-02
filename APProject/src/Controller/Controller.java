@@ -1048,4 +1048,14 @@ public String adminRejectTeams(String adminUsername, List<String> pendingTeamsNa
 
         return "You do not have access to this section";
     }
+    public String adminSendMessageToAllUsers(String adminUsername, String messageTxt) {
+        if(adminUsername.equals("admin")){
+            Message message = new Message(messageTxt, MessageType.ADMIN, 0);
+            messageRepository.createMessage(message);
+            userRepository.findAll().forEach(u -> u.getMessages().add(message));
+            return "message sent successfully!";
+        }
+        return "You do not have access to this section";
+    }
+
 }
