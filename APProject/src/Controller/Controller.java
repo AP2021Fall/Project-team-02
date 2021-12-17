@@ -973,4 +973,27 @@ public class Controller {
 //    public boolean isTeamLeader(User user) {
 //        return false ;
 //    }
+public String adminRejectTeams(String adminUsername, List<String> pendingTeamsName) {
+    if(adminUsername.equals("admin")){
+        List<Team> pendingTeams = teamRepository.findAll().stream().sorted((t1, t2) -> t2.getId().compareTo(t1.getId()))
+                .filter(t -> !t.isActive())
+                .collect(Collectors.toList());
+
+        if(!pendingTeams.stream().map(Team::getName).collect(Collectors.toList()).containsAll(pendingTeamsName)){
+            return "Some teams are not in pending status! Try again";
+        }
+
+        pendingTeams.stream().filter(t -> pendingTeamsName.contains(t.getName())).forEach(t -> {
+            teamRepository.remove(t);
+            t.getLeader().getTeams().remove(t);
+            for (User member : t.getMembers()) {
+                member.getTeams().remove(t);
+            }
+        });
+        return "teams rejected successfully!";
+    }
+    return "You do not have access to this section";
+
+}
+
 }
