@@ -11,12 +11,15 @@ public class Team {
     private User leader;
     private Map<Integer, Integer> usersScore = new HashMap<>();
     private List<User> members = new ArrayList<>();
+    public List<User> suspendMembers = new ArrayList<>();
     private List<Message> messages = new ArrayList<>();
     private List<Board> boards = new ArrayList<>();
+    private List<Task> task = new ArrayList<>();
     private boolean active;
 
     public Team(String name) {
         this.name = name;
+        this.active = false;
     }
 
     public Team(Integer id, String name, boolean active) {
@@ -91,6 +94,22 @@ public class Team {
 
     public User findByUsername(String username) {
         return members.stream().filter(u -> u.getUsername().equals(username)).findAny().orElse(null);
+    }
+
+    public List<Task> getTask() {
+        return task;
+    }
+
+    public void setTask(List<Task> task) {
+        this.task = task;
+    }
+
+    public List<User> getSuspendMembers() {
+        return suspendMembers;
+    }
+
+    public void setSuspendMembers(List<User> suspendMembers) {
+        this.suspendMembers = suspendMembers;
     }
 
 }
