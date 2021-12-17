@@ -1259,4 +1259,66 @@ public String adminRejectTeams(String adminUsername, List<String> pendingTeamsNa
         }
         return "You do not have the permission to do this action!";
     }
+    public String addMemberToTeam(String username, String teamName, String newMemberName) {
+        User user = userRepository.findByUsername(username);
+        if(user != null && user.getLeader()) {
+            Team team = user.getTeams().stream().filter(t -> t.getName().equals(teamName))
+                    .findAny().orElse(null);
+            if(team != null) {
+                User newMember = userRepository.findByUsername(newMemberName);
+
+                if(newMember == null)
+                    return "No user exists with this username!";
+
+                if(team.findByUsername(newMemberName) == null) {
+                    newMember.getTeams().add(team);
+                    team.getMembers().add(newMember);
+                }
+                return "new member add successfully!";
+            }
+            return "team not found";
+        }
+
+        return "You do not have the permission to do this action!";
+    }
+
+    public List<String> showMembersName(String username, String teamName) {
+        User user = userRepository.findByUsername(username);
+        if(user != null && user.getLeader()){
+            user.getTeams().stream().filter(t -> t.getName().equals(teamName))
+                    .flatMap(t -> t.getMembers().stream())
+                    .map(User::getUsername)
+                    .sorted(String::compareTo)
+                    .collect(Collectors.toList());
+        }
+        return null;
+    }
+
+    public String createTask(String username, String teamName, String taskTitle, String startTime, String deadline) {
+        User user = userRepository.findByUsername(username);
+        if(user != null) {
+            if(user.getLeader()) {
+                Team team = teamRepository.findByTeamName(teamName);
+                if(team.getTask().stream().anyMatch(t -> t.getTitle().equals(taskTitle)))
+                    return "There is another task with this title!";
+
+                if(Task.isValidDate(startTime)){
+                    if(Task.isValidDate(deadline)){
+                        Task task = new Task(taskTitle);
+                        task.setDeadLine(deadline);
+                        task.setCreationDate(startTime);
+                        team.getTask().add(task);
+                        taskRepository.createTask(task);
+
+                        return "Task created successfully!";
+                    }
+                    return "Invalid deadline!";
+                }
+                return "Invalid start date!";
+            }
+            return "You do not have the permission to do this action!";
+        }
+        return "user not found";
+    }
+
 }
