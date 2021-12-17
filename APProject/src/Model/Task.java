@@ -146,5 +146,16 @@ public class Task {
         return "";
     }
 
+    public static boolean isValidDate(String dateStr) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd|HH:mm");
+        dateFormat.setLenient(false);
+        try {
+            Date date = dateFormat.parse(dateStr);
+            return date.compareTo(new Date()) >= 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
 }
 
