@@ -1080,4 +1080,25 @@ public String adminRejectTeams(String adminUsername, List<String> pendingTeamsNa
         }
         return  "You do not have access to this section";
     }
+    public String adminBanUser(String adminUsername, String memberUsername){
+        if(adminUsername.equals("admin")){
+            User user  = userRepository.findByUsername(memberUsername);
+
+            if(user == null)
+                return "There is no user with this username";
+
+            userRepository.deleteUser(user);
+            for (Team team : user.getTeams()) {
+                team.getMembers().remove(user);
+            }
+
+            for (Task task : user.getTasks()) {
+                task.getUsers().remove(user);
+            }
+
+            return "user baned successfully!";
+        }
+        return  "You do not have access to this section";
+    }
+
 }
