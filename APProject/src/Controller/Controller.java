@@ -1198,4 +1198,65 @@ public String adminRejectTeams(String adminUsername, List<String> pendingTeamsNa
         }
         return "You do not have the permission to do this action!";
     }
+    public String promoteTeamMember(String username, String teamName, String memberName){
+        User user = userRepository.findByUsername(username);
+        if(user != null && user.getLeader()){
+            Team team = user.getTeams().stream().filter(t -> t.getName().equals(teamName))
+                    .findAny().orElse(null);
+            if(team != null){
+                User teamMember = team.findByUsername(memberName);
+                if(teamMember == null)
+                    return "No user exists with this username!";
+
+                teamMember.setLeader(true);
+                for (Team teamMemberTeam : teamMember.getTeams()) {
+                    teamMemberTeam.getMembers().remove(teamMember);
+                }
+
+                team.setLeader(teamMember);
+                teamMember.setTeams(new ArrayList<>());
+                teamMember.getTeams().add(team);
+                return "user: "+ memberName + " 's role change to leader";
+            }
+            return "team not found!";
+        }
+        return "You do not have the permission to do this action!";
+    }
+
+    public String suspendTeamMember(String username, String teamName, String memberName) {
+        User user = userRepository.findByUsername(username);
+        if(user != null && user.getLeader()){
+            Team team = user.getTeams().stream().filter(t -> t.getName().equals(teamName))
+                    .findAny().orElse(null);
+            if(team != null){
+                User teamMember = team.findByUsername(memberName);
+                if(teamMember == null)
+                    return "No user exists with this username!";
+
+                team.getSuspendMembers().add(teamMember);
+                return "user: " + memberName + " suspended";
+            }
+            return "team not found!";
+        }
+        return "You do not have the permission to do this action!";
+    }
+
+    public String deleteTeamMember(String username, String teamName, String memberName) {
+        User user = userRepository.findByUsername(username);
+        if(user != null && user.getLeader()) {
+            Team team = user.getTeams().stream().filter(t -> t.getName().equals(teamName)).findAny().orElse(null);
+            if(team != null) {
+                User teamMember = team.findByUsername(memberName);
+                if(teamMember == null)
+                    return "No user exists with this username!";
+
+                team.getMembers().remove(teamMember);
+                team.getSuspendMembers().remove(teamMember);
+                teamMember.getTeams().remove(team);
+                return "user removed successfully";
+            }
+            return "team not found";
+        }
+        return "You do not have the permission to do this action!";
+    }
 }
