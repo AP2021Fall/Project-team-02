@@ -1011,4 +1011,27 @@ public String adminRejectTeams(String adminUsername, List<String> pendingTeamsNa
         return "You do not have access to this section";
 
     }
+    public List<String> adminShowPendingTeams(String adminUsername) {
+        if(adminUsername.equals("admin")){
+            return teamRepository.findAll().stream().sorted((t1,t2) -> t2.getId().compareTo(t1.getId()))
+                    .filter(t -> !t.isActive())
+                    .map(Team::getName)
+                    .collect(Collectors.toList());
+        }
+        return null;
+    }
+    public String adminSendMessageToTeam(String adminUsername, String teamName, String messageTxt) {
+        if (adminUsername.equals("admin")){
+            Team team = teamRepository.findByTeamName(teamName);
+            if(team == null)
+                return "No team exists with this name!";
+
+            Message message = new Message(messageTxt, MessageType.ADMIN, 0);
+            messageRepository.createMessage(message);
+            team.getMessages().add(message);
+            return "message sent successfully!";
+
+        }
+        return "You do not have access to this section";
+    }
 }
