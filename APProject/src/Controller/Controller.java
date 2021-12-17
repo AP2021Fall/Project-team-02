@@ -1352,5 +1352,29 @@ public class Controller {
 
         return null;
     }
+    private boolean isValidUsername(String username) {
+        Pattern usernamePattern = Pattern.compile("^[a-zA-Z0-9-]*$");
+        return usernamePattern.matcher(username).matches();
+    }
 
+    public ChangePasswordResponse changePassword(String username, String oldPassword,
+                                                 String newPassword) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            if (user.getPassword().equals(oldPassword)) {
+                if (oldPassword.equals(newPassword)) {
+                    return new ChangePasswordResponse(false, "Please type a New Password !");
+                }
+                if (isValidPassword(newPassword)) {
+                    user.setPassword(newPassword);
+                    return new ChangePasswordResponse(true, "");
+                }
+                return new ChangePasswordResponse(false, "Please Choose A strong Password (Containing at least 8 characters including 1 digit and 1 Capital Letter)");
+
+            } else {
+                return new ChangePasswordResponse(false, "wrong old password!");
+            }
+        }
+        return null;
+    }
 }
