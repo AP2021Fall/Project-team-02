@@ -1,6 +1,8 @@
 package View;
 
+import Controller.Controller;
 public class RoadMap extends TeamMenu {
+    public static Controller controller = new Controller();
     String team;
 
     public RoadMap(String name, Menu parent, String team) {
@@ -10,7 +12,7 @@ public class RoadMap extends TeamMenu {
 
     public void show() {
         super.show();
-        System.out.println(showRoadMap(team));
+        System.out.println(controller.showRoadMap(team));
     }
 
     public void execute() {

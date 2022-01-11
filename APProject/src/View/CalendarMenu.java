@@ -1,5 +1,7 @@
 package View;
 
+import Controller.Controller;
+
 public class CalendarMenu extends Menu{
     public CalendarMenu(String name, Menu parent) {
         super(name, parent);
@@ -19,7 +21,7 @@ public class CalendarMenu extends Menu{
             nextMenu.execute();
         }
         else if(Regex.calenderMenu(input)) {
-            System.out.println(calender());
+            System.out.println(Controller.dto.ShowCalenderResponse());
             this.nextMenu = parent ;
         }
         nextMenu.show();

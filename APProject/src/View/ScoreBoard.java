@@ -1,5 +1,7 @@
 package View;
 
+import Controller.Controller;
+
 public class ScoreBoard extends TeamMenu {
     String team ;
     public ScoreBoard(String name, Menu parent , String team) {
@@ -9,7 +11,7 @@ public class ScoreBoard extends TeamMenu {
 
     public void show() {
         super.show();
-        System.out.println(showScoreBoard(team));
+        System.out.println(Controller.showScoreBoard(team));
     }
 
     public void execute() {

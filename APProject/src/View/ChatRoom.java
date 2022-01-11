@@ -1,5 +1,7 @@
 package View;
 
+import Controller.Controller;
+
 public class ChatRoom extends TeamMenu {
     private String team;
 
@@ -11,7 +13,7 @@ public class ChatRoom extends TeamMenu {
     public void show() {
         super.show();
         System.out.println("Team Chatroom :");
-        System.out.println(getChatRoomName(team));
+        System.out.println(getChatRoomName(team));  // i don't know what is it
         System.out.println("send your message to chatroom:send message <message>");
     }
 
@@ -20,7 +22,7 @@ public class ChatRoom extends TeamMenu {
         while (!input.equalsIgnoreCase("back")) {
             String[] inputParse = parseInput(input);
             if (Regex.chatRoom(input)) {
-              sendMessage(inputParse[2]) ;
+              Controller.sendMessage(inputParse[2]) ;
               this.nextMenu = this ;
             }
             else {

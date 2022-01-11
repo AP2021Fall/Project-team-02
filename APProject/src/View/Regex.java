@@ -106,7 +106,7 @@ public class Regex {
         matcher = pattern.matcher(input) ;
         return matcher.find();
     }
-    public static boolean showNotifications(String input) {
+    public static boolean showNotification(String input) {
         pattern = Pattern.compile("^(profile show notifications)$" , Pattern.CASE_INSENSITIVE) ;
         matcher = pattern.matcher(input) ;
         return matcher.find();

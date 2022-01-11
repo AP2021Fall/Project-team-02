@@ -13,7 +13,7 @@ public class MainMenu extends Menu{
         System.out.println("Tasks Page");
         System.out.println("Calendar Menu");
         System.out.println("Notification Bar");
-        if(userLeader()) {
+        if(userLeader()) {   // Anita
             System.out.println("-----------------------------------");
             System.out.println("admin commands: ");
             System.out.println("show teams");

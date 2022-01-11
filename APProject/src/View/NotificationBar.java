@@ -7,7 +7,7 @@ public class NotificationBar extends Menu{
 
     public void show() {
         super.show();
-        System.out.println(Allnutifs());
+        System.out.println(Allnutifs());  //nadarim ino
     }
 
     public void execute() {

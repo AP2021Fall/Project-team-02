@@ -1,6 +1,8 @@
 package View;
 
 import Model.Task;
+import Controller.Controller;
+import View.Regex;
 
     public class TasksPage extends Menu{
         String team ;
@@ -9,7 +11,7 @@ import Model.Task;
         }
         public void show() {
             super.show();
-            System.out.println(showTasks(team));
+            System.out.println(Controller.showTasks(team));
             if(userLeader()) {
                 System.out.println("------------------------------------------");
                 System.out.println("Use this formats : ");
