@@ -1,14 +1,15 @@
 package View;
 
+import Controller.*;
 public class TeamMenu extends Menu{
     public TeamMenu(String name, Menu parent) {
         super(name, parent);
     }
-
+    public static Controller controller = new Controller();
 
     public void show() {
         super.show();
-        System.out.println(showUserTeams());
+        System.out.println(Controller.showTeam()); // Anita in chera baraye voroodish eror mide ??
         System.out.println("Use to enter your teamMenu : "
         + "enter team <teamName>");
     }
@@ -23,7 +24,7 @@ public class TeamMenu extends Menu{
             nextMenu.execute();
         }
         else if(inputParse[1].trim().equalsIgnoreCase("team")) {
-            String outPut = Team(inputParse[2]) ;
+            String outPut = Team(inputParse[2]) ; //Arya in chie ??
             System.out.println(outPut);
             show2(inputParse[2]);
             if(outPut.equalsIgnoreCase("this team not exist")) {
@@ -82,18 +83,18 @@ public class TeamMenu extends Menu{
             this.nextMenu = new TasksPage("taskPage" , this ) ;
         }
         else if(inputParse2[1].trim().equalsIgnoreCase("task")) {
-            String outPut = showTaskById(team , inputParse2[3]) ;
+            String outPut = taskTablesById(team , inputParse2[3]) ; // Anita baraye in bayad chio seda bezanam ??
             System.out.println(outPut);
             this.nextMenu = this ;
             this.execute2(team);
         }
         else if(inputParse2[0].trim().equalsIgnoreCase("sudo")) {
-            System.out.println(showAllTasks());
+            System.out.println(controller.showAllTasksOfTeam()); //Ainta voroodya ??
             this.nextMenu = this ;
             this.execute2(team);
         }
         else if(inputParse2[0].trim().equalsIgnoreCase("create")) {
-            System.out.println(createTask(inputParse2[2] ,inputParse2[4] , inputParse2[6]));
+            System.out.println(controller.createTask(inputParse2[2] ,inputParse2[4] , inputParse2[6]));
             this.nextMenu = this ;
             this.execute2(team);
         }
@@ -103,22 +104,22 @@ public class TeamMenu extends Menu{
             this.execute2(team);
         }
         else if(inputParse2[0].trim().equalsIgnoreCase("Add")) {
-            System.out.println(addMember(inputParse2[3] , team));
+            System.out.println(controller.addMemberToTeam(inputParse2[3] , team));
             this.nextMenu = this ;
             this.execute2(team);
         }
         else if(inputParse2[0].trim().equalsIgnoreCase("delete")) {
-            System.out.println(deleteMember(inputParse2[3] , team));
+            System.out.println(controller.deleteTeamMember(inputParse2[3] , team));
             this.nextMenu = this ;
             this.execute2(team);
         }
         else if(inputParse2[0].trim().equalsIgnoreCase("suspend")) {
-            System.out.println(suspendMember(inputParse2[3] , team));
+            System.out.println(controller.suspendTeamMember(inputParse2[3] , team));
             this.nextMenu = this ;
             this.execute2(team);
         }
         else if(inputParse2[0].trim().equalsIgnoreCase("promote")) {
-            System.out.println(promoteMember(inputParse2[2] , inputParse[4] ,team));
+            System.out.println(controller.promoteTeamMember(inputParse2[2] , inputParse[4] ,team));
             this.nextMenu = this ;
             this.execute2(team);
         }
@@ -132,11 +133,11 @@ public class TeamMenu extends Menu{
             this.nextMenu = this ;
             this.execute2(team);
         }
-        else if(inputParse2[0].trim().equalsIgnoreCase("notification") && inputParse2[3].trim().equalsIgnoreCase("teamName")) {
+       /* else if(inputParse2[0].trim().equalsIgnoreCase("notification") && inputParse2[3].trim().equalsIgnoreCase("teamName")) {
             System.out.println(sendNotificationToMember(inputParse2[2],inputParse2[4]));
             this.nextMenu = this ;
             this.execute2(team);
-        }
+        }*/
         else {
             System.out.println("Invalid input try again");
             this.nextMenu = this ;

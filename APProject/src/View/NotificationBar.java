@@ -1,5 +1,6 @@
 package View;
 
+import Controller.*;
 public class NotificationBar extends Menu{
     public NotificationBar(String name, Menu parent) {
         super(name, parent);
@@ -7,7 +8,7 @@ public class NotificationBar extends Menu{
 
     public void show() {
         super.show();
-        System.out.println(Allnutifs());  //nadarim ino
+        System.out.println(Controller.showNotification());
     }
 
     public void execute() {

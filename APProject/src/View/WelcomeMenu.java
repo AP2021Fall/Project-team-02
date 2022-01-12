@@ -1,11 +1,13 @@
 package View;
 
 
+import Controller.Controller;
+
 public class WelcomeMenu extends Menu {
     public WelcomeMenu(String name, Menu parent) {
         super(name, parent);
     }
-
+    public static Controller controller = new Controller();
     public void show() {
         System.out.println("Welcome To Our Program!");
         System.out.println("I Hope You Enjoy");
@@ -22,8 +24,8 @@ public class WelcomeMenu extends Menu {
         if(input.equalsIgnoreCase("exit")) {
             System.exit(1);
         }
-        else if (Regex.SignUp(input)) {
-            String outPut = createUser(inputParse[3], inputParse[5], inputParse[7] , inputParse[9]) ;
+        else if (Regex.signUp(input)) {
+            String outPut = controller.createUser(inputParse[3], inputParse[5], inputParse[7] , inputParse[9]) ;
             System.out.println(outPut) ;
             if(outPut.equalsIgnoreCase("user created successfully!")) {
                 if(!userAdmin)
@@ -44,7 +46,7 @@ public class WelcomeMenu extends Menu {
                 nextMenu = this ;
             }
         else if(Regex.logIn(input)) {
-            String outPut = login(inputParse[3] , inputParse[5]);
+            String outPut = controller.loginUser(inputParse[3] , inputParse[5]);  //type output ro be join kardam be loginresponse
             System.out.println(outPut);
             if(outPut.equalsIgnoreCase("user logged in successfully!")) {
                 if(!userAdmin)

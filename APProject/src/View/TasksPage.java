@@ -32,7 +32,7 @@ import View.Regex;
                 nextMenu.execute();
             }
             else if(Regex.changeTitle(input)) {
-                System.out.println(changeTitle1(inputParse[3] , inputParse[5]));
+                System.out.println(changeTitle1(inputParse[3] , inputParse[5]));   // Arya in 1 chie too in metod ha ??
                 this.nextMenu = this ;
                 nextMenu.execute();
             }

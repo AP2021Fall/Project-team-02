@@ -13,7 +13,7 @@ public class ChatRoom extends TeamMenu {
     public void show() {
         super.show();
         System.out.println("Team Chatroom :");
-        System.out.println(getChatRoomName(team));  // i don't know what is it
+        System.out.println(getChatRoomName(team));
         System.out.println("send your message to chatroom:send message <message>");
     }
 

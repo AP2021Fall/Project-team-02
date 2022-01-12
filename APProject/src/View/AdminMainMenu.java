@@ -1,9 +1,12 @@
 package View;
 
+import Controller.Controller;
+
 public class AdminMainMenu extends Menu {
     public AdminMainMenu(String name, Menu parent) {
         super(name, parent);
     }
+    public static Controller controller = new Controller();
     public void show() {
         System.out.println("Welcome to Admin Menu :");
         System.out.println("Use this commends: ");
@@ -26,7 +29,7 @@ public class AdminMainMenu extends Menu {
             System.exit(1) ;
         }
         else if(Regex.adminShowProfile(input)) {
-            showProfile(inputParse[3]) ;
+            controller.showProfile(inputParse[3]) ;
             this.nextMenu = this;
             nextMenu.execute();
         }
@@ -46,24 +49,24 @@ public class AdminMainMenu extends Menu {
             nextMenu.execute();
         }
         else if(Regex.adminSendNotification(input)) {
-            showProfile(inputParse[2] , inputParse[4]) ;
+            controller.adminShowProfile(inputParse[2] , inputParse[4]) ;
             this.nextMenu = this;
             nextMenu.execute();
         }
-        else if(Regex.adminNotificationTeam(input)) {
+        else if(Regex.adminNotificationTeam(input)) {  // Arya in chie??
             showProfile(inputParse[2] , inputParse[4]) ;
             this.nextMenu = this;
             nextMenu.execute();
         }
         else if(Regex.adminAccept(input)) {
             String[] parseInputUsernames1 = parseInputUsernames(inputParse[2]) ;
-            adminAccept(parseInputUsernames1) ;
+            controller.adminAcceptTeams(parseInputUsernames1) ;  // ino hamoon list too controller bezanam ??
             this.nextMenu = this;
             nextMenu.execute();
         }
         else if(Regex.adminReject(input)) {
             String[] parseInputUsernames1 = parseInputUsernames(inputParse[2]);
-            adminreject(parseInputUsernames1);
+            controller.adminRejectTeams(parseInputUsernames1);
             this.nextMenu = this;
             nextMenu.execute();
         }

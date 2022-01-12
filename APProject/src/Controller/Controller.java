@@ -1198,7 +1198,7 @@ public class Controller {
         Pattern passwordPattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$");
         return passwordPattern.matcher(password).matches() && password.length() >= 8;
     }
-    public LoginResponse loginUser(String username, String password) {
+    public String loginUser(String username, String password) {
         if(username.equals("admin") && password.equals("admin"))
             return new LoginResponse(0, username, Role.SYSTEM_ADMINISTRATOR, "user logged in successfully!");
 
