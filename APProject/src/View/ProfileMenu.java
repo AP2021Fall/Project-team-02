@@ -74,7 +74,7 @@ public class ProfileMenu extends Menu{
             nextMenu.execute();
         }
         else if(Regex.showMyProfile(input)) {
-            System.out.println(Controller.showMyProfile());    //aslan nadarim chizi be onvane show myprofile
+            System.out.println(controller.showProfile());    //aslan nadarim chizi be onvane show myprofile
             this.nextMenu = this ;
             nextMenu.execute();
         }

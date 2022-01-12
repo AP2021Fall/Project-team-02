@@ -1,7 +1,13 @@
 package View;
 
+import Controller.*;
+
+import static View.Regex.boardMenuRemove;
+import static View.Regex.boardMenuSelect;
+
 public class BoardMenu extends TeamMenu{
     String team ;
+    public static Controller controller = new Controller();
     public BoardMenu(String name, Menu parent , String team) {
         super(name, parent);
     }
@@ -24,15 +30,15 @@ public class BoardMenu extends TeamMenu{
             this.nextMenu = parent ;
         }
         else if(Regex.boardMenuCreate(input)) {
-            createBoard(inputParse[3]) ;
+            Controller.createBoard(inputParse[3]) ;
             this.nextMenu = this ;
         }
-        else if(Regex.boardMenuRemove(input)) {
-            System.out.println(menuBoardRemove(inputParse[3]));
+        else if(boardMenuRemove(input)) {
+            System.out.println(boardMenuRemove(inputParse[3]));
             this.nextMenu = this ;
         }
-        else if(Regex.boardMenuSelect(input)) {
-            System.out.println(menuBoardSelect(inputParse[3])) ;
+        else if(boardMenuSelect(input)) {
+            System.out.println(boardMenuSelect(inputParse[3])) ;
             this.nextMenu = this ;
         }
         else if(Regex.boardMenuDeSelect(input)) {
@@ -40,7 +46,7 @@ public class BoardMenu extends TeamMenu{
             this.nextMenu = this ;
         }
         else if(Regex.boardShow(input)) {
-            System.out.println(showBoard(inputParse[3]));
+            System.out.println(controller.showBoard(inputParse[3]));
             this.nextMenu = this ;
         }
         else if(Regex.boardShowDoneFail(input)) {
@@ -59,7 +65,7 @@ public class BoardMenu extends TeamMenu{
             this.nextMenu = this ;
         }
         else if(Regex.boardShowDoneFail(input)) {
-            System.out.println(boardShowDoneOrFail(inputParse[2] , inputParse[5]));
+            System.out.println(boardShowDoneFail(inputParse[2] , inputParse[5]));
             this.nextMenu = this ;
         }
         else if(Regex.boardCategory(input)) {

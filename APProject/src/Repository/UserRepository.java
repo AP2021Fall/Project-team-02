@@ -2,7 +2,6 @@ package Repository;
 
 import Model.User;
 import Repository.table.UserTable;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;

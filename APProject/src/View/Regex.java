@@ -186,7 +186,7 @@ public class Regex {
         matcher = pattern.matcher(input) ;
         return matcher.find() ;
     }
-    public static boolean boardMenuDeSelect(String input) {
+    public static boolean rboardMenuDeSelect(String input) {
         pattern = Pattern.compile("^(board deselect)$" , Pattern.CASE_INSENSITIVE);
         matcher = pattern.matcher(input) ;
         return matcher.find() ;

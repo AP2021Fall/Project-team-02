@@ -20,6 +20,7 @@ public class Controller {
     public static TaskRepository taskRepository = new TaskRepository();
     public static TeamRepository teamRepository = new TeamRepository();
     public static UserRepository userRepository = new UserRepository();
+    public static Controller controller = new Controller();
 
     public ShowBoardResponse showBoard(String username, String teamName, String boardName) {
         User user = userRepository.findByUsername(username);
@@ -333,7 +334,7 @@ public class Controller {
     public static void sendMessage(String username) {
         User user = userRepository.findByUsername(username);
         if (user != null) {
-            Team team = teamRepository.findByTeamName( teamName());
+            Team team = teamRepository.findByTeamName(TeamName());
             if (team != null) {
                 Message newMessage = new Message(message, MessageType.TEAM, user.getId());
                 team.getMessages().add(newMessage);
@@ -526,7 +527,7 @@ public class Controller {
 
     public static List<Message> showNotification() {
         String username;
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username);   // Anita
         if (user != null) {
             return messageRepository.findByReceiverIdAndType(user.getId(), MessageType.TEAM_LEADER);
         }
@@ -541,7 +542,7 @@ public class Controller {
         return null;
     }
 
-    public ShowProfileResponse showProfile(String username) {
+    public ShowProfileResponse showProfile() {
         User user = userRepository.findByUsername(username);
         if (user != null) {
             return user.profile();

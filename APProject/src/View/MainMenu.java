@@ -1,9 +1,12 @@
 package View;
 
+import Controller.*;
+
 public class MainMenu extends Menu{
     public MainMenu(String name, Menu parent) {
         super(name, parent);
     }
+    public static Controller controller = new Controller();
 
     public void show() {
         super.show();
@@ -13,7 +16,7 @@ public class MainMenu extends Menu{
         System.out.println("Tasks Page");
         System.out.println("Calendar Menu");
         System.out.println("Notification Bar");
-        if(userLeader()) {   // Anita
+        if(userLeader()) {
             System.out.println("-----------------------------------");
             System.out.println("admin commands: ");
             System.out.println("show teams");
@@ -47,18 +50,18 @@ public class MainMenu extends Menu{
             }
         }
         else if(Regex.leaderShowTeam(input)) {
-            System.out.println(showTeams());
+            System.out.println(controller.showTeams());
             this.nextMenu = this;
             nextMenu.execute();
         }
         else if(Regex.leaderShowTeams(input)) {
-            String outPut = showTeam(inputParse[2]) ;
+            String outPut = controller.showTeams(inputParse[1]) ;   // showteam or showteams ??
             System.out.println(outPut);
             this.nextMenu = this;
             nextMenu.execute();
         }
         else if(Regex.leaderCreateTeam(input)) {
-            System.out.println(createTeam(inputParse[2]));
+            System.out.println(controller.createNewTeam(inputParse[2]));
             this.nextMenu = this;
             nextMenu.execute();
         }
