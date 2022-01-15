@@ -1,12 +1,20 @@
 package View;
 
 import Controller.Controller;
+import Controller.dto.AdminShowProfileResponse;
+import Controller.dto.ScoreBoardResponse;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class AdminMainMenu extends Menu {
-    public AdminMainMenu(String name, Menu parent) {
+    private String adminUsername;
+    private Controller controller = new Controller();
+
+    public AdminMainMenu(String name, Menu parent,String adminUsername) {
         super(name, parent);
+        this.adminUsername = adminUsername;
     }
-    public static Controller controller = new Controller();
     public void show() {
         System.out.println("Welcome to Admin Menu :");
         System.out.println("Use this commends: ");
@@ -29,44 +37,74 @@ public class AdminMainMenu extends Menu {
             System.exit(1) ;
         }
         else if(Regex.adminShowProfile(input)) {
-            controller.showProfile(inputParse[3]) ;
+            AdminShowProfileResponse showProfileResponse = controller.adminShowProfile(adminUsername, inputParse[3]) ;
+            if (showProfileResponse.isSuccessful()){
+                System.out.println(showProfileResponse.getUser().profile());
+            }else {
+                System.out.println(showProfileResponse.getMessage());
+            }
             this.nextMenu = this;
             nextMenu.execute();
         }
         else if(Regex.adminBanUser(input)) {
-            banUser(inputParse[3]) ;
+            String response = controller.adminBanUser(adminUsername, inputParse[3]);
+            System.out.println(response);
             this.nextMenu = this;
             nextMenu.execute();
         }
         else if(Regex.adminChangeRole(input)) {
-            changeRole(inputParse[3] , inputParse[5]) ;
+            String response = controller.adminChangeUserRole(adminUsername, inputParse[3] , inputParse[5]);
+            System.out.println(response);
             this.nextMenu = this;
             nextMenu.execute();
         }
         else if(Regex.adminSendNotificationAll(input)) {
-           sendNotificationAll(inputParse[2]) ;
+            String response = controller.adminSendMessageToAllUsers(adminUsername, inputParse[2]) ;
+            System.out.println(response);
             this.nextMenu = this;
             nextMenu.execute();
         }
         else if(Regex.adminSendNotification(input)) {
-            controller.adminShowProfile(inputParse[2] , inputParse[4]) ;
+            String response = controller.adminSendMessageToUser(adminUsername, inputParse[4] , inputParse[2]) ;
+            System.out.println(response);
             this.nextMenu = this;
             nextMenu.execute();
         }
-        else if(Regex.adminNotificationTeam(input)) {  // Arya in chie??
-            showProfile(inputParse[2] , inputParse[4]) ;
+        else if(Regex.adminNotificationTeam(input)) {
+            String response = controller.adminSendMessageToTeam(adminUsername, inputParse[4] , inputParse[2]) ;
+            System.out.println(response);
             this.nextMenu = this;
             nextMenu.execute();
         }
         else if(Regex.adminAccept(input)) {
             String[] parseInputUsernames1 = parseInputUsernames(inputParse[2]) ;
-            controller.adminAcceptTeams(parseInputUsernames1) ;  // ino hamoon list too controller bezanam ??
+            String response = controller.adminAcceptTeams(adminUsername, Arrays.asList(parseInputUsernames1)) ;
+            System.out.println(response);
             this.nextMenu = this;
             nextMenu.execute();
         }
         else if(Regex.adminReject(input)) {
             String[] parseInputUsernames1 = parseInputUsernames(inputParse[2]);
-            controller.adminRejectTeams(parseInputUsernames1);
+            String response = controller.adminRejectTeams(adminUsername, Arrays.asList(parseInputUsernames1));
+            System.out.println(response);
+            this.nextMenu = this;
+            nextMenu.execute();
+        }
+        else if(Regex.adminShowPendingTeam(input)) {
+
+            List<String> pendingTeams = controller.adminShowPendingTeams(adminUsername);
+            pendingTeams.forEach(System.out::println);
+            this.nextMenu = this;
+            nextMenu.execute();
+        }else if(Regex.adminShowScoreBoard(input)){
+            String teamName = inputParse[3];
+            ScoreBoardResponse scoreBoardResponse = controller.showScoreBoard(teamName);
+            if (scoreBoardResponse.isSuccessful()){
+                scoreBoardResponse.getUsersScores().forEach((username, score) -> System.out.println(username +" : " + score));
+
+            }else{
+                System.out.println(scoreBoardResponse.getMessage());
+            }
             this.nextMenu = this;
             nextMenu.execute();
         }
