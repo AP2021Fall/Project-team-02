@@ -1,15 +1,18 @@
 package View;
 
-import Controller.*;
+import Controller.Controller;
+import Controller.dto.ShowBoardResponse;
 
-import static View.Regex.boardMenuRemove;
-import static View.Regex.boardMenuSelect;
+import java.util.List;
 
 public class BoardMenu extends TeamMenu{
-    String team ;
-    public static Controller controller = new Controller();
-    public BoardMenu(String name, Menu parent , String team) {
-        super(name, parent);
+    private String team;
+    private String selectedBoard;
+
+    private Controller controller = new Controller();
+    public BoardMenu(String name, Menu parent , String team, String username, String role) {
+        super(name, parent, username, role);
+        this.team = team;
     }
     public void show() {
         super.show();
@@ -30,74 +33,94 @@ public class BoardMenu extends TeamMenu{
             this.nextMenu = parent ;
         }
         else if(Regex.boardMenuCreate(input)) {
-            Controller.createBoard(inputParse[3]) ;
+            String response = controller.createBoard(getUsername(), team, inputParse[3]);
+            if (response != null)
+                System.out.println(response);
             this.nextMenu = this ;
         }
-        else if(boardMenuRemove(input)) {
-            System.out.println(boardMenuRemove(inputParse[3]));
+        else if(Regex.boardMenuRemove(input)) {
+            String response = controller.removeBoard(getUsername(), team, inputParse[3]);
+            if (response != null)
+                System.out.println(response);
             this.nextMenu = this ;
         }
-        else if(boardMenuSelect(input)) {
-            System.out.println(boardMenuSelect(inputParse[3])) ;
+        else if(Regex.boardMenuSelect(input)) {
+            selectedBoard = inputParse[3];
             this.nextMenu = this ;
         }
         else if(Regex.boardMenuDeSelect(input)) {
-            System.out.println(boardDeSelect());
+            selectedBoard = null;
             this.nextMenu = this ;
         }
         else if(Regex.boardShow(input)) {
-            System.out.println(controller.showBoard(inputParse[3]));
-            this.nextMenu = this ;
-        }
-        else if(Regex.boardShowDoneFail(input)) {
-            if(inputParse.length == 12) {
-                System.out.println(boardShowDoneFail1(inputParse[3] , inputParse[5] , inputParse[7] , inputParse[9] , inputParse[11]));
-            }
-            else if(inputParse[4].equalsIgnoreCase("assign")) {
-                System.out.println(boardShowDoneFail2(inputParse[3] , inputParse[5] , inputParse[7] , inputParse[9]));
-            }
-            else if(inputParse[6].equalsIgnoreCase("category")) {
-                System.out.println(boardShowDoneFail3(inputParse[3] , inputParse[7] , inputParse[9] , inputParse[5]));
-            }
-            else {
-                System.out.println(boardShowDoneFail4(inputParse[3] , inputParse[5] , inputParse[7]));
+            ShowBoardResponse response = controller.showBoard(getUsername(), team, inputParse[3]);
+            if (response != null){
+                response.print();
             }
             this.nextMenu = this ;
         }
         else if(Regex.boardShowDoneFail(input)) {
-            System.out.println(boardShowDoneFail(inputParse[2] , inputParse[5]));
+            List<String> response = controller.showDoneFailedTasks(getUsername(), team, inputParse[5], inputParse[2]);
+            response.forEach(System.out::println);
             this.nextMenu = this ;
         }
         else if(Regex.boardCategory(input)) {
-            System.out.println(boardShowCategory(inputParse[3] , inputParse[5]));
+            String response = controller.addCategoryToBoard(getUsername(), team, inputParse[5], inputParse[3], null);
+            if (response != null)
+                System.out.println(response);
             this.nextMenu = this ;
         }
         else if(Regex.boardCategoryNext(input)) {
-            System.out.println(boardShowCategoryNext(inputParse[4] , inputParse[6]));
+            String response = controller.moveTaskToNextCategory(getUsername(), team, inputParse[6], inputParse[4]);
+            if (response != null)
+                System.out.println(response);
             this.nextMenu = this ;
         }
         else if(Regex.boardForce(input)) {
-            System.out.println(boardForce(inputParse[3] , inputParse[5] , inputParse[7]));
+            String response = controller.forceUpdateTaskCategory(getUsername(), team, inputParse[7], inputParse[3], inputParse[5]);
+            if (response != null)
+                System.out.println(response);
             this.nextMenu = this;
         }
         else if(Regex.boardAssign(input)) {
-            System.out.println(boardAssign(inputParse[2] ,inputParse[4] ,inputParse[6]));
+            try {
+                int taskId = Integer.parseInt(inputParse[4]);
+                String response = controller.assignTaskToMember(getUsername(), team, inputParse[2], inputParse[6], taskId);
+                if (response != null)
+                    System.out.println(response);
+            }catch (Exception e){
+
+            }
             this.nextMenu = this ;
         }
         else if(Regex.boardAddTask(input)) {
-            System.out.println(boardAdd(inputParse[2] , inputParse[4]));
+            try {
+                int taskId = Integer.parseInt(inputParse[4]);
+                String response = controller.addTaskToBoard(getUsername(), team, inputParse[4], taskId);
+                if (response != null) {
+                    System.out.println(response);
+                }
+            }catch (Exception e){
+
+            }
             this.nextMenu = this ;
         }
         else if(Regex.boardDone(input)) {
-            System.out.println(boardDone(inputParse[3]));
+            String response = controller.doneBoard(getUsername(), team, inputParse[3]);
+            if (response != null)
+                System.out.println(response);
             this.nextMenu = this ;
         }
         else if(Regex.boardCategoryColumn(input)) {
-            System.out.println(boardCategoryColumn(inputParse[2] , inputParse[4] , inputParse[6]));
-            this.nextMenu = this ;
-        }
-        else if(Regex.boardCategory(input)) {
-            System.out.println(boardCategory(inputParse[3] , inputParse[5]));
+            try {
+                int index = Integer.parseInt(inputParse[4]);
+                String response = controller.updateCategoryColumn(getUsername(), team, inputParse[6], inputParse[2], index);
+                if (response != null) {
+                    System.out.println(response);
+                }
+            }catch (Exception e){
+
+            }
             this.nextMenu = this ;
         }
         nextMenu.show();
