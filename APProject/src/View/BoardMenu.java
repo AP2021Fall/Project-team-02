@@ -2,7 +2,6 @@ package View;
 
 import Controller.Controller;
 import Controller.dto.ShowBoardResponse;
-
 import java.util.List;
 
 public class BoardMenu extends TeamMenu{
@@ -10,6 +9,7 @@ public class BoardMenu extends TeamMenu{
     private String selectedBoard;
 
     private Controller controller = new Controller();
+
     public BoardMenu(String name, Menu parent , String team, String username, String role) {
         super(name, parent, username, role);
         this.team = team;

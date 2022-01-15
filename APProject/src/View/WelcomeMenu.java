@@ -38,7 +38,8 @@ public class WelcomeMenu extends Menu {
                 if(loginResponse.getRole().equals(Role.SYSTEM_ADMINISTRATOR))
                     nextMenu = new AdminMainMenu("adminMainMenu" , this, loginResponse.getUsername()) ;
                 else
-                    nextMenu = new MainMenu("mainMenu" , this, loginResponse.getUsername(), loginResponse.getRole()) ;
+                    nextMenu = new MainMenu("mainMenu" , this, loginResponse.getUsername(),
+                            loginResponse.getRole(), loginResponse.getTeam()) ;
             }else{
                 nextMenu = this ;
             }

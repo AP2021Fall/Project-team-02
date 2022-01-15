@@ -1,7 +1,7 @@
 package View;
 
 import Controller.Controller;
-import Model.Role;
+import Model.*;
 
 import java.util.List;
 
@@ -9,11 +9,13 @@ public class MainMenu extends Menu {
     private String username;
     private String role;
     private Controller controller = new Controller();
+    private String team;
 
-    public MainMenu(String name, Menu parent, String username, String role) {
+    public MainMenu(String name, Menu parent, String username, String role, String team) {
         super(name, parent);
         this.username = username;
         this.role = role;
+        this.team = team;
     }
 
     public void show() {
@@ -49,6 +51,8 @@ public class MainMenu extends Menu {
                 this.nextMenu = new CalendarMenu("calendarMenu", this, username);
             } else if (inputParse[1].trim().equalsIgnoreCase("notification")) {
                 this.nextMenu = new NotificationBar("notifications", this, username);
+            }else if (inputParse[1].trim().equalsIgnoreCase("Board")) {
+                this.nextMenu = new BoardMenu("BoardMenu", this, username, role, team);
             }
         } else if (Regex.leaderShowTeam(input) && Role.TEAM_LEADER.equals(role)) {
             String teamName = inputParse[2];
