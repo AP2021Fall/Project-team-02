@@ -20,7 +20,6 @@ public class Controller {
     public static TaskRepository taskRepository = new TaskRepository();
     public static TeamRepository teamRepository = new TeamRepository();
     public static UserRepository userRepository = new UserRepository();
-    public static Controller controller = new Controller();
 
     public ShowBoardResponse showBoard(String username, String teamName, String boardName) {
         User user = userRepository.findByUsername(username);
@@ -34,7 +33,6 @@ public class Controller {
                     ShowBoardResponse response = new ShowBoardResponse(board.getName(), team.getLeader().getUsername());
 
                     List<Task> tasks = board.getCategories().stream().flatMap(c -> c.getTasks().stream()).collect(Collectors.toList());
-                    ;
 
                     long doneCount = tasks.stream().filter(Task::isDone).count();
                     long failedCount = tasks.stream().filter(t -> (t.isFailed() || t.taskTimeFinished())).count();
@@ -95,6 +93,7 @@ public class Controller {
                 if (teamBoard.isPresent()) {
                     Board board = teamBoard.get();
                     board.setActive(true);
+                    return null;
                 } else {
                     return "There is no board with this name";
                 }
@@ -125,6 +124,7 @@ public class Controller {
                             return "wrong column!";
                         board.getCategories().add(index, category);
                     }
+                    return null;
                 } else {
                     return "There is no board with this name";
                 }
@@ -134,7 +134,36 @@ public class Controller {
         return "user not found";
     }
 
-    public String moveTaskToNextCategory(String username, String teamName, String boardName, String taskTitle) throws ParseException {
+    public String updateCategoryColumn(String username, String teamName, String boardName, String categoryName, Integer index) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            if (user.getLeader()) {
+                Team team = teamRepository.findByTeamName(teamName);
+                Optional<Board> teamBoard = team.getBoards().stream().filter(b -> b.getName().equals(boardName)).findAny();
+                if (teamBoard.isPresent()) {
+                    Board board = teamBoard.get();
+                    Optional<Category> categoryOptional = board.getCategories().stream().filter(c -> c.getName().equals(categoryName)).findAny();
+                    if (!categoryOptional.isPresent())
+                        return "There is no category with this name!";
+
+                    Category category = categoryOptional.get();
+
+                    if (board.getCategories().size() - 1 < index)
+                        return "wrong column!";
+                    board.getCategories().remove(category);
+                    board.getCategories().add(index, category);
+
+                    return null;
+                } else {
+                    return "There is no board with this name";
+                }
+            }
+            return "You do not have the permission to do this action!";
+        }
+        return "user not found";
+    }
+
+    public String moveTaskToNextCategory(String username, String teamName, String boardName, String taskTitle){
         User user = userRepository.findByUsername(username);
         if (user != null) {
             Team team = teamRepository.findByTeamName(teamName);
@@ -171,6 +200,7 @@ public class Controller {
                                 }
                             }
                             team.getUsersScore().put(user.getId(), userScore);
+                            return null;
                         }
                     } else {
                         return "This task is not assigned to you";
@@ -268,6 +298,7 @@ public class Controller {
                     categoryRepository.removeByBoard(board.getId());
                     List<Integer> taskIds = taskRepository.removeByBoard(board.getId());
                     commentRepository.removeByTaskId(taskIds);
+                    return null;
                 } else {
                     return "There is no board with this name";
                 }
@@ -310,7 +341,7 @@ public class Controller {
             return new ShowTaskResponse("task not found");
 
         }
-        return null;
+        return new ShowTaskResponse("user not found!");
     }
 
 
@@ -331,10 +362,10 @@ public class Controller {
     }
 
 
-    public static void sendMessage(String username) {
+    public  void sendMessage(String username, String teamName, String message) {
         User user = userRepository.findByUsername(username);
         if (user != null) {
-            Team team = teamRepository.findByTeamName(TeamName());
+            Team team = teamRepository.findByTeamName(teamName);
             if (team != null) {
                 Message newMessage = new Message(message, MessageType.TEAM, user.getId());
                 team.getMessages().add(newMessage);
@@ -367,7 +398,7 @@ public class Controller {
         Team team = teamRepository.findByTeamName(teamName);
         if (team != null) {
             Map<String, Integer> response = team.getBoards().stream().flatMap(board -> board.getCategories().stream())
-                    .flatMap(category -> category.getTasks().stream()).collect(Collectors.toMap(t -> t.getTitle(), t -> t.getId()));
+                    .flatMap(category -> category.getTasks().stream()).collect(Collectors.toMap(Task::getTitle, Task::getId));
 
             if (response.size() == 0) {
                 return new RoadMapResponse(false, "no task yet");
@@ -380,7 +411,7 @@ public class Controller {
     }
 
 
-    public static ScoreBoardResponse showScoreBoard(String teamName) {
+    public ScoreBoardResponse showScoreBoard(String teamName) {
         Team team = teamRepository.findByTeamName(teamName);
         if (team != null) {
             Map<String, Integer> usersScore = new HashMap<>();
@@ -525,16 +556,15 @@ public class Controller {
         return "user not found";
     }
 
-    public static List<Message> showNotification() {
-        String username;
-        User user = userRepository.findByUsername(username);   // Anita
+    public  List<Message> showNotification(String username) {
+        User user = userRepository.findByUsername(username);
         if (user != null) {
             return messageRepository.findByReceiverIdAndType(user.getId(), MessageType.TEAM_LEADER);
         }
         return null;
     }
 
-    public static List<Log> showLog() {
+    public List<Log> showLog(String username) {
         User user = userRepository.findByUsername(username);
         if (user != null) {
             return logRepository.getLogsByUserId(user.getId());
@@ -542,7 +572,7 @@ public class Controller {
         return null;
     }
 
-    public ShowProfileResponse showProfile() {
+    public ShowProfileResponse showProfile(String username) {
         User user = userRepository.findByUsername(username);
         if (user != null) {
             return user.profile();
@@ -550,7 +580,7 @@ public class Controller {
         return null;
     }
 
-    public static List<String> showTeam(String username) {
+    public List<String> showTeam(String username, String teamName) {
         User user = userRepository.findByUsername(username);
         if (user != null) {
             Team team = user.getTeams().stream().filter(t -> t.getName().equals(teamName)).findAny().orElse(null);
@@ -565,7 +595,7 @@ public class Controller {
         return null;
     }
 
-    public List<String> showTeams() {
+    public List<String> showTeams(String username) {
         User user = userRepository.findByUsername(username);
         if (user != null) {
             if (user.getRole().equals(Role.TEAM_MEMBER) || user.getRole().equals(Role.TEAM_LEADER)) {
@@ -616,7 +646,7 @@ public class Controller {
                 return new ChangePasswordResponse(false, "wrong old password!");
             }
         }
-        return null;
+        return new ChangePasswordResponse(false, "user not found!");
     }
 
 
@@ -723,7 +753,7 @@ public class Controller {
                     .map(Team::getName)
                     .collect(Collectors.toList());
         }
-        return null;
+        return new ArrayList<>();
     }
 
     public String adminSendMessageToTeam(String adminUsername, String teamName, String messageTxt) {
@@ -982,7 +1012,7 @@ public class Controller {
                     .sorted(String::compareTo)
                     .collect(Collectors.toList());
         }
-        return null;
+        return new ArrayList<>();
     }
 
     public String createTask(String username, String teamName, String taskTitle, String startTime, String deadline) {
@@ -1038,44 +1068,41 @@ public class Controller {
         }
     }
 
-    public ShowCalenderResponse showCalender(String username, String teamName) {
+    public ShowCalenderResponse showCalender(String username) {
         User user = userRepository.findByUsername(username);
         if (user != null) {
-            if (user.getTeams().stream().anyMatch(t -> t.getName().equals(teamName))) {
-                Team team = teamRepository.findByTeamName(teamName);
-                List<String> sortedDeadlines = user.getTasks().stream().filter(t -> t.teamName().equals(teamName))
-                        .filter(t -> !(t.isFailed() || t.isDone() || t.taskTimeFinished()))
-                        .map(Task::getDeadLine)
-                        .sorted(String::compareTo)
-                        .collect(Collectors.toList());
+            List<String> sortedDeadlines = user.getTasks().stream()
+                    .filter(t -> !(t.isFailed() || t.isDone() || t.taskTimeFinished()))
+                    .map(Task::getDeadLine)
+                    .sorted(String::compareTo)
+                    .collect(Collectors.toList());
 
-                if (sortedDeadlines.isEmpty())
-                    return new ShowCalenderResponse("no deadlines");
+            if (sortedDeadlines.isEmpty())
+                return new ShowCalenderResponse("no deadlines");
 
-                List<String> responseDeadLines = new ArrayList<>();
-                for (String deadline : sortedDeadlines) {
-                    int days = Task.getDeadlineDays(deadline);
-                    StringBuilder stringBuilder = new StringBuilder();
-                    if (days < 4)
-                        stringBuilder.append("***");
-                    else if (days <= 10)
-                        stringBuilder.append("**");
-                    else
-                        stringBuilder.append("*");
+            List<String> responseDeadLines = new ArrayList<>();
+            for (String deadline : sortedDeadlines) {
+                int days = Task.getDeadlineDays(deadline);
+                StringBuilder stringBuilder = new StringBuilder();
+                if (days < 4)
+                    stringBuilder.append("***");
+                else if (days <= 10)
+                    stringBuilder.append("**");
+                else
+                    stringBuilder.append("*");
 
-                    int dateIndex = deadline.indexOf("|");
-                    if (dateIndex < 0)
-                        dateIndex = 10;
+                int dateIndex = deadline.indexOf("|");
+                if (dateIndex < 0)
+                    dateIndex = 10;
 
-                    stringBuilder.append(deadline.substring(0, dateIndex));
-                    stringBuilder.append("__remaining days:");
-                    stringBuilder.append(days);
-                    responseDeadLines.add(stringBuilder.toString());
-                }
-
+                stringBuilder.append(deadline.substring(0, dateIndex));
+                stringBuilder.append("__remaining days:");
+                stringBuilder.append(days);
+                responseDeadLines.add(stringBuilder.toString());
             }
+            return new ShowCalenderResponse(responseDeadLines);
         }
-        return null;
+        return new ShowCalenderResponse("user not found!");
     }
 
     public List<Task> showAllTasksOfTeam(String username, String teamName) {
@@ -1084,7 +1111,7 @@ public class Controller {
             if (user.getLeader()) {
                 Team team = user.getTeams().stream().filter(t -> t.getName().equals(teamName)).findAny().orElse(null);
                 if (team == null)
-                    return null;
+                    return new ArrayList<>();
 
                 return team.getBoards().stream().flatMap(b -> b.getCategories().stream()).flatMap(c -> c.getTasks().stream())
                         .collect(Collectors.toList());
@@ -1187,7 +1214,7 @@ public class Controller {
             }
         }
 
-        return null;
+        return new ArrayList<>();
     }
     private boolean isValidUsername(String username) {
         Pattern usernamePattern = Pattern.compile("^[a-zA-Z0-9-]*$");
@@ -1198,7 +1225,7 @@ public class Controller {
         Pattern passwordPattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$");
         return passwordPattern.matcher(password).matches() && password.length() >= 8;
     }
-    public String loginUser(String username, String password) {
+    public LoginResponse loginUser(String username, String password) {
         if(username.equals("admin") && password.equals("admin"))
             return new LoginResponse(0, username, Role.SYSTEM_ADMINISTRATOR, "user logged in successfully!");
 
@@ -1218,5 +1245,10 @@ public class Controller {
     }
     public boolean checkUEmailExists(String email) {
         return userRepository.existEmail(email);
+    }
+
+    public boolean userHasThisTeam(String username, String teamName) {
+        User user = userRepository.findByUsername(username);
+        return user.getTeams().stream().anyMatch(t -> t.getName().equals(teamName));
     }
 }
