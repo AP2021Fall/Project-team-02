@@ -1,54 +1,71 @@
 package View;
 
-import Controller.*;
-public class TeamMenu extends Menu{
-    public TeamMenu(String name, Menu parent) {
+import Controller.Controller;
+import Controller.dto.ShowTaskResponse;
+import Model.Role;
+import Model.Task;
+import Model.User;
+
+import java.util.Arrays;
+import java.util.List;
+
+public class TeamMenu extends Menu {
+
+    private String username;
+    private String role;
+    private Controller controller = new Controller();
+
+    public TeamMenu(String name, Menu parent, String username, String role) {
         super(name, parent);
+
+        this.username = username;
+        this.role = role;
     }
-    public static Controller controller = new Controller();
+
 
     public void show() {
         super.show();
-        System.out.println(Controller.showTeam()); // Anita in chera baraye voroodish eror mide ??
+        List<String> teams = controller.showTeamMenu(username);
+        teams.forEach(System.out::println);
         System.out.println("Use to enter your teamMenu : "
-        + "enter team <teamName>");
+                + "enter team <teamName>");
     }
 
 
     public void execute() {
-        String input = getInput() ;
-        String[] inputParse = parseInput(input) ;
-        if(inputParse[0].trim().equalsIgnoreCase("back")) {
-            this.nextMenu = parent ;
+        String input = getInput();
+        String[] inputParse = parseInput(input);
+        if (inputParse[0].trim().equalsIgnoreCase("back")) {
+            this.nextMenu = parent;
             nextMenu.show();
             nextMenu.execute();
-        }
-        else if(inputParse[1].trim().equalsIgnoreCase("team")) {
-            String outPut = Team(inputParse[2]) ; //Arya in chie ??
-            System.out.println(outPut);
-            show2(inputParse[2]);
-            if(outPut.equalsIgnoreCase("this team not exist")) {
-                this.nextMenu = this ;
+        } else if (inputParse[1].trim().equalsIgnoreCase("team")) {
+            boolean hasTeam = controller.userHasThisTeam(username, inputParse[2]);
+            if (hasTeam) {
+                show2(inputParse[2]);
+            } else {
+                System.out.println("this team not exist");
+                this.nextMenu = this;
                 nextMenu.show();
                 nextMenu.execute();
             }
-        }
-        else  {
+        } else {
             System.out.println("invalid input!");
-            this.nextMenu = this ;
+            this.nextMenu = this;
             nextMenu.show();
             nextMenu.execute();
-        }}
+        }
+    }
 
-        public void show2(String team) {
-        System.out.println("Use to see team info :") ;
+    public void show2(String team) {
+        System.out.println("Use to see team info :");
         System.out.println("board Menu");
         System.out.println("scoreboard show");
         System.out.println("roadmap show");
         System.out.println("chatroom show");
         System.out.println("show tasks");
         System.out.println("show task id <id>");
-        if(userLeader(team)) {
+        if (Role.TEAM_LEADER.equals(role)) {
             System.out.println("Admin menu: ");
             System.out.println("-------------------------------");
             System.out.println("sudo show all tasks");
@@ -64,85 +81,124 @@ public class TeamMenu extends Menu{
         }
         execute2(team);
     }
-        public void execute2(String team) {
-        String input2 = getInput() ;
-        String[] inputParse2 = parseInput(input2) ;
-        if(inputParse2[0].trim().equalsIgnoreCase("back")) {
-            this.nextMenu = parent ;
-        }
-        else if (inputParse2[0].trim().equalsIgnoreCase("scoreboard")) {
-            this.nextMenu = new ScoreBoard("scoreBoard" , this , team) ;
-        }
-        else if(inputParse2[0].trim().equalsIgnoreCase("roadmap")) {
-            this.nextMenu = new RoadMap("roadMap" , this , team) ;
-        }
-        else if(inputParse2[0].trim().equalsIgnoreCase("chatroom")) {
-            this.nextMenu = new ChatRoom("chatroom" , this , team) ;
-        }
-        else if(inputParse2[1].trim().equalsIgnoreCase("tasks")) {
-            this.nextMenu = new TasksPage("taskPage" , this ) ;
-        }
-        else if(inputParse2[1].trim().equalsIgnoreCase("task")) {
-            String outPut = taskTablesById(team , inputParse2[3]) ; // Anita baraye in bayad chio seda bezanam ??
-            System.out.println(outPut);
-            this.nextMenu = this ;
+
+    public void execute2(String team) {
+        String input2 = getInput();
+        String[] inputParse2 = parseInput(input2);
+        if (inputParse2[0].trim().equalsIgnoreCase("back")) {
+            this.nextMenu = parent;
+        } else if (inputParse2[0].trim().equalsIgnoreCase("scoreboard")) {
+            this.nextMenu = new ScoreBoard("scoreBoard", this, team, username, role);
+        } else if (inputParse2[0].trim().equalsIgnoreCase("roadmap")) {
+            this.nextMenu = new RoadMap("roadMap", this, team, username, role);
+        } else if (inputParse2[0].trim().equalsIgnoreCase("chatroom")) {
+            this.nextMenu = new ChatRoom("chatroom", this, team, username, role);
+        } else if (inputParse2[1].trim().equalsIgnoreCase("task")) {
+            try {
+                int taskId = new Integer(inputParse2[3]);
+                ShowTaskResponse showTaskResponse = controller.showTask(username, taskId);
+                if (showTaskResponse.getMessage()!= null){
+                    System.out.println(showTaskResponse.getMessage());
+                }else{
+                    Task task = showTaskResponse.getTask();
+
+                    System.out.println(team
+                            +":id"
+                            + task.getId()
+                            + ",creation date:" + task.getCategory()
+                            +",deadline:" + task.getDeadLine()
+                            + ",assign to:" + Arrays.toString(task.getUsers().stream().map(User::getUsername).toArray())
+                            + ",priority:" + task.getPriority());
+                }
+
+            }catch (Exception e){
+            }
+            this.nextMenu = this;
             this.execute2(team);
-        }
-        else if(inputParse2[0].trim().equalsIgnoreCase("sudo")) {
-            System.out.println(controller.showAllTasksOfTeam()); //Ainta voroodya ??
-            this.nextMenu = this ;
+        } else if (inputParse2[0].trim().equalsIgnoreCase("sudo")) {
+            List<Task> tasks = controller.showAllTasksOfTeam(username, team);
+            for (int i = 0; i < tasks.size(); i++) {
+                Task task = tasks.get(i);
+                System.out.println(i + 1
+                        + ".title: " + task.getTitle()
+                        +":id" + task.getId()
+                        + ",creation date:" + task.getCreationDate()
+                        +",deadline:" + task.getDeadLine()
+                        + ",assign to:" + Arrays.toString(task.getUsers().stream().map(User::getUsername).toArray())
+                        + ",priority:" + task.getPriority());
+            }
+            this.nextMenu = this;
             this.execute2(team);
-        }
-        else if(inputParse2[0].trim().equalsIgnoreCase("create")) {
-            System.out.println(controller.createTask(inputParse2[2] ,inputParse2[4] , inputParse2[6]));
-            this.nextMenu = this ;
+        } else if (inputParse2[0].trim().equalsIgnoreCase("create")) {
+            String response = controller.createTask(username, team, inputParse2[3], inputParse2[5], inputParse2[7]);
+            System.out.println(response);
+            this.nextMenu = this;
             this.execute2(team);
-        }
-        else if(inputParse2[1].trim().equalsIgnoreCase("members")) {
-            System.out.println(showMembersTeam(team));
-            this.nextMenu = this ;
+        } else if (inputParse2[1].trim().equalsIgnoreCase("members")) {
+            List<String> members = controller.showMembersName(username, team);
+            members.forEach(System.out::println);
+            this.nextMenu = this;
             this.execute2(team);
-        }
-        else if(inputParse2[0].trim().equalsIgnoreCase("Add")) {
-            System.out.println(controller.addMemberToTeam(inputParse2[3] , team));
-            this.nextMenu = this ;
+        } else if (inputParse2[0].trim().equalsIgnoreCase("Add")) {
+            String response = controller.addMemberToTeam(username, team, inputParse2[3]);
+            System.out.println(response);
+            this.nextMenu = this;
             this.execute2(team);
-        }
-        else if(inputParse2[0].trim().equalsIgnoreCase("delete")) {
-            System.out.println(controller.deleteTeamMember(inputParse2[3] , team));
-            this.nextMenu = this ;
+        } else if (inputParse2[0].trim().equalsIgnoreCase("delete")) {
+            String response = controller.deleteTeamMember(username, team, inputParse2[3]);
+            System.out.println(response);
+            this.nextMenu = this;
             this.execute2(team);
-        }
-        else if(inputParse2[0].trim().equalsIgnoreCase("suspend")) {
-            System.out.println(controller.suspendTeamMember(inputParse2[3] , team));
-            this.nextMenu = this ;
+        } else if (inputParse2[0].trim().equalsIgnoreCase("suspend")) {
+            String response = controller.suspendTeamMember(username, team, inputParse2[3]);
+            System.out.println(response);
+            this.nextMenu = this;
             this.execute2(team);
-        }
-        else if(inputParse2[0].trim().equalsIgnoreCase("promote")) {
-            System.out.println(controller.promoteTeamMember(inputParse2[2] , inputParse[4] ,team));
-            this.nextMenu = this ;
+        } else if (inputParse2[0].trim().equalsIgnoreCase("promote")) {
+            String response = controller.promoteTeamMember(username, team, inputParse2[2]);
+            System.out.println(response);
+            this.nextMenu = this;
             this.execute2(team);
-        }
-        else if(inputParse2[0].trim().equalsIgnoreCase("assign")) {
-            System.out.println(assignMember(inputParse2[3] , inputParse2[5] , team));
-            this.nextMenu = this ;
+        } else if (inputParse2[0].trim().equalsIgnoreCase("assign")) {
+            try {
+                String response = controller.assignTaskToMember(username, team, inputParse2[5], Integer.parseInt(inputParse2[3]));
+                System.out.println(response);
+            }catch (Exception e){
+
+            }
+            this.nextMenu = this;
             this.execute2(team);
-        }
-        else if(inputParse2[0].trim().equalsIgnoreCase("notification") && inputParse2[3].trim().equalsIgnoreCase("username")) {
-            System.out.println(sendNotificationToMember(inputParse2[2],inputParse2[4]));
-            this.nextMenu = this ;
+        } else if (inputParse2[0].trim().equalsIgnoreCase("notification") && inputParse2[3].trim().equalsIgnoreCase("username")) {
+            String response = controller.sendMessageToMember(username, team, inputParse2[4], inputParse2[2]);
+            this.nextMenu = this;
             this.execute2(team);
-        }
-       /* else if(inputParse2[0].trim().equalsIgnoreCase("notification") && inputParse2[3].trim().equalsIgnoreCase("teamName")) {
-            System.out.println(sendNotificationToMember(inputParse2[2],inputParse2[4]));
-            this.nextMenu = this ;
+        } else if (inputParse2[0].trim().equalsIgnoreCase("notification") && inputParse2[3].trim().equalsIgnoreCase("teamName")) {
+            String response = controller.sendMessageToTeam(username, inputParse2[4], inputParse2[2]);
+            System.out.println(response);
+            this.nextMenu = this;
             this.execute2(team);
-        }*/
-        else {
+        } else {
             System.out.println("Invalid input try again");
-            this.nextMenu = this ;
+            this.nextMenu = this;
             this.execute2(team);
         }
         nextMenu.show();
         nextMenu.execute();
-    }}
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+}
