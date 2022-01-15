@@ -1,28 +1,33 @@
 package View;
 
 import Controller.Controller;
+import Controller.dto.RoadMapResponse;
+
 public class RoadMap extends TeamMenu {
-    public static Controller controller = new Controller();
+    public  Controller controller = new Controller();
     String team;
 
-    public RoadMap(String name, Menu parent, String team) {
-        super(name, parent);
+    public RoadMap(String name, Menu parent, String team, String username, String role) {
+        super(name, parent, username, role);
         this.team = team;
     }
 
     public void show() {
         super.show();
-        System.out.println(controller.showRoadMap(team));
+        RoadMapResponse roadMapResponse = controller.showRoadMap(team);
+        if (roadMapResponse.isSuccessful()){
+            roadMapResponse.getTasksStatus().forEach((task, status) -> System.out.println(task + " " + status + "% done"));
+        }else{
+            System.out.println(roadMapResponse.getMessage());
+        }
     }
 
     public void execute() {
         String input = getInput();
-        if(input.equals("back")) {
-            this.nextMenu = parent;
-        } else {
+        if (!input.equals("back")) {
             System.out.println("invalid input");
-            this.nextMenu = parent;
         }
+        this.nextMenu = parent;
         nextMenu.show();
         nextMenu.execute();
     }
