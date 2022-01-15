@@ -1,14 +1,27 @@
 package View;
 
-import Controller.*;
+import Controller.Controller;
+import Model.Message;
+
+import java.util.List;
+
 public class NotificationBar extends Menu{
-    public NotificationBar(String name, Menu parent) {
+
+    private String username;
+    private  Controller controller = new Controller();
+    public NotificationBar(String name, Menu parent, String username) {
         super(name, parent);
+        this.username = username;
+
     }
 
     public void show() {
         super.show();
-        System.out.println(Controller.showNotification());
+        List<Message> messages = controller.showNotification(username);
+        for (Message message : messages) {
+            System.out.println(message);
+
+        }
     }
 
     public void execute() {
