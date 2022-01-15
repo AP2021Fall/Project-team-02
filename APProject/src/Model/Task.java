@@ -7,8 +7,10 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Task {
     private Integer id;
@@ -155,6 +157,17 @@ public class Task {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public void print(){
+        System.out.println("Title: " + title);
+        System.out.println("Category: " + category.getName());
+        System.out.println("Description; " + description);
+        System.out.println("Creation Date: " +creationDate);
+        System.out.println("Deadline: " + description);
+        List<String> usernames = users.stream().map(User::getUsername).collect(Collectors.toList());
+        System.out.println("Assigned to:" + Arrays.toString(usernames.toArray()));
+        System.out.println("Status: " + category);
     }
 
 }
