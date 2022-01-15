@@ -1,12 +1,20 @@
 package View;
 
-import Controller.*;
+import Controller.Controller;
+import Model.Role;
 
-public class MainMenu extends Menu{
-    public MainMenu(String name, Menu parent) {
+import java.util.List;
+
+public class MainMenu extends Menu {
+    private String username;
+    private String role;
+    private Controller controller = new Controller();
+
+    public MainMenu(String name, Menu parent, String username, String role) {
         super(name, parent);
+        this.username = username;
+        this.role = role;
     }
-    public static Controller controller = new Controller();
 
     public void show() {
         super.show();
@@ -16,7 +24,7 @@ public class MainMenu extends Menu{
         System.out.println("Tasks Page");
         System.out.println("Calendar Menu");
         System.out.println("Notification Bar");
-        if(userLeader()) {
+        if (Role.TEAM_LEADER.equals(role)) {   // Anita
             System.out.println("-----------------------------------");
             System.out.println("admin commands: ");
             System.out.println("show teams");
@@ -28,44 +36,39 @@ public class MainMenu extends Menu{
     public void execute() {
         String input = getInput();
         String[] inputParse = parseInput(input);
-        if(inputParse[0].trim().equalsIgnoreCase("back")) {
-            this.nextMenu = parent ;
-        }
-        else if(Regex.mainMenuEnterMenu(input)) {
-
-            if(inputParse[1].trim().equalsIgnoreCase("profile")) {
-                this.nextMenu = new ProfileMenu("profileMenu" , this) ;
+        if (inputParse[0].trim().equalsIgnoreCase("back")) {
+            this.nextMenu = parent;
+        } else if (Regex.mainMenuEnterMenu(input)) {
+            if (inputParse[1].trim().equalsIgnoreCase("profile")) {
+                this.nextMenu = new ProfileMenu("profileMenu", this, username);
+            } else if (inputParse[1].trim().equalsIgnoreCase("team")) {
+                this.nextMenu = new TeamMenu("teamMenu", this, username, role);
+            } else if (inputParse[1].trim().equalsIgnoreCase("tasks")) {
+                this.nextMenu = new TasksPage("taskMenu", this, username, role);
+            } else if (inputParse[1].trim().equalsIgnoreCase("calender")) {
+                this.nextMenu = new CalendarMenu("calendarMenu", this, username);
+            } else if (inputParse[1].trim().equalsIgnoreCase("notification")) {
+                this.nextMenu = new NotificationBar("notifications", this, username);
             }
-            else if(inputParse[1].trim().equalsIgnoreCase("team")) {
-                this.nextMenu = new TeamMenu("profileMenu" , this) ;
-            }
-            else if(inputParse[1].trim().equalsIgnoreCase("tasks")) {
-                this.nextMenu = new TasksPage("taskMenu" , this) ;
-            }
-            else if(inputParse[1].trim().equalsIgnoreCase("calender")) {
-                this.nextMenu = new CalendarMenu("calendarMenu" , this) ;
-            }
-            else if(inputParse[1].trim().equalsIgnoreCase("notification")) {
-                this.nextMenu = new NotificationBar("notifications" , this) ;
-            }
-        }
-        else if(Regex.leaderShowTeam(input)) {
-            System.out.println(controller.showTeams());
+        } else if (Regex.leaderShowTeam(input) && Role.TEAM_LEADER.equals(role)) {
+            String teamName = inputParse[2];
+            List<String> teamInfo = controller.showTeam(username, teamName);
+            if (teamInfo != null)
+                teamInfo.forEach(System.out::println);
             this.nextMenu = this;
             nextMenu.execute();
-        }
-        else if(Regex.leaderShowTeams(input)) {
-            String outPut = controller.showTeams(inputParse[1]) ;   // showteam or showteams ??
-            System.out.println(outPut);
+        } else if (Regex.leaderShowTeams(input)) {
+            List<String> teams = controller.showTeams(username);
+            if (teams != null)
+                teams.forEach(System.out::println);
             this.nextMenu = this;
             nextMenu.execute();
-        }
-        else if(Regex.leaderCreateTeam(input)) {
-            System.out.println(controller.createNewTeam(inputParse[2]));
+        } else if (Regex.leaderCreateTeam(input)) {
+            String response = controller.createNewTeam(username, inputParse[2]);
+            System.out.println(response);
             this.nextMenu = this;
             nextMenu.execute();
-        }
-        else {
+        } else {
             System.out.println("Your input is not valid");
             this.nextMenu = this;
             nextMenu.execute();
