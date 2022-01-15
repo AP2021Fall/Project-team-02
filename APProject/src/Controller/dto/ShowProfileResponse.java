@@ -1,4 +1,4 @@
-package Controller.dto;
+package Controller.dto;//package Controller.dto;
 
 public class ShowProfileResponse {
     private String fullName;
@@ -63,5 +63,17 @@ public class ShowProfileResponse {
 
     public void setTotalScore(int totalScore) {
         this.totalScore = totalScore;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "fullName='" + fullName + '\'' +
+                ", username='" + username + '\'' +
+                ", birthDate='" + birthDate + '\'' +
+                ", email='" + email + '\'' +
+                ", role='" + role + '\'' +
+                ", totalScore=" + totalScore +
+                '}';
     }
 }

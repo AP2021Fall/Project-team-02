@@ -1,15 +1,19 @@
 package Controller.dto;
 
 import Model.Task;
+import Model.TaskPriority;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ShowBoardResponse {
     private String boardName;
     private int completionPercentage;
     private int failedPercentage;
     private String leaderName;
-    private List<Task> tasks;
+    private List<Task> tasks = new ArrayList<>();
 
     public ShowBoardResponse(String boardName, String leaderName) {
         this.boardName = boardName;
@@ -56,4 +60,25 @@ public class ShowBoardResponse {
         this.tasks = tasks;
     }
 
+    public void print() {
+        System.out.println("Board name: " + boardName);
+        System.out.println("Board completion: " + completionPercentage);
+        System.out.println("Board failed: " + failedPercentage);
+        System.out.println("Board leader: " + leaderName);
+        System.out.println("Highest Priority:");
+        getTasksByPriority(TaskPriority.HIGHEST).stream().forEach(Task::print);
+        System.out.println("High Priority:");
+        getTasksByPriority(TaskPriority.HIGH).stream().forEach(Task::print);
+        System.out.println("Low Priority:");
+        getTasksByPriority(TaskPriority.LOW).stream().forEach(Task::print);
+        System.out.println("Lowest Priority:");
+        getTasksByPriority(TaskPriority.LOWEST).stream().forEach(Task::print);
+
+    }
+
+    public List<Task> getTasksByPriority(String taskPriority){
+        return tasks.stream().filter(task -> task.getPriority().equals(taskPriority)).sorted(Comparator.comparing(Task::getTitle))
+                .collect(Collectors.toList());
+
+    }
 }
