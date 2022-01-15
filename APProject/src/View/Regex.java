@@ -10,7 +10,7 @@ public class Regex {
         pattern = Pattern.compile("^(show profile username .+)$" , Pattern.CASE_INSENSITIVE) ;
         matcher = pattern.matcher(input) ;
         return matcher.find();
-     }
+    }
     public static boolean adminBanUser(String input) {
         pattern = Pattern.compile("^(ban user user .+)$" , Pattern.CASE_INSENSITIVE) ;
         matcher = pattern.matcher(input) ;
@@ -62,7 +62,7 @@ public class Regex {
         return matcher.find();
     }
     public static boolean leaderShowTeams(String input) {
-        pattern = Pattern.compile("^(show team)$" , Pattern.CASE_INSENSITIVE) ;
+        pattern = Pattern.compile("^(show teams)$" , Pattern.CASE_INSENSITIVE) ;
         matcher = pattern.matcher(input) ;
         return matcher.find();
     }
@@ -186,7 +186,7 @@ public class Regex {
         matcher = pattern.matcher(input) ;
         return matcher.find() ;
     }
-    public static boolean rboardMenuDeSelect(String input) {
+    public static boolean boardMenuDeSelect(String input) {
         pattern = Pattern.compile("^(board deselect)$" , Pattern.CASE_INSENSITIVE);
         matcher = pattern.matcher(input) ;
         return matcher.find() ;
