@@ -1,16 +1,20 @@
 package View;
 
-import Model.User;
 import Controller.Controller;
-import View.Regex;
+import Controller.dto.ChangePasswordResponse;
+import Controller.dto.ChangeUsernameResponse;
+import Controller.dto.ShowProfileResponse;
+import Model.Log;
+import Model.Message;
 
-import static View.Regex.changePassword;
-import static View.Regex.changeUsername;
+import java.util.List;
 
 public class ProfileMenu extends Menu{
-    public static Controller controller = new Controller();
-    public ProfileMenu(String name, Menu parent) {
+    private String username;
+    private Controller controller = new Controller();
+    public ProfileMenu(String name, Menu parent, String username) {
         super(name, parent);
+        this.username = username;
     }
     public void show() {
         super.show();
@@ -37,54 +41,55 @@ public class ProfileMenu extends Menu{
             nextMenu.show();
             nextMenu.execute();
         }
-        else if(changePassword(input)) {
-            String output = changePassword(inputParse[3],inputParse[5]) ;      //kollan nemidoonam fazesh chie :|
-            System.out.println(output);
-            if(output.equalsIgnoreCase("wrong old password !")) {
-                this.nextMenu = this ;
-                nextMenu.execute();
-            }
-            if(output.equalsIgnoreCase("Please type a New Password !")) {
-                this.nextMenu = this ;
-                nextMenu.execute();
-            }
-            if(output.equalsIgnoreCase("Please Choose A strong Password (Containing at least 8 characters including " +
-                    "1 digit and 1 Capital Letter)")) {
-                this.nextMenu = this ;
-                nextMenu.execute();
-            }
-            else {
+        else if(Regex.changePassword(input)) {
+            ChangePasswordResponse changePasswordResponse = controller.changePassword(username, inputParse[3], inputParse[5]);
+            if (changePasswordResponse.isSuccessful()){
                 this.nextMenu = new WelcomeMenu("welcomeMenu" , null) ;
-
+            }else {
+                System.out.println(changePasswordResponse.getMessage());
+                this.nextMenu = this ;
+                nextMenu.execute();
             }
         }
-        else if(changeUsername(input)) {
-            System.out.println(changeUsername(inputParse[3]));
+        else if(Regex.changeUsername(input)) {
+            ChangeUsernameResponse changeUsernameResponse = controller.changeUsername(username, inputParse[3]);
+            if (changeUsernameResponse.isSuccessful()){
+                username = changeUsernameResponse.getNewUsername();
+            }else{
+                System.out.println(changeUsernameResponse.getMessage());
+            }
             this.nextMenu = this ;
             nextMenu.execute();
         }
         else if(Regex.profileShowTeams(input)) {
-            System.out.println(controller.showTeams());
+            controller.showTeams(username);
             this.nextMenu = this ;
             nextMenu.execute();
         }
         else if(Regex.profileShowTeam(input)) {
-            System.out.println(Controller.showTeam(inputParse[2]));
+            List<String> teamInfo = controller.showTeam(username, inputParse[2]);
+            if (teamInfo != null)
+                teamInfo.forEach(System.out::println);
             this.nextMenu = this ;
             nextMenu.execute();
         }
         else if(Regex.showMyProfile(input)) {
-            System.out.println(controller.showProfile());    //aslan nadarim chizi be onvane show myprofile
+            ShowProfileResponse showProfileResponse = controller.showProfile(username);
+            System.out.println(showProfileResponse.toString());
             this.nextMenu = this ;
             nextMenu.execute();
         }
         else if((Regex.profileShowLogs(input))) {
-            System.out.println(Controller.showLog());
+            List<Log> logs = controller.showLog(username);
+            if (logs != null)
+                logs.forEach(System.out::println);
             this.nextMenu = this ;
             nextMenu.execute();
         }
         else if(Regex.showNotification(input)) {
-            System.out.println(Controller.showNotification());
+            List<Message> messages = controller.showNotification(username);
+            if (messages != null)
+                messages.stream().map(Message::getTxt).forEach(System.out::println);
             this.nextMenu = this ;
             nextMenu.execute();
         }
