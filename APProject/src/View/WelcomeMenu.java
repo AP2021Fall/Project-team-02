@@ -2,12 +2,15 @@ package View;
 
 
 import Controller.Controller;
+import Controller.dto.LoginResponse;
+import Model.Role;
 
 public class WelcomeMenu extends Menu {
     public WelcomeMenu(String name, Menu parent) {
         super(name, parent);
     }
-    public static Controller controller = new Controller();
+    private Controller controller = new Controller();
+
     public void show() {
         System.out.println("Welcome To Our Program!");
         System.out.println("I Hope You Enjoy");
@@ -25,39 +28,18 @@ public class WelcomeMenu extends Menu {
             System.exit(1);
         }
         else if (Regex.signUp(input)) {
-            String outPut = controller.createUser(inputParse[3], inputParse[5], inputParse[7] , inputParse[9]) ;
-            System.out.println(outPut) ;
-            if(outPut.equalsIgnoreCase("user created successfully!")) {
-                if(!userAdmin)
-                    nextMenu = new MainMenu("mainMenu" , this) ;
-                else
-                    nextMenu = new AdminMainMenu("adminMainMenu" , this) ;
-            }}
-            else if(Regex.errorUsernameExists(outPut)) {
-                nextMenu = this ;
-            }
-            else if(outPut.equalsIgnoreCase("Your passwords are not the same!")) {
-                nextMenu = this ;
-            }
-            else if(outPut.equalsIgnoreCase("User with this email already exists!")) {
-                nextMenu = this ;
-            }
-            else if(outPut.equalsIgnoreCase("Email address is invalid!")) {
-                nextMenu = this ;
-            }
-        else if(Regex.logIn(input)) {
-            String outPut = controller.loginUser(inputParse[3] , inputParse[5]);  //type output ro be join kardam be loginresponse
+            String outPut = controller.createUser(inputParse[3], inputParse[5], inputParse[7], inputParse[9]);
             System.out.println(outPut);
-            if(outPut.equalsIgnoreCase("user logged in successfully!")) {
-                if(!userAdmin)
-                    nextMenu = new MainMenu("mainMenu" , this) ;
+            nextMenu = this;
+        }else if(Regex.logIn(input)) {
+            LoginResponse loginResponse = controller.loginUser(inputParse[3] , inputParse[5]);
+            System.out.println(loginResponse.getMessage());
+            if(loginResponse.getMessage().equalsIgnoreCase("user logged in successfully!")) {
+                if(loginResponse.getRole().equals(Role.SYSTEM_ADMINISTRATOR))
+                    nextMenu = new AdminMainMenu("adminMainMenu" , this, loginResponse.getUsername()) ;
                 else
-                    nextMenu = new AdminMainMenu("adminMainMenu" , this) ;
-            }
-            if(Regex.errorUsernameExists(outPut)) {
-                nextMenu = this ;
-            }
-            if(outPut.equalsIgnoreCase("Username and password didn't match!")) {
+                    nextMenu = new MainMenu("mainMenu" , this, loginResponse.getUsername(), loginResponse.getRole()) ;
+            }else{
                 nextMenu = this ;
             }
         }
