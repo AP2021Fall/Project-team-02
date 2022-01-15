@@ -1,13 +1,16 @@
 package View;
 
-import Controller.*;
+import Controller.Controller;
 import Controller.dto.ShowCalenderResponse;
 
 public class CalendarMenu extends Menu{
-    public CalendarMenu(String name, Menu parent) {
+    private Controller controller = new Controller();
+    private String username;
+    public CalendarMenu(String name, Menu parent, String username) {
         super(name, parent);
+
+        this.username = username;
     }
-    public  ShowCalenderResponse showcalenderresponse = new ShowCalenderResponse();
 
     public void show() {
         super.show();
@@ -23,7 +26,12 @@ public class CalendarMenu extends Menu{
             nextMenu.execute();
         }
         else if(Regex.calenderMenu(input)) {
-            System.out.println(showcalenderresponse.ShowCalenderResponse());
+            ShowCalenderResponse showCalenderResponse = controller.showCalender(username);
+            if (showCalenderResponse.getMessage() != null){
+                System.out.println(showCalenderResponse.getMessage());
+            }else{
+                showCalenderResponse.getDeadLines().forEach(System.out::println);
+            }
             this.nextMenu = parent ;
         }
         nextMenu.show();
