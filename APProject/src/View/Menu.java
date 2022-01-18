@@ -10,14 +10,9 @@ public class Menu {
     protected String name;
     protected Menu parent;
     protected HashMap<Integer , Menu> subMenus ;
-    static protected ArrayList<Menu> allMenus;
-    static ArrayList<Menu> getAllMenus() {
-        return allMenus ;
-    }
     public Menu(String name , Menu parent) {
         setName(name) ;
         setParent(parent);
-        allMenus.add(this) ;
     }
 
     public void setName(String name) {
