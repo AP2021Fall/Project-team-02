@@ -48,7 +48,7 @@ public class Controller {
         return null;
     }
 
-    public String addTaskToBoard(String username, String teamName, String boardName, Integer taskId) throws ParseException {
+    public String addTaskToBoard(String username, String teamName, String boardName, Integer taskId) {
         User user = userRepository.findByUsername(username);
         if (user != null) {
             if (user.getLeader()) {
@@ -682,18 +682,19 @@ public class Controller {
     }
 
     public static boolean checkPasswordFormat(String password) {
-        Pattern passwordPattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$");
+        Pattern passwordPattern = Pattern.compile("(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+");
+//
         return passwordPattern.matcher(password).matches() && password.length() >= 8;
     }
 
     public boolean checkEmailFormat(String email) {
-        Pattern gmailPattern = Pattern.compile("^[A-Za-z0-9+.]+@gmail.com$");
-        Pattern yahooPattern = Pattern.compile("^[A-Za-z0-9+.]+@yahoo.com$");
+        Pattern gmailPattern = Pattern.compile("[A-Za-z]+[0-9\\.]*@gmail.com");
+        Pattern yahooPattern = Pattern.compile("[A-Za-z]+[0-9\\.]*@yahoo.com");
         return yahooPattern.matcher(email).matches() || gmailPattern.matcher(email).matches();
     }
 
     public boolean checkUserNameFormat(String username) {
-        Pattern usernamePattern = Pattern.compile("^[a-zA-Z0-9-]*$");
+        Pattern usernamePattern = Pattern.compile("[a-zA-Z0-9_]{3,}");
         return usernamePattern.matcher(username).matches();
     }
 
