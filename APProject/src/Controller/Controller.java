@@ -495,8 +495,8 @@ public class Controller {
                             return "Deadline updated successfully!";
                         }
 
-                    } catch (Exception e) {
-
+                    } catch (ParseException e){
+                        System.out.println(e.getMessage());
                     }
                     return "New deadline is invalid!";
                 }
@@ -651,9 +651,9 @@ public class Controller {
 
 
     public String createUser(String username, String password, String confirmPassword, String email) {
-        if (checkUsernameExists(username)) {
+        if (!checkUsernameExists(username)) {
             if (password.equals(confirmPassword)) {
-                if (checkEmailExists(email)) {
+                if (!checkEmailExists(email)) {
                     if (checkUserNameFormat(username)) {
                         if (checkEmailFormat(email)) {
                             if (checkPasswordFormat(password)) {
