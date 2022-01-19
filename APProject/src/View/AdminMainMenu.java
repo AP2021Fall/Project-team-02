@@ -36,6 +36,9 @@ public class AdminMainMenu extends Menu {
         if(inputParse[0].trim().equalsIgnoreCase("exit")) {
             System.exit(1) ;
         }
+        else if(inputParse[0].trim().equalsIgnoreCase("back")) {
+            this.nextMenu = parent ;
+        }
         else if(Regex.adminShowProfile(input)) {
             AdminShowProfileResponse showProfileResponse = controller.adminShowProfile(adminUsername, inputParse[3]) ;
             if (showProfileResponse.isSuccessful()){
