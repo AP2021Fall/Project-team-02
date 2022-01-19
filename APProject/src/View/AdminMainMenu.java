@@ -56,7 +56,8 @@ public class AdminMainMenu extends Menu {
             nextMenu.execute();
         }
         else if(Regex.adminChangeRole(input)) {
-            String response = controller.adminChangeUserRole(adminUsername, inputParse[3] , inputParse[5]);
+            String role  = inputParse[5] + " " + (inputParse.length == 7? inputParse[6]:"");
+            String response = controller.adminChangeUserRole(adminUsername, inputParse[3] , role);
             System.out.println(response);
             this.nextMenu = this;
             nextMenu.execute();
