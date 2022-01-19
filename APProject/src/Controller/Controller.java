@@ -655,7 +655,7 @@ public class Controller {
         if (!checkUsernameExists(username)) {
             if (password.equals(confirmPassword)) {
                 if (!checkEmailExists(email)) {
-                    if (username.length() < 4)
+                    if (username.length() >= 4)
                         if (checkUserNameFormat(username)) {
                             if (checkEmailFormat(email)) {
                                 if (checkPasswordFormat(password)) {
@@ -700,7 +700,7 @@ public class Controller {
 
     public boolean checkUserNameFormat(String username) {
         Pattern usernamePattern = Pattern.compile("[a-zA-Z0-9_]+");
-        return usernamePattern.matcher(username).matches() && username.length() >= 4;
+        return usernamePattern.matcher(username).matches();
     }
 
     public boolean checkUsernameExists(String username) {
