@@ -41,18 +41,30 @@ public class MainMenu extends Menu {
         if (inputParse[0].trim().equalsIgnoreCase("back")) {
             this.nextMenu = parent;
         } else if (Regex.mainMenuEnterMenu(input)) {
-            if (inputParse[1].trim().equalsIgnoreCase("profile")) {
+            if (inputParse[2].trim().equalsIgnoreCase("profile")) {
                 this.nextMenu = new ProfileMenu("profileMenu", this, username);
-            } else if (inputParse[1].trim().equalsIgnoreCase("team")) {
+                nextMenu.show();
+                nextMenu.execute();
+            } else if (inputParse[2].trim().equalsIgnoreCase("team")) {
                 this.nextMenu = new TeamMenu("teamMenu", this, username, role);
-            } else if (inputParse[1].trim().equalsIgnoreCase("tasks")) {
+                nextMenu.show();
+                nextMenu.execute();
+            } else if (inputParse[2].trim().equalsIgnoreCase("tasks")) {
                 this.nextMenu = new TasksPage("taskMenu", this, username, role);
-            } else if (inputParse[1].trim().equalsIgnoreCase("calender")) {
+                nextMenu.show();
+                nextMenu.execute();
+            } else if (inputParse[2].trim().equalsIgnoreCase("calender")) {
                 this.nextMenu = new CalendarMenu("calendarMenu", this, username);
-            } else if (inputParse[1].trim().equalsIgnoreCase("notification")) {
+                nextMenu.show();
+                nextMenu.execute();
+            } else if (inputParse[2].trim().equalsIgnoreCase("notification")) {
                 this.nextMenu = new NotificationBar("notifications", this, username);
-            }else if (inputParse[1].trim().equalsIgnoreCase("Board")) {
+                nextMenu.show();
+                nextMenu.execute();
+            }else if (inputParse[2].trim().equalsIgnoreCase("Board")) {
                 this.nextMenu = new BoardMenu("BoardMenu", this, username, role, team);
+                nextMenu.show();
+                nextMenu.execute();
             }
         } else if (Regex.leaderShowTeam(input) && Role.TEAM_LEADER.equals(role)) {
             String teamName = inputParse[2];
@@ -60,24 +72,26 @@ public class MainMenu extends Menu {
             if (teamInfo != null)
                 teamInfo.forEach(System.out::println);
             this.nextMenu = this;
+            nextMenu.show();
             nextMenu.execute();
         } else if (Regex.leaderShowTeams(input)) {
             List<String> teams = controller.showTeams(username);
             if (teams != null)
                 teams.forEach(System.out::println);
             this.nextMenu = this;
+            nextMenu.show();
             nextMenu.execute();
         } else if (Regex.leaderCreateTeam(input)) {
             String response = controller.createNewTeam(username, inputParse[2]);
             System.out.println(response);
             this.nextMenu = this;
+            nextMenu.show();
             nextMenu.execute();
         } else {
             System.out.println("Your input is not valid");
             this.nextMenu = this;
+            nextMenu.show();
             nextMenu.execute();
         }
-        nextMenu.show();
-        nextMenu.execute();
     }
 }
