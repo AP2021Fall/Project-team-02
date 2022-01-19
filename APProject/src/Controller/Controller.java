@@ -5,6 +5,7 @@ import Model.*;
 import Repository.*;
 import Model.Task;
 import Model.Message;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -163,7 +164,7 @@ public class Controller {
         return "user not found";
     }
 
-    public String moveTaskToNextCategory(String username, String teamName, String boardName, String taskTitle){
+    public String moveTaskToNextCategory(String username, String teamName, String boardName, String taskTitle) {
         User user = userRepository.findByUsername(username);
         if (user != null) {
             Team team = teamRepository.findByTeamName(teamName);
@@ -362,7 +363,7 @@ public class Controller {
     }
 
 
-    public  void sendMessage(String username, String teamName, String message) {
+    public void sendMessage(String username, String teamName, String message) {
         User user = userRepository.findByUsername(username);
         if (user != null) {
             Team team = teamRepository.findByTeamName(teamName);
@@ -495,7 +496,7 @@ public class Controller {
                             return "Deadline updated successfully!";
                         }
 
-                    } catch (ParseException e){
+                    } catch (ParseException e) {
                         System.out.println(e.getMessage());
                     }
                     return "New deadline is invalid!";
@@ -556,7 +557,7 @@ public class Controller {
         return "user not found";
     }
 
-    public  List<Message> showNotification(String username) {
+    public List<Message> showNotification(String username) {
         User user = userRepository.findByUsername(username);
         if (user != null) {
             return messageRepository.findByReceiverIdAndType(user.getId(), MessageType.TEAM_LEADER);
@@ -654,22 +655,26 @@ public class Controller {
         if (!checkUsernameExists(username)) {
             if (password.equals(confirmPassword)) {
                 if (!checkEmailExists(email)) {
-                    if (checkUserNameFormat(username)) {
-                        if (checkEmailFormat(email)) {
-                            if (checkPasswordFormat(password)) {
-                                User user = new User(username, password, email);
-                                userRepository.createUser(user);
-                                return "user created successfully!";
+                    if (username.length() < 4)
+                        if (checkUserNameFormat(username)) {
+                            if (checkEmailFormat(email)) {
+                                if (checkPasswordFormat(password)) {
+                                    User user = new User(username, password, email);
+                                    user.setRole(Role.TEAM_MEMBER);
+                                    userRepository.createUser(user);
+                                    return "user created successfully!";
+                                } else {
+                                    return "Please Choose A strong Password (Containing at least 8 characters including 1 digit and 1 Capital Letter)";
+                                }
+
                             } else {
-                                return "Please Choose A strong Password (Containing at least 8 characters including 1 digit and 1 Capital Letter)";
+                                return "Email address is invalid!";
                             }
-
-                        } else {
-                            return "Email address is invalid!";
-                        }
-                    } else
+                        } else
+                            return "New username contains Special Characters! Please remove them and try again";
+                    else {
                         return "Your new username must include at least 4 characters!";
-
+                    }
                 } else {
                     return "User with this email already exists!";
                 }
@@ -694,8 +699,8 @@ public class Controller {
     }
 
     public boolean checkUserNameFormat(String username) {
-        Pattern usernamePattern = Pattern.compile("[a-zA-Z0-9_]{3,}");
-        return usernamePattern.matcher(username).matches();
+        Pattern usernamePattern = Pattern.compile("[a-zA-Z0-9_]+");
+        return usernamePattern.matcher(username).matches() && username.length() >= 4;
     }
 
     public boolean checkUsernameExists(String username) {
@@ -1142,11 +1147,11 @@ public class Controller {
                         if (task == null)
                             return "Invalid task";
 
-                        if(!task.isFailed())
+                        if (!task.isFailed())
                             return " This task is not in failed section";
 
                         Category category = null;
-                        if(categoryName != null) {
+                        if (categoryName != null) {
 
                             Optional<Category> categoryOptional = board.getCategories().stream().filter(c -> c.getName().equals(categoryName)).findAny();
                             if (categoryOptional.isPresent()) {
@@ -1154,7 +1159,7 @@ public class Controller {
                             } else {
                                 return "Invalid category";
                             }
-                        }else {
+                        } else {
                             category = board.getCategories().get(0);
                         }
 
@@ -1165,9 +1170,9 @@ public class Controller {
                         task.setCategory(category);
                         category.getTasks().add(task);
 
-                        if(assignUsername != null) {
+                        if (assignUsername != null) {
                             User assignUser = team.findByUsername(assignUsername);
-                            if(assignUser == null)
+                            if (assignUser == null)
                                 return "Invalid teammember";
                             task.getUsers().add(assignUser);
                             assignUser.getTasks().add(task);
@@ -1179,12 +1184,12 @@ public class Controller {
                             Date date = dateFormat.parse(deadLine);
                             if (task.getCreationDate().compareTo(deadLine) <= 0 && date.compareTo(new Date()) >= 0) {
                                 task.setDeadLine(deadLine);
-                            }else{
-                                return  "invalid deadline";
+                            } else {
+                                return "invalid deadline";
                             }
 
                         } catch (Exception e) {
-                            return  "invalid deadline";
+                            return "invalid deadline";
                         }
 
                     }
@@ -1208,7 +1213,7 @@ public class Controller {
                 Board board = teamBoard.get();
                 if (board.getActive()) {
                     Category category = board.getCategories().stream().filter(c -> c.getName().equals(categoryName)).findAny().orElse(null);
-                    if(category != null){
+                    if (category != null) {
                         return category.getTasks().stream().map(Task::getTitle).collect(Collectors.toList());
                     }
                 }
@@ -1217,17 +1222,19 @@ public class Controller {
 
         return new ArrayList<>();
     }
+
     private boolean isValidUsername(String username) {
         Pattern usernamePattern = Pattern.compile("^[a-zA-Z0-9-]*$");
         return usernamePattern.matcher(username).matches();
     }
 
-    private  boolean isValidPassword(String password) {
+    private boolean isValidPassword(String password) {
         Pattern passwordPattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+$");
         return passwordPattern.matcher(password).matches() && password.length() >= 8;
     }
+
     public LoginResponse loginUser(String username, String password) {
-        if(username.equals("admin") && password.equals("admin"))
+        if (username.equals("admin") && password.equals("admin"))
             return new LoginResponse(0, username, Role.SYSTEM_ADMINISTRATOR, "user logged in successfully!");
 
         User user = userRepository.findByUsername(username);
@@ -1244,6 +1251,7 @@ public class Controller {
             return new LoginResponse("There is not any user with username: " + username + "!");
         }
     }
+
     public boolean checkUEmailExists(String email) {
         return userRepository.existEmail(email);
     }
