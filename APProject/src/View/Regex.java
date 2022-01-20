@@ -77,7 +77,7 @@ public class Regex {
         return matcher.find();
     }
     public static boolean changePassword(String input) {
-        pattern = Pattern.compile("^(profile change oldPassowrd .+ newPassowrd .+)$" , Pattern.CASE_INSENSITIVE) ;
+        pattern = Pattern.compile("^(profile change oldPassword .+ newPassword .+)$" , Pattern.CASE_INSENSITIVE) ;
         matcher = pattern.matcher(input);
         return matcher.find();
     }
