@@ -8,11 +8,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MessageRepository extends AbstractDataBaseConnector {
-    private static List<Message> messages = new ArrayList<>();
+    public static List<Message> messages = new ArrayList<>();
 
     public void creatTable() throws SQLException {
 
-        if (tableExists(getTableName())) {
+        if (!tableExists(getTableName())) {
             try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
                  Statement stmt = conn.createStatement();
             ) {
@@ -60,9 +60,36 @@ public class MessageRepository extends AbstractDataBaseConnector {
 
     public Message createMessage(Message message) {
         message.setId(IdGenerator.getNewId());
-
         messages.add(message);
+        insert(message);
         return message;
     }
 
+    public void insert(Message message){
+        try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+
+            PreparedStatement preparedStatement;
+            if (message.getReceiverId() != null) {
+                preparedStatement = conn
+                        .prepareStatement("INSERT INTO messages (id, senderId, receiverId, type, txt) VALUES(?, ?, ?, ?, ?)");
+
+                preparedStatement.setInt(1, message.getId());
+                preparedStatement.setInt(2, message.getSenderId());
+                preparedStatement.setInt(3, message.getReceiverId());
+                preparedStatement.setString(4, message.getType());
+                preparedStatement.setString(5, message.getTxt());
+            }else{
+                preparedStatement = conn
+                        .prepareStatement("INSERT INTO messages (id, senderId, type, txt) VALUES(?, ?, ?, ?)");
+                preparedStatement.setInt(1, message.getId());
+                preparedStatement.setInt(2, message.getSenderId());
+                preparedStatement.setString(3, message.getType());
+                preparedStatement.setString(4, message.getTxt());
+            }
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

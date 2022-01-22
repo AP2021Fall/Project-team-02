@@ -1,5 +1,7 @@
 package Model;
 
+import Repository.table.BoardTable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,5 +74,9 @@ public class Board {
         isActive = active;
     }
 
+    public BoardTable getTable() {
+        int teamId = team != null ? team.getId() : 0;
+        return new BoardTable(id, name, teamId, "");
+    }
 }
 

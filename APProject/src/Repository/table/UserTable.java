@@ -7,14 +7,12 @@ public class UserTable {
     private String email;
     private String role;
     private String logs;
-    private String teams;
     private String messages;
-    private String tasks;
     private Boolean isLeader;
     private String fullName;
     private String birthDate;
 
-    public UserTable(Integer id, String username, String password, String email, String role, String logs, String teams, String messages, String tasks,
+    public UserTable(Integer id, String username, String password, String email, String role, String logs, String messages,
                      Boolean isLeader, String fullName, String birthDate) {
         this.id = id;
         this.username = username;
@@ -22,9 +20,7 @@ public class UserTable {
         this.email = email;
         this.role = role;
         this.logs = logs;
-        this.teams = teams;
         this.messages = messages;
-        this.tasks = tasks;
         this.isLeader = isLeader;
         this.fullName = fullName;
         this.birthDate = birthDate;
@@ -78,28 +74,12 @@ public class UserTable {
         this.logs = logs;
     }
 
-    public String getTeams() {
-        return teams;
-    }
-
-    public void setTeams(String teams) {
-        this.teams = teams;
-    }
-
     public String getMessages() {
         return messages;
     }
 
     public void setMessages(String messages) {
         this.messages = messages;
-    }
-
-    public String getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(String tasks) {
-        this.tasks = tasks;
     }
 
     public Boolean getLeader() {

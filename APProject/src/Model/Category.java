@@ -1,5 +1,7 @@
 package Model;
 
+import Repository.table.CategoryTable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +51,14 @@ public class Category {
 
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    public CategoryTable getTable() {
+        StringBuilder tasks = new StringBuilder("");
+        for (Task t : getTasks()) {
+            tasks.append(t.getId() + ",");
+        }
+        return new CategoryTable(id, name, board.getId(), tasks.toString());
     }
 }
 

@@ -1,6 +1,7 @@
 package Model;
 
 import Controller.dto.ShowProfileResponse;
+import Repository.table.UserTable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -136,6 +137,20 @@ public class User {
         Integer totalScore = teams.stream().map(t -> (t.getUsersScore().getOrDefault(id, 0))).mapToInt(Integer::intValue).sum();
 
         return new ShowProfileResponse(fullName, username, birthDate, email, role, totalScore);
+    }
+
+    public UserTable getTable() {
+        StringBuilder logsIdStr = new StringBuilder("");
+        for (Log log: logs) {
+            logsIdStr.append(log.getId() + ".");
+        }
+
+        StringBuilder messagesIdStr = new StringBuilder("");
+        for (Message message : messages) {
+            messagesIdStr.append(message.getId() + ".");
+        }
+
+        return new UserTable(id, username, password, email, role, logsIdStr.toString(), messagesIdStr.toString(),isLeader, fullName, birthDate);
     }
 }
 

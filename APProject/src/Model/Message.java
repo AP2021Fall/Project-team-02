@@ -67,5 +67,4 @@ public class Message {
     public void setReceiverId(Integer receiverId) {
         this.receiverId = receiverId;
     }
-
 }

@@ -1,8 +1,9 @@
 package Model;
 
+import Repository.table.TaskTable;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
@@ -116,7 +117,7 @@ public class Task {
         return category != null && category.getName().equals("failed");
     }
 
-    public boolean taskTimeFinished(){
+    public boolean taskTimeFinished() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD|HH:mm");
         Date date = null;
         try {
@@ -142,7 +143,7 @@ public class Task {
     }
 
     public String teamName() {
-        if(getCategory()!= null){
+        if (getCategory() != null) {
             return category.getBoard().getTeam().getName();
         }
         return "";
@@ -159,16 +160,30 @@ public class Task {
         }
     }
 
-    public void print(){
+    public void print() {
         System.out.println("Title: " + title);
         System.out.println("Category: " + category.getName());
         System.out.println("Description; " + description);
-        System.out.println("Creation Date: " +creationDate);
+        System.out.println("Creation Date: " + creationDate);
         System.out.println("Deadline: " + description);
         List<String> usernames = users.stream().map(User::getUsername).collect(Collectors.toList());
         System.out.println("Assigned to:" + Arrays.toString(usernames.toArray()));
         System.out.println("Status: " + category);
     }
 
+    public TaskTable getTable() {
+        StringBuilder usersId = new StringBuilder("");
+        for (User user : users) {
+            usersId.append(user.getId() + ",");
+        }
+
+        StringBuilder commentsId = new StringBuilder("");
+        for (Comment comment : comments) {
+            commentsId.append(comment.getId() + ",");
+        }
+
+        int categoryId = category != null ? category.getId() : 0;
+        return new TaskTable(id, title, description, priority, creationDate, deadLine, usersId.toString(), commentsId.toString(), categoryId);
+    }
 }
 

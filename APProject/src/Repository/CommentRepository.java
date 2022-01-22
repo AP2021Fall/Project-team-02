@@ -1,8 +1,6 @@
 package Repository;
 
 import Model.Comment;
-import Model.Log;
-import Model.User;
 
 import java.sql.*;
 import java.util.HashMap;
@@ -10,13 +8,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class CommentRepository extends AbstractDataBaseConnector{
+public class CommentRepository extends AbstractDataBaseConnector {
 
-    private static Map<Integer, Comment> commentsById = new HashMap<>();
+    public static Map<Integer, Comment> commentsById = new HashMap<>();
 
     public void creatTable() throws SQLException {
 
-        if (tableExists(getTableName())) {
+        if (!tableExists(getTableName())) {
             try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
                  Statement stmt = conn.createStatement();
             ) {
@@ -35,11 +33,11 @@ public class CommentRepository extends AbstractDataBaseConnector{
     }
 
     public void initData() {
-        try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT id, userId, taskId, message FROM comments");
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT id, userId, taskId, message FROM comments");
         ) {
-            while(rs.next()){
+            while (rs.next()) {
                 Comment comment = new Comment(rs.getInt("id"),
                         rs.getInt("userId"),
                         rs.getInt("taskId"),
@@ -50,7 +48,6 @@ public class CommentRepository extends AbstractDataBaseConnector{
             e.printStackTrace();
         }
     }
-
 
     @Override
     String getTableName() {
@@ -64,4 +61,30 @@ public class CommentRepository extends AbstractDataBaseConnector{
         commentsById.remove(toRemove);
     }
 
+
+    public Comment createComment(Comment comment) {
+        comment.setId(IdGenerator.getNewId());
+        commentsById.put(comment.getId(), comment);
+        insert(comment);
+        return comment;
+
+    }
+
+    private void insert(Comment comment) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+
+            PreparedStatement preparedStatement;
+            preparedStatement = conn
+                    .prepareStatement("INSERT INTO comments (id, userId, taskId, message) VALUES(?, ?, ?, ?)");
+
+            preparedStatement.setInt(1, comment.getId());
+            preparedStatement.setInt(2, comment.getUserId());
+            preparedStatement.setInt(3, comment.getTaskId());
+            preparedStatement.setString(4, comment.getMessage());
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

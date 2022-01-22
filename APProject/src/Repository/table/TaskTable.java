@@ -1,8 +1,5 @@
 package Repository.table;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class TaskTable {
     private Integer id;
     private String title;
@@ -11,7 +8,7 @@ public class TaskTable {
     private String creationDate;
     private String deadLine;
     private String users;
-    private String comments ;
+    private String comments;
     private Integer categoryId;
 
 

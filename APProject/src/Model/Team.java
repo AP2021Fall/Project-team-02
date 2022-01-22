@@ -1,5 +1,7 @@
 package Model;
 
+import Repository.table.TeamTable;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -112,5 +114,25 @@ public class Team {
         this.suspendMembers = suspendMembers;
     }
 
+    public TeamTable getTable() {
+        StringBuilder usersScoreStr = new StringBuilder("");
+        usersScore.forEach((userId, score) -> {
+            usersScoreStr.append(userId + ",");
+            usersScoreStr.append(score + ",");
+        });
+
+        StringBuilder membersIdStr = new StringBuilder("");
+        for (User member : members) {
+            membersIdStr.append(member.getId() + ".");
+        }
+
+        StringBuilder messagesIdStr = new StringBuilder("");
+        for (Message message : messages) {
+            messagesIdStr.append(message.getId() + ".");
+        }
+
+
+        return new TeamTable(id, name, leader.getId(), usersScoreStr.toString(), membersIdStr.toString(), messagesIdStr.toString(), active);
+    }
 }
 
