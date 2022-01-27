@@ -22,7 +22,7 @@ public class Main {
             getExistingDateFromDataBase();
             fillRepositories();
         }catch (Exception e){
-            e.printStackTrace();
+//            e.printStackTrace();
         }
 
         WelcomeMenu welcomeMenu = new WelcomeMenu("WelcomeMenu" , null) ;
