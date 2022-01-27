@@ -75,7 +75,7 @@ public class Board {
     }
 
     public BoardTable getTable() {
-        int teamId = team != null ? team.getId() : 0;
+        int teamId = team != null? team.getId(): 0;
         return new BoardTable(id, name, teamId, "");
     }
 }

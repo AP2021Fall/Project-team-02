@@ -13,7 +13,7 @@ public class User {
     private String email;
     private String role;
     private String fullName;
-    private Boolean isLeader;
+    private Boolean isLeader = false;
     private String birthDate;
     private List<Log> logs = new ArrayList<>();
     private List<Team> teams = new ArrayList<>();
@@ -24,6 +24,14 @@ public class User {
         this.username = username;
         this.password = password;
         this.email = email;
+    }
+
+    public User(String username, String password, String email, String role, boolean isLeader) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.isLeader = isLeader;
     }
 
     public User(Integer id, String username, String password, String email, String role, String fullName, Boolean isLeader, String birthDate) {
@@ -141,16 +149,16 @@ public class User {
 
     public UserTable getTable() {
         StringBuilder logsIdStr = new StringBuilder("");
-        for (Log log: logs) {
-            logsIdStr.append(log.getId() + ".");
+        for (Log log : logs) {
+            logsIdStr.append(log.getId() + ",");
         }
 
         StringBuilder messagesIdStr = new StringBuilder("");
         for (Message message : messages) {
-            messagesIdStr.append(message.getId() + ".");
+            messagesIdStr.append(message.getId() + ",");
         }
 
-        return new UserTable(id, username, password, email, role, logsIdStr.toString(), messagesIdStr.toString(),isLeader, fullName, birthDate);
+        return new UserTable(id, username, password, email, role, logsIdStr.toString(), messagesIdStr.toString(), isLeader, fullName, birthDate);
     }
 }
 

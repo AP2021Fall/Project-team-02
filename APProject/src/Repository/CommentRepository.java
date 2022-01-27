@@ -58,9 +58,8 @@ public class CommentRepository extends AbstractDataBaseConnector {
         List<Integer> toRemove = commentsById.values().stream().filter(c -> taskIds.contains(c.getTaskId()))
                 .map(Comment::getId).collect(Collectors.toList());
 
-        commentsById.remove(toRemove);
+        toRemove.forEach(commentsById.keySet()::remove);
     }
-
 
     public Comment createComment(Comment comment) {
         comment.setId(IdGenerator.getNewId());
@@ -81,6 +80,26 @@ public class CommentRepository extends AbstractDataBaseConnector {
             preparedStatement.setInt(2, comment.getUserId());
             preparedStatement.setInt(3, comment.getTaskId());
             preparedStatement.setString(4, comment.getMessage());
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void update(Comment comment) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+
+            PreparedStatement preparedStatement;
+            preparedStatement = conn
+                    .prepareStatement("update comments " +
+                            " set userId = ?, taskId = ?, message = ?" +
+                            " where id = ?");
+
+            preparedStatement.setInt(1, comment.getUserId());
+            preparedStatement.setInt(2, comment.getTaskId());
+            preparedStatement.setString(3, comment.getMessage());
+            preparedStatement.setInt(4, comment.getId());
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (Exception e) {

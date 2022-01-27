@@ -1,7 +1,6 @@
 package Repository;
 
 import Model.*;
-import Repository.table.BoardTable;
 import Repository.table.TeamTable;
 
 import java.sql.*;
@@ -28,7 +27,9 @@ public class TeamRepository extends AbstractDataBaseConnector {
                         " active boolean," +
                         " usersScore VARCHAR(255)," +
                         " members VARCHAR(255)," +
-                        " messages VARCHAR(255)" +
+                        " messages VARCHAR(255)," +
+                        " suspendMembers VARCHAR(255)," +
+                        " tasks VARCHAR(255)" +
                         ") ";
 
                 stmt.executeUpdate(sql);
@@ -42,7 +43,7 @@ public class TeamRepository extends AbstractDataBaseConnector {
     public void initData() {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery("SELECT id, name, leaderId, active, usersScore, members, messages  FROM teams");
+             ResultSet rs = stmt.executeQuery("SELECT id, name, leaderId, active, usersScore, members, messages, tasks, suspendMembers  FROM teams");
         ) {
             while (rs.next()) {
                 Team team = new Team(rs.getInt("id"),
@@ -55,6 +56,8 @@ public class TeamRepository extends AbstractDataBaseConnector {
                         rs.getString("usersScore"),
                         rs.getString("members"),
                         rs.getString("messages"),
+                        rs.getString("tasks"),
+                        rs.getString("suspendMembers"),
                         rs.getBoolean("active"));
 
 
@@ -77,6 +80,7 @@ public class TeamRepository extends AbstractDataBaseConnector {
 
     public Team createTeam(Team team) {
         team.setId(IdGenerator.getNewId());
+        insert(team.getTable());
         return teamsById.put(team.getId(), team);
     }
 
@@ -86,7 +90,6 @@ public class TeamRepository extends AbstractDataBaseConnector {
 
     public void remove(Team t) {
         teamsById.remove(t.getId());
-        insert(t.getTable());
         teamTablesById.remove(t.getId());
     }
 
@@ -94,7 +97,7 @@ public class TeamRepository extends AbstractDataBaseConnector {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
             PreparedStatement preparedStatement;
             preparedStatement = conn
-                    .prepareStatement("INSERT INTO teams (id, name, leaderId, active, usersScore, members,messages ) VALUES(?, ?, ?, ?, ?, ?, ?)");
+                    .prepareStatement("INSERT INTO teams (id, name, leaderId, active, usersScore, members,messages, tasks, suspendMembers) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
             preparedStatement.setInt(1, teamTable.getId());
             preparedStatement.setString(2, teamTable.getName());
@@ -103,6 +106,8 @@ public class TeamRepository extends AbstractDataBaseConnector {
             preparedStatement.setString(5, teamTable.getUsersScore());
             preparedStatement.setString(6, teamTable.getMembers());
             preparedStatement.setString(7, teamTable.getMessages());
+            preparedStatement.setString(8, teamTable.getTasks());
+            preparedStatement.setString(9, teamTable.getSuspendMembers());
 
             preparedStatement.executeUpdate();
             preparedStatement.close();
@@ -134,7 +139,7 @@ public class TeamRepository extends AbstractDataBaseConnector {
                         member.getTeams().add(team);
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+//                    e.printStackTrace();
                 }
             }
 
@@ -144,7 +149,19 @@ public class TeamRepository extends AbstractDataBaseConnector {
                     Integer messageId = Integer.parseInt(messageIdStr);
                     MessageRepository.messages.stream().filter(m -> m.getId().equals(messageId)).findAny().ifPresent(message -> team.getMessages().add(message));
                 } catch (Exception e) {
-                    e.printStackTrace();
+//                    e.printStackTrace();
+                }
+            }
+
+            String[] tasks = teamTable.getTasks().split(",");
+            for (String taskIdStr : tasks) {
+                try {
+                    Integer taskId = Integer.parseInt(taskIdStr);
+                    Task task = TaskRepository.tasksById.get(taskId);
+                    if (task != null)
+                        team.getTasks().add(task);
+                } catch (Exception e) {
+//                    e.printStackTrace();
                 }
             }
 
@@ -157,12 +174,53 @@ public class TeamRepository extends AbstractDataBaseConnector {
 
                     team.getUsersScore().put(userId, score);
                 } catch (Exception e) {
-                    e.printStackTrace();
+//                    e.printStackTrace();
                 }
 
             }
+
+            String[] suspendMembers = teamTable.getSuspendMembers().split(",");
+            for (String memberIdStr : suspendMembers) {
+                try {
+                    Integer memberId = Integer.parseInt(memberIdStr);
+                    User member = UserRepository.usersById.get(memberId);
+                    if (member != null) {
+                        team.getSuspendMembers().add(member);
+                    }
+                } catch (Exception e) {
+//                    e.printStackTrace();
+                }
+            }
         }
 
+    }
+
+    public void update(Team team){
+        update(team.getTable());
+    }
+
+    private void update(TeamTable teamTable) {
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            PreparedStatement preparedStatement;
+            preparedStatement = conn
+                    .prepareStatement("update teams " +
+                            " set name = ?, leaderId = ?, active = ?, usersScore = ?, members = ?,messages = ?, tasks = ?" +
+                            " where id = ?");
+
+            preparedStatement.setString(1, teamTable.getName());
+            preparedStatement.setInt(2, teamTable.getLeaderId());
+            preparedStatement.setBoolean(3, teamTable.isActive());
+            preparedStatement.setString(4, teamTable.getUsersScore());
+            preparedStatement.setString(5, teamTable.getMembers());
+            preparedStatement.setString(6, teamTable.getMessages());
+            preparedStatement.setString(7, teamTable.getTasks());
+            preparedStatement.setInt(8, teamTable.getId());
+
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

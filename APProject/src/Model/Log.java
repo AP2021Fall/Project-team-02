@@ -41,5 +41,12 @@ public class Log implements Serializable {
     public void setUserId(Integer userId) {
         this.userId = userId;
     }
+
+    @Override
+    public String toString() {
+        return "Log{" +
+                "date='" + date + '\'' +
+                '}';
+    }
 }
 

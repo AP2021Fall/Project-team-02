@@ -1,7 +1,7 @@
 package View;
 
 import Controller.Controller;
-import Model.*;
+import Model.Role;
 
 import java.util.List;
 

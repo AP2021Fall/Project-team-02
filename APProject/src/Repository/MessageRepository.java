@@ -92,4 +92,38 @@ public class MessageRepository extends AbstractDataBaseConnector {
             e.printStackTrace();
         }
     }
+
+
+    public void update(Message message){
+        try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+
+            PreparedStatement preparedStatement;
+            if (message.getReceiverId() != null) {
+                preparedStatement = conn
+                        .prepareStatement("update messages " +
+                                " set senderId = ?, receiverId = ?, type = ?, txt = ?" +
+                                " where id = ?");
+
+                preparedStatement.setInt(1, message.getSenderId());
+                preparedStatement.setInt(2, message.getReceiverId());
+                preparedStatement.setString(3, message.getType());
+                preparedStatement.setString(4, message.getTxt());
+                preparedStatement.setInt(5, message.getId());
+            }else{
+                preparedStatement = conn
+                        .prepareStatement("update messages " +
+                                " set senderId = ?, type= ?, txt = ?" +
+                                " where id = ?");
+                preparedStatement.setInt(1, message.getSenderId());
+                preparedStatement.setString(2, message.getType());
+                preparedStatement.setString(3, message.getTxt());
+                preparedStatement.setInt(4, message.getId());
+            }
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

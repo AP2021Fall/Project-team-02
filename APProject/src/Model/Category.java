@@ -53,12 +53,12 @@ public class Category {
         this.tasks = tasks;
     }
 
-    public CategoryTable getTable() {
+    public CategoryTable getTable(){
         StringBuilder tasks = new StringBuilder("");
         for (Task t : getTasks()) {
             tasks.append(t.getId() + ",");
         }
-        return new CategoryTable(id, name, board.getId(), tasks.toString());
+        return new CategoryTable(id, name, board.getId(), tasks.toString()  );
     }
 }
 

@@ -50,12 +50,12 @@ public class Controller {
     public String addTaskToBoard(String username, String teamName, String boardName, Integer taskId) {
         User user = userRepository.findByUsername(username);
         if (user != null) {
-            if (user.getLeader()) {
+            if (Boolean.TRUE.equals(user.getLeader())) {
                 Team team = teamRepository.findByTeamName(teamName);
                 Optional<Board> teamBoard = team.getBoards().stream().filter(b -> b.getName().equals(boardName)).findAny();
                 if (teamBoard.isPresent()) {
                     Board board = teamBoard.get();
-                    if (board.getActive()) {
+                    if (Boolean.TRUE.equals(board.getActive())) {
                         Task task = taskRepository.findById(taskId);
                         if (task == null)
                             return "Invalid task id!";
@@ -69,9 +69,12 @@ public class Controller {
                         if (task.getUsers().isEmpty())
                             return "Please assign this task to someone first";
 
-                        Category fistCategory = board.getCategories().get(0);
-                        task.setCategory(fistCategory);
-                        fistCategory.getTasks().add(task);
+                        Category firstCategory = board.getCategories().get(0);
+                        task.setCategory(firstCategory);
+                        firstCategory.getTasks().add(task);
+
+                        taskRepository.update(task);
+                        categoryRepository.update(firstCategory);
                     }
                     return null;
                 } else {
@@ -86,12 +89,14 @@ public class Controller {
     public String doneBoard(String username, String teamName, String boardName) {
         User user = userRepository.findByUsername(username);
         if (user != null) {
-            if (user.getLeader()) {
+            if (Boolean.TRUE.equals(user.getLeader())) {
                 Team team = teamRepository.findByTeamName(teamName);
                 Optional<Board> teamBoard = team.getBoards().stream().filter(b -> b.getName().equals(boardName)).findAny();
                 if (teamBoard.isPresent()) {
                     Board board = teamBoard.get();
                     board.setActive(true);
+
+                    boardRepository.update(board);
                     return null;
                 } else {
                     return "There is no board with this name";
@@ -105,7 +110,7 @@ public class Controller {
     public String addCategoryToBoard(String username, String teamName, String boardName, String categoryName, Integer index) {
         User user = userRepository.findByUsername(username);
         if (user != null) {
-            if (user.getLeader()) {
+            if (Boolean.TRUE.equals(user.getLeader())) {
                 Team team = teamRepository.findByTeamName(teamName);
                 Optional<Board> teamBoard = team.getBoards().stream().filter(b -> b.getName().equals(boardName)).findAny();
                 if (teamBoard.isPresent()) {
@@ -123,6 +128,8 @@ public class Controller {
                             return "wrong column!";
                         board.getCategories().add(index, category);
                     }
+
+                    boardRepository.update(board);
                     return null;
                 } else {
                     return "There is no board with this name";
@@ -136,7 +143,7 @@ public class Controller {
     public String updateCategoryColumn(String username, String teamName, String boardName, String categoryName, Integer index) {
         User user = userRepository.findByUsername(username);
         if (user != null) {
-            if (user.getLeader()) {
+            if (Boolean.TRUE.equals(user.getLeader())) {
                 Team team = teamRepository.findByTeamName(teamName);
                 Optional<Board> teamBoard = team.getBoards().stream().filter(b -> b.getName().equals(boardName)).findAny();
                 if (teamBoard.isPresent()) {
@@ -152,6 +159,7 @@ public class Controller {
                     board.getCategories().remove(category);
                     board.getCategories().add(index, category);
 
+                    boardRepository.update(board);
                     return null;
                 } else {
                     return "There is no board with this name";
@@ -169,13 +177,13 @@ public class Controller {
             Optional<Board> teamBoard = team.getBoards().stream().filter(b -> b.getName().equals(boardName)).findAny();
             if (teamBoard.isPresent()) {
                 Board board = teamBoard.get();
-                if (board.getActive()) {
+                if (Boolean.TRUE.equals(board.getActive())) {
                     Task task = board.getCategories().stream().flatMap(c -> c.getTasks().stream()).filter(t -> t.getTitle().equals(taskTitle)).findAny().orElse(null);
                     if (task == null)
                         return "Invalid task!";
 
                     Optional<User> userOption = task.getUsers().stream().filter(u -> u.getUsername().equals(username)).findAny();
-                    if (userOption.isPresent() || user.getLeader()) {
+                    if (userOption.isPresent() || Boolean.TRUE.equals(user.getLeader())) {
                         Category category = task.getCategory();
                         int categoryIndex = board.getCategories().indexOf(category);
                         if (categoryIndex < board.getCategories().size() - 2) {
@@ -183,6 +191,11 @@ public class Controller {
                             Category nextCategory = board.getCategories().get(categoryIndex + 1);
                             nextCategory.getTasks().add(task);
                             task.setCategory(nextCategory);
+
+                            taskRepository.update(task);
+                            categoryRepository.update(category);
+                            categoryRepository.update(nextCategory);
+
                             Integer userScore = team.getUsersScore().get(user.getId());
                             if (task.isDone()) {
                                 userScore += 10;
@@ -196,9 +209,15 @@ public class Controller {
                                     oldCategory.getTasks().remove(task);
                                     task.setCategory(failedCategory);
 
+                                    taskRepository.update(task);
+                                    categoryRepository.update(oldCategory);
+                                    categoryRepository.update(failedCategory);
+
                                 }
                             }
                             team.getUsersScore().put(user.getId(), userScore);
+
+                            teamRepository.update(team);
                             return null;
                         }
                     } else {
@@ -216,12 +235,12 @@ public class Controller {
     public String forceUpdateTaskCategory(String username, String teamName, String boardName, String categoryName, String taskTitle) {
         User user = userRepository.findByUsername(username);
         if (user != null) {
-            if (user.getLeader()) {
+            if (Boolean.TRUE.equals(user.getLeader())) {
                 Team team = teamRepository.findByTeamName(teamName);
                 Optional<Board> teamBoard = team.getBoards().stream().filter(b -> b.getName().equals(boardName)).findAny();
                 if (teamBoard.isPresent()) {
                     Board board = teamBoard.get();
-                    if (board.getActive()) {
+                    if (Boolean.TRUE.equals(board.getActive())) {
                         Task task = board.getCategories().stream().flatMap(c -> c.getTasks().stream()).filter(t -> t.getTitle().equals(taskTitle)).findAny().orElse(null);
                         if (task == null)
                             return "There is no task with given information";
@@ -233,9 +252,14 @@ public class Controller {
                             Category oldCategory = task.getCategory();
                             if (oldCategory != null) {
                                 oldCategory.getTasks().remove(task);
+
+                                categoryRepository.update(oldCategory);
                             }
                             task.setCategory(category);
                             category.getTasks().add(task);
+
+                            categoryRepository.update(category);
+                            taskRepository.update(task);
                         } else {
                             return "Invalid category";
                         }
@@ -253,12 +277,12 @@ public class Controller {
     public String assignTaskToMember(String username, String teamName, String memberUsername, String boardName, Integer taskId) {
         User user = userRepository.findByUsername(username);
         if (user != null) {
-            if (user.getLeader()) {
+            if (Boolean.TRUE.equals(user.getLeader())) {
                 Team team = teamRepository.findByTeamName(teamName);
                 Optional<Board> teamBoard = team.getBoards().stream().filter(b -> b.getName().equals(boardName)).findAny();
                 if (teamBoard.isPresent()) {
                     Board board = teamBoard.get();
-                    if (board.getActive()) {
+                    if (Boolean.TRUE.equals(board.getActive())) {
                         Task task = taskRepository.findById(taskId);
                         if (task == null)
                             return "Invalid task id!";
@@ -270,6 +294,10 @@ public class Controller {
                             User member = memberOption.get();
                             task.getUsers().add(member);
                             member.getTasks().add(task);
+
+                            taskRepository.update(task);
+                            userRepository.update(member);
+
                         } else {
                             return "Invalid teammate";
                         }
@@ -287,12 +315,13 @@ public class Controller {
     public String removeBoard(String username, String teamName, String boardName) {
         User user = userRepository.findByUsername(username);
         if (user != null) {
-            if (user.getLeader()) {
+            if (Boolean.TRUE.equals(user.getLeader())){
                 Team team = teamRepository.findByTeamName(teamName);
                 Optional<Board> teamBoard = team.getBoards().stream().filter(b -> b.getName().equals(boardName)).findAny();
                 if (teamBoard.isPresent()) {
                     Board board = teamBoard.get();
                     team.getBoards().remove(board);
+
                     boardRepository.remove(board);
                     categoryRepository.removeByBoard(board.getId());
                     List<Integer> taskIds = taskRepository.removeByBoard(board.getId());
@@ -310,7 +339,7 @@ public class Controller {
     public String createBoard(String username, String teamName, String boardName) {
         User user = userRepository.findByUsername(username);
         if (user != null) {
-            if (user.getLeader()) {
+            if (Boolean.TRUE.equals(user.getLeader())) {
                 Team team = teamRepository.findByTeamName(teamName);
                 Optional<Board> teamBoard = team.getBoards().stream().filter(b -> b.getName().equals(boardName)).findAny();
                 if (teamBoard.isPresent())
@@ -319,6 +348,8 @@ public class Controller {
                 Board board = new Board(boardName, team);
                 team.getBoards().add(board);
                 boardRepository.createBoard(board);
+
+                teamRepository.update(team);
                 return null;
             }
             return "You do not have the permission to do this action!";
@@ -367,7 +398,10 @@ public class Controller {
             Team team = teamRepository.findByTeamName(teamName);
             if (team != null) {
                 Message newMessage = new Message(message, MessageType.TEAM, user.getId());
+                messageRepository.createMessage(newMessage);
                 team.getMessages().add(newMessage);
+
+                teamRepository.update(team);
             }
         }
     }
@@ -444,6 +478,10 @@ public class Controller {
                     if (targetUser != null) {
                         task.getUsers().remove(targetUser);
                         targetUser.getTasks().remove(task);
+
+                        taskRepository.update(task);
+                        userRepository.update(targetUser);
+
                         return "User " + targetUsername + " removed successfully!";
                     }
                     return "There is not any user with this username " + targetUsername + "  in list!";
@@ -466,6 +504,9 @@ public class Controller {
                         if (!task.getUsers().contains(targetUser)) {
                             task.getUsers().add(targetUser);
                             targetUser.getTasks().add(task);
+
+                            taskRepository.update(task);
+                            userRepository.update(targetUser);
                         }
                         return "User " + targetUsername + " added successfully!";
                     }
@@ -491,6 +532,7 @@ public class Controller {
                         Date date = dateFormat.parse(newDate);
                         if (task.getCreationDate().compareTo(newDate) <= 0) {
                             task.setDeadLine(newDate);
+                            taskRepository.update(task);
                             return "Deadline updated successfully!";
                         }
 
@@ -514,6 +556,7 @@ public class Controller {
             if (task.getCategory() != null) {
                 if (user.getTeams().contains(task.getCategory().getBoard().getTeam()) && user.getLeader()) {
                     task.setPriority(priority);
+                    taskRepository.update(task);
                     return "Priority updated successfully!";
                 }
                 return "You Don’t Have Access To Do This Action!";
@@ -530,6 +573,7 @@ public class Controller {
             if (task.getCategory() != null) {
                 if (user.getTeams().contains(task.getCategory().getBoard().getTeam()) && user.getLeader()) {
                     task.setDescription(description);
+                    taskRepository.update(task);
                     return "Description updated successfully!";
                 }
                 return "You Don’t Have Access To Do This Action!";
@@ -546,6 +590,7 @@ public class Controller {
             if (task.getCategory() != null) {
                 if (user.getTeams().contains(task.getCategory().getBoard().getTeam()) && user.getLeader()) {
                     task.setTitle(title);
+                    taskRepository.update(task);
                     return "Title updated successfully!";
                 }
                 return "You Don’t Have Access To Do This Action!";
@@ -617,6 +662,7 @@ public class Controller {
                 if (user.getUsername().equals(newUsername))
                     return new ChangeUsernameResponse(false, null, "you already have this username!");
                 user.setUsername(newUsername);
+                userRepository.update(user);
                 return new ChangeUsernameResponse(true, newUsername, null);
 
             } else
@@ -637,6 +683,7 @@ public class Controller {
                 }
                 if (checkPasswordFormat(newPassword)) {
                     user.setPassword(newPassword);
+                    userRepository.update(user);
                     return new ChangePasswordResponse(true, "");
                 }
                 return new ChangePasswordResponse(false, "Please Choose A strong Password (Containing at least 8 characters including 1 digit and 1 Capital Letter)");
@@ -657,8 +704,7 @@ public class Controller {
                         if (checkUserNameFormat(username)) {
                             if (checkEmailFormat(email)) {
                                 if (checkPasswordFormat(password)) {
-                                    User user = new User(username, password, email);
-                                    user.setRole(Role.TEAM_MEMBER);
+                                    User user = new User(username, password, email, Role.TEAM_MEMBER, false);
                                     userRepository.createUser(user);
                                     return "user created successfully!";
                                 } else {
@@ -723,8 +769,11 @@ public class Controller {
             pendingTeams.stream().filter(t -> pendingTeamsName.contains(t.getName())).forEach(t -> {
                 teamRepository.remove(t);
                 t.getLeader().getTeams().remove(t);
+
+                userRepository.update(t.getLeader());
                 for (User member : t.getMembers()) {
                     member.getTeams().remove(t);
+                    userRepository.update(member);
                 }
             });
             return "teams rejected successfully!";
@@ -743,7 +792,10 @@ public class Controller {
                 return "Some teams are not in pending status! Try again";
             }
 
-            pendingTeams.stream().filter(t -> pendingTeamsName.contains(t.getName())).forEach(t -> t.setActive(true));
+            pendingTeams.stream().filter(t -> pendingTeamsName.contains(t.getName())).forEach(t -> {
+                t.setActive(true);
+                teamRepository.update(t);
+            });
             return "teams accepted successfully!";
         }
         return "You do not have access to this section";
@@ -769,6 +821,8 @@ public class Controller {
             Message message = new Message(messageTxt, MessageType.ADMIN, 0);
             messageRepository.createMessage(message);
             team.getMessages().add(message);
+
+            teamRepository.update(team);
             return "message sent successfully!";
 
         }
@@ -784,6 +838,8 @@ public class Controller {
             Message message = new Message(messageTxt, MessageType.ADMIN, 0, user.getId());
             messageRepository.createMessage(message);
             user.getMessages().add(message);
+
+            userRepository.update(user);
             return "message sent successfully!";
         }
 
@@ -794,7 +850,11 @@ public class Controller {
         if (adminUsername.equals("admin")) {
             Message message = new Message(messageTxt, MessageType.ADMIN, 0);
             messageRepository.createMessage(message);
-            userRepository.findAll().forEach(u -> u.getMessages().add(message));
+
+            userRepository.findAll().forEach(u -> {
+                u.getMessages().add(message);
+                userRepository.update(u);
+            });
             return "message sent successfully!";
         }
         return "You do not have access to this section";
@@ -813,11 +873,14 @@ public class Controller {
                 user.setLeader(true);
                 for (Team teamMemberTeam : user.getTeams()) {
                     teamMemberTeam.getMembers().remove(user);
+                    teamRepository.update(teamMemberTeam);
                 }
 
                 user.setTeams(new ArrayList<>());
             } else
                 user.setLeader(false);
+
+            userRepository.update(user);
 
             return "user role change successfully!";
         }
@@ -834,10 +897,12 @@ public class Controller {
             userRepository.deleteUser(user);
             for (Team team : user.getTeams()) {
                 team.getMembers().remove(user);
+                teamRepository.update(team);
             }
 
             for (Task task : user.getTasks()) {
                 task.getUsers().remove(user);
+                taskRepository.update(task);
             }
 
             return "user baned successfully!";
@@ -865,8 +930,11 @@ public class Controller {
             if (team != null) {
 
                 Message message = new Message(messageTxt, MessageType.TEAM_LEADER, user.getId());
-                team.getMessages().add(message);
                 messageRepository.createMessage(message);
+                team.getMessages().add(message);
+
+                teamRepository.update(team);
+                messageRepository.update(message);
                 return "message sent successfully!";
             }
 
@@ -886,8 +954,11 @@ public class Controller {
                     return "No user exists with this username!";
 
                 Message message = new Message(messageTxt, MessageType.TEAM_LEADER, user.getId(), member.getId());
-                member.getMessages().add(message);
                 messageRepository.createMessage(message);
+                member.getMessages().add(message);
+
+                userRepository.update(member);
+                messageRepository.update(message);
                 return "message sent successfully!";
             }
 
@@ -906,7 +977,7 @@ public class Controller {
                 if (member == null)
                     return "No user exists with this username!";
 
-                Task task = team.getTask().stream().filter(t -> t.getId() == taskId).findAny().orElse(null);
+                Task task = team.getTasks().stream().filter(t -> t.getId() == taskId).findAny().orElse(null);
                 if (task == null)
                     return "No Task exists with this id!";
 
@@ -914,6 +985,9 @@ public class Controller {
                 task.getUsers().add(member);
                 member.getTasks().remove(task);
                 member.getTasks().add(task);
+
+                userRepository.update(member);
+                taskRepository.update(task);
                 return "Member Assigned Successfully!";
             }
             return "team not found!";
@@ -933,6 +1007,7 @@ public class Controller {
                     return "No user exists with this username!";
 
                 teamMember.setLeader(true);
+                teamMember.setRole(Role.TEAM_LEADER);
                 for (Team teamMemberTeam : teamMember.getTeams()) {
                     teamMemberTeam.getMembers().remove(teamMember);
                 }
@@ -940,6 +1015,11 @@ public class Controller {
                 team.setLeader(teamMember);
                 teamMember.setTeams(new ArrayList<>());
                 teamMember.getTeams().add(team);
+                user.getTeams().remove(team);
+
+                teamRepository.update(team);
+                userRepository.update(user);
+                userRepository.update(teamMember);
                 return "user: " + memberName + " 's role change to leader";
             }
             return "team not found!";
@@ -958,6 +1038,7 @@ public class Controller {
                     return "No user exists with this username!";
 
                 team.getSuspendMembers().add(teamMember);
+                teamRepository.update(team);
                 return "user: " + memberName + " suspended";
             }
             return "team not found!";
@@ -977,6 +1058,9 @@ public class Controller {
                 team.getMembers().remove(teamMember);
                 team.getSuspendMembers().remove(teamMember);
                 teamMember.getTeams().remove(team);
+
+                userRepository.update(teamMember);
+                teamRepository.update(team);
                 return "user removed successfully";
             }
             return "team not found";
@@ -991,26 +1075,26 @@ public class Controller {
                     .findAny().orElse(null);
             if (team != null) {
                 User newMember = userRepository.findByUsername(newMemberName);
-
                 if (newMember == null)
                     return "No user exists with this username!";
+                newMember.getTeams().remove(team);
+                newMember.getTeams().add(team);
 
-                if (team.findByUsername(newMemberName) == null) {
-                    newMember.getTeams().add(team);
-                    team.getMembers().add(newMember);
-                }
+                team.getMembers().remove(newMember);
+                team.getMembers().add(newMember);
+                userRepository.update(newMember);
+                teamRepository.update(team);
                 return "new member add successfully!";
             }
             return "team not found";
         }
-
         return "You do not have the permission to do this action!";
     }
 
     public List<String> showMembersName(String username, String teamName) {
         User user = userRepository.findByUsername(username);
         if (user != null && user.getLeader()) {
-            user.getTeams().stream().filter(t -> t.getName().equals(teamName))
+            return user.getTeams().stream().filter(t -> t.getName().equals(teamName))
                     .flatMap(t -> t.getMembers().stream())
                     .map(User::getUsername)
                     .sorted(String::compareTo)
@@ -1024,7 +1108,7 @@ public class Controller {
         if (user != null) {
             if (user.getLeader()) {
                 Team team = teamRepository.findByTeamName(teamName);
-                if (team.getTask().stream().anyMatch(t -> t.getTitle().equals(taskTitle)))
+                if (team.getTasks().stream().anyMatch(t -> t.getTitle().equals(taskTitle)))
                     return "There is another task with this title!";
 
                 if (Task.isValidDate(startTime)) {
@@ -1032,8 +1116,9 @@ public class Controller {
                         Task task = new Task(taskTitle);
                         task.setDeadLine(deadline);
                         task.setCreationDate(startTime);
-                        team.getTask().add(task);
+                        team.getTasks().add(task);
                         taskRepository.createTask(task);
+                        teamRepository.update(team);
 
                         return "Task created successfully!";
                     }
@@ -1057,8 +1142,9 @@ public class Controller {
 
                     Team team = new Team(teamName);
                     team.setLeader(user);
-                    user.getTeams().add(team);
                     teamRepository.createTeam(team);
+                    user.getTeams().add(team);
+                    userRepository.update(user);
 
                     return "Team created successfully! Waiting For Admin’s confirmation…";
                 } else {
@@ -1146,7 +1232,7 @@ public class Controller {
                             return "Invalid task";
 
                         if (!task.isFailed())
-                            return " This task is not in failed section";
+                            return "This task is not in failed section";
 
                         Category category = null;
                         if (categoryName != null) {
@@ -1164,6 +1250,7 @@ public class Controller {
                         Category oldCategory = task.getCategory();
                         if (oldCategory != null) {
                             oldCategory.getTasks().remove(task);
+                            categoryRepository.update(oldCategory);
                         }
                         task.setCategory(category);
                         category.getTasks().add(task);
@@ -1174,6 +1261,7 @@ public class Controller {
                                 return "Invalid teammember";
                             task.getUsers().add(assignUser);
                             assignUser.getTasks().add(task);
+                            userRepository.update(user);
                         }
 
                         SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD|HH:mm");
@@ -1189,6 +1277,9 @@ public class Controller {
                         } catch (Exception e) {
                             return "invalid deadline";
                         }
+
+                        taskRepository.update(task);
+                        categoryRepository.update(category);
 
                     }
                     return null;
@@ -1240,7 +1331,9 @@ public class Controller {
             if (user.getPassword().equals(password)) {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 Log log = new Log(dateFormat.format(new Date()), user.getId());
+                user.getLogs().add(log);
                 logRepository.createLog(log);
+                userRepository.update(user);
                 return new LoginResponse(user.getId(), user.getUsername(), user.getRole(), "user logged in successfully!");
             } else {
                 return new LoginResponse("Username and password didn’t match!");

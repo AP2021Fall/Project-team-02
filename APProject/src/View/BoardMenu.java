@@ -2,6 +2,7 @@ package View;
 
 import Controller.Controller;
 import Controller.dto.ShowBoardResponse;
+
 import java.util.List;
 
 public class BoardMenu extends TeamMenu{

@@ -16,7 +16,7 @@ public class Team {
     public List<User> suspendMembers = new ArrayList<>();
     private List<Message> messages = new ArrayList<>();
     private List<Board> boards = new ArrayList<>();
-    private List<Task> task = new ArrayList<>();
+    private List<Task> tasks = new ArrayList<>();
     private boolean active;
 
     public Team(String name) {
@@ -98,12 +98,12 @@ public class Team {
         return members.stream().filter(u -> u.getUsername().equals(username)).findAny().orElse(null);
     }
 
-    public List<Task> getTask() {
-        return task;
+    public List<Task> getTasks() {
+        return tasks;
     }
 
-    public void setTask(List<Task> task) {
-        this.task = task;
+    public void setTasks(List<Task> task) {
+        this.tasks = task;
     }
 
     public List<User> getSuspendMembers() {
@@ -123,16 +123,28 @@ public class Team {
 
         StringBuilder membersIdStr = new StringBuilder("");
         for (User member : members) {
-            membersIdStr.append(member.getId() + ".");
+            membersIdStr.append(member.getId() + ",");
         }
 
         StringBuilder messagesIdStr = new StringBuilder("");
         for (Message message : messages) {
-            messagesIdStr.append(message.getId() + ".");
+            messagesIdStr.append(message.getId() + ",");
+        }
+
+        StringBuilder tasksIdStr = new StringBuilder("");
+        for (Task task : tasks) {
+            tasksIdStr.append(task.getId() + ",");
         }
 
 
-        return new TeamTable(id, name, leader.getId(), usersScoreStr.toString(), membersIdStr.toString(), messagesIdStr.toString(), active);
+        StringBuilder suspendMembersIdStr = new StringBuilder("");
+        for (User suspendMember : suspendMembers) {
+            suspendMembersIdStr.append(suspendMember.getId() + ",");
+        }
+
+
+
+        return new TeamTable(id, name, leader.getId(), usersScoreStr.toString(), membersIdStr.toString(), messagesIdStr.toString(), tasksIdStr.toString(), suspendMembersIdStr.toString(), active);
     }
 }
 

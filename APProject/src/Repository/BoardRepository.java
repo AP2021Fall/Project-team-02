@@ -1,11 +1,8 @@
 package Repository;
 
 import Model.Board;
-import Model.Category;
-import Model.Task;
 import Model.Team;
 import Repository.table.BoardTable;
-import Repository.table.CategoryTable;
 
 import java.sql.*;
 import java.util.HashMap;
@@ -70,14 +67,27 @@ public class BoardRepository extends AbstractDataBaseConnector{
 
     public void createBoard(Board board) {
         board.setId(IdGenerator.getNewId());
+        insert(board.getTable());
         boarsById.put(board.getId(), board);
     }
 
 
     public void remove(Board board) {
         boarsById.remove(board.getId());
-        insert(board.getTable());
+        removeById(board.getId());
         boarTablesById.remove(board.getId());
+    }
+
+    private void removeById(Integer id) {
+        try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            PreparedStatement preparedStatement = conn
+                    .prepareStatement("delete from boards where id = ?");
+            preparedStatement.setInt(1, id);
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (Exception e) {
+//            e.printStackTrace();
+        }
     }
 
     public void insert(BoardTable boardTable){
@@ -112,4 +122,30 @@ public class BoardRepository extends AbstractDataBaseConnector{
         }
 
     }
+
+    public void update(Board board){
+        update(board.getTable());
+    }
+
+    private void update(BoardTable boardTable){
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+
+            PreparedStatement preparedStatement;
+            preparedStatement = conn
+                    .prepareStatement("update boards " +
+                            " set name = ?, teamId = ?, active = ?, tasksCategory = ?" +
+                            " where id = ?");
+
+            preparedStatement.setString(1, boardTable.getName());
+            preparedStatement.setInt(2, boardTable.getTeamId());
+            preparedStatement.setInt(3, boardTable.getActive());
+            preparedStatement.setString(4, boardTable.getTasksCategory());
+            preparedStatement.setInt(5, boardTable.getId());
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

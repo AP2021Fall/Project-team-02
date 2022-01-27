@@ -8,7 +8,7 @@ public class TaskTable {
     private String creationDate;
     private String deadLine;
     private String users;
-    private String comments;
+    private String comments ;
     private Integer categoryId;
 
 

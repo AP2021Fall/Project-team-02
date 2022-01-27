@@ -8,7 +8,6 @@ public class CalendarMenu extends Menu{
     private String username;
     public CalendarMenu(String name, Menu parent, String username) {
         super(name, parent);
-
         this.username = username;
     }
 

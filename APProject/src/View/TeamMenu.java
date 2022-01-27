@@ -93,7 +93,7 @@ public class TeamMenu extends Menu {
             this.nextMenu = new RoadMap("roadMap", this, team, username, role);
         } else if (inputParse2[0].trim().equalsIgnoreCase("chatroom")) {
             this.nextMenu = new ChatRoom("chatroom", this, team, username, role);
-        } else if (inputParse2[1].trim().equalsIgnoreCase("task")) {
+        } else if (inputParse2[1].trim().equalsIgnoreCase("task") && !inputParse2[0].trim().equalsIgnoreCase("create")) {
             try {
                 int taskId = new Integer(inputParse2[3]);
                 ShowTaskResponse showTaskResponse = controller.showTask(username, taskId);

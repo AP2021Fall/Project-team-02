@@ -1,9 +1,6 @@
 package Repository;
 
-import Model.Board;
-import Model.Team;
 import Model.User;
-import Repository.table.BoardTable;
 import Repository.table.UserTable;
 
 import java.sql.*;
@@ -114,6 +111,10 @@ public class UserRepository extends AbstractDataBaseConnector {
         userTablesById.remove(user.getId());
     }
 
+    public void update(User user){
+        update(user.getTable());
+    }
+
     private void removeUserById(Integer id) {
         try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
             PreparedStatement preparedStatement = conn
@@ -122,7 +123,7 @@ public class UserRepository extends AbstractDataBaseConnector {
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
 
@@ -167,7 +168,7 @@ public class UserRepository extends AbstractDataBaseConnector {
                     Integer messageId = Integer.parseInt(messageIdStr);
                     MessageRepository.messages.stream().filter(m -> m.getId().equals(messageId)).findAny().ifPresent(message -> user.getMessages().add(message));
                 } catch (Exception e) {
-                    e.printStackTrace();
+//                    e.printStackTrace();
                 }
             }
 
@@ -177,11 +178,39 @@ public class UserRepository extends AbstractDataBaseConnector {
                     Integer logId = Integer.parseInt(logIdStr);
                     LogRepository.logs.stream().filter(l -> l.getId().equals(logId)).findAny().ifPresent(log -> user.getLogs().add(log));
                 } catch (Exception e) {
-                    e.printStackTrace();
+//                    e.printStackTrace();
                 }
             }
         }
 
     }
+
+    private void update(UserTable userTable){
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+
+            PreparedStatement preparedStatement;
+            preparedStatement = conn
+                    .prepareStatement("update users " +
+                            " set username = ?, password = ?, email = ?, role = ?, logs = ?, messages = ?, leader = ?, fullName = ?, birthDate = ? " +
+                            " where id = ?");
+
+            preparedStatement.setString(1, userTable.getUsername());
+            preparedStatement.setString(2, userTable.getPassword());
+            preparedStatement.setString(3, userTable.getEmail());
+            preparedStatement.setString(4, userTable.getRole());
+            preparedStatement.setString(5, userTable.getLogs());
+            preparedStatement.setString(6, userTable.getMessages());
+            preparedStatement.setBoolean(7, userTable.getLeader());
+            preparedStatement.setString(8, userTable.getFullName());
+            preparedStatement.setString(9, userTable.getBirthDate());
+            preparedStatement.setInt(10, userTable.getId());
+
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

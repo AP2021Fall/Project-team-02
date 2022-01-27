@@ -1,8 +1,6 @@
 package Repository;
 
 import Model.*;
-import Repository.table.BoardTable;
-import Repository.table.CategoryTable;
 import Repository.table.TaskTable;
 
 import java.sql.*;
@@ -70,7 +68,7 @@ public class TaskRepository extends AbstractDataBaseConnector {
                 taskTablesById.put(taskTable.getId(), taskTable);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
 
@@ -132,7 +130,7 @@ public class TaskRepository extends AbstractDataBaseConnector {
                     task.getUsers().add(user);
                     user.getTasks().add(task);
                 }catch (Exception e){
-                    e.printStackTrace();
+//                    e.printStackTrace();
                 }
             }
 
@@ -143,10 +141,38 @@ public class TaskRepository extends AbstractDataBaseConnector {
                     Comment comment= CommentRepository.commentsById.get(commentId);
                     task.getComments().add(comment);
                 }catch (Exception e){
-                    e.printStackTrace();
+//                    e.printStackTrace();
                 }
             }
         }
 
+    }
+
+    public void update(Task task){
+        update(task.getTable());
+    }
+
+    private void update(TaskTable taskTable){
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            PreparedStatement preparedStatement;
+            preparedStatement = conn.prepareStatement("update tasks " +
+                    " set title = ?, categoryId = ?, description = ?, priority = ?, creationDate = ?, deadLine = ?, users = ?, comments = ?" +
+                    " where id = ?");
+
+            preparedStatement.setString(1, taskTable.getTitle());
+            preparedStatement.setInt(2, taskTable.getCategoryId());
+            preparedStatement.setString(3, taskTable.getDescription());
+            preparedStatement.setString(4, taskTable.getPriority());
+            preparedStatement.setString(5, taskTable.getCreationDate());
+            preparedStatement.setString(6, taskTable.getDeadLine());
+            preparedStatement.setString(7, taskTable.getUsers());
+            preparedStatement.setString(8, taskTable.getComments());
+            preparedStatement.setInt(9, taskTable.getId());
+
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (Exception e) {
+//            e.printStackTrace();
+        }
     }
 }

@@ -2,9 +2,6 @@ package Repository;
 
 import Model.Log;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectOutputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +70,24 @@ public class LogRepository extends AbstractDataBaseConnector{
             preparedStatement.setInt(1, log.getId());
             preparedStatement.setInt(2, log.getUserId());
             preparedStatement.setString(3, log.getDate());
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void update(Log log){
+        try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+
+            PreparedStatement preparedStatement = conn
+                    .prepareStatement("update logs " +
+                            " set userId = ? , date = ?" +
+                            " where id = ?");
+
+            preparedStatement.setInt(1, log.getUserId());
+            preparedStatement.setString(2, log.getDate());
+            preparedStatement.setInt(3, log.getId());
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (Exception e) {
