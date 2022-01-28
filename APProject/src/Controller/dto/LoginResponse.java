@@ -5,14 +5,12 @@ public class LoginResponse {
     private String username;
     private String role;
     private String message;
-    private String team;
 
     public LoginResponse(Integer userId, String username, String role, String message) {
         this.userId = userId;
         this.username = username;
         this.role = role;
         this.message = message;
-        this.team = team;
     }
 
     public LoginResponse(String message) {
@@ -51,5 +49,4 @@ public class LoginResponse {
         this.username = username;
     }
 
-    public String getTeam() {return team;}
 }

@@ -9,13 +9,11 @@ public class MainMenu extends Menu {
     private String username;
     private String role;
     private Controller controller = new Controller();
-    private String team;
 
-    public MainMenu(String name, Menu parent, String username, String role, String team) {
+    public MainMenu(String name, Menu parent, String username, String role) {
         super(name, parent);
         this.username = username;
         this.role = role;
-        this.team = team;
     }
 
     public void show() {
@@ -59,10 +57,6 @@ public class MainMenu extends Menu {
                 nextMenu.execute();
             } else if (inputParse[2].trim().equalsIgnoreCase("notification")) {
                 this.nextMenu = new NotificationBar("notifications", this, username);
-                nextMenu.show();
-                nextMenu.execute();
-            }else if (inputParse[2].trim().equalsIgnoreCase("Board")) {
-                this.nextMenu = new BoardMenu("BoardMenu", this, username, role, team);
                 nextMenu.show();
                 nextMenu.execute();
             }

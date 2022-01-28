@@ -361,7 +361,7 @@ public class Controller {
         User user = userRepository.findByUsername(username);
         if (user != null) {
             Task task = taskRepository.findById(taskId);
-            if (task.getCategory() != null) {
+            if (task != null) {
                 if (user.getTeams().contains(task.getCategory().getBoard().getTeam())) {
                     return new ShowTaskResponse(task);
                 } else {
@@ -1198,13 +1198,12 @@ public class Controller {
     public List<Task> showAllTasksOfTeam(String username, String teamName) {
         User user = userRepository.findByUsername(username);
         if (user != null) {
-            if (user.getLeader()) {
+            if (Boolean.TRUE.equals(user.getLeader())) {
                 Team team = user.getTeams().stream().filter(t -> t.getName().equals(teamName)).findAny().orElse(null);
                 if (team == null)
                     return new ArrayList<>();
 
-                return team.getBoards().stream().flatMap(b -> b.getCategories().stream()).flatMap(c -> c.getTasks().stream())
-                        .collect(Collectors.toList());
+                return team.getTasks();
 
             }
         }
@@ -1350,5 +1349,18 @@ public class Controller {
     public boolean userHasThisTeam(String username, String teamName) {
         User user = userRepository.findByUsername(username);
         return user.getTeams().stream().anyMatch(t -> t.getName().equals(teamName));
+    }
+
+    public List<Task> showAllTasks(String username, String teamName) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            Team team = user.getTeams().stream().filter(t -> t.getName().equals(teamName)).findAny().orElse(null);
+            if (team == null)
+                return new ArrayList<>();
+
+            return team.getTasks();
+        }
+
+        return new ArrayList<>();
     }
 }

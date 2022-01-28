@@ -39,7 +39,7 @@ public class WelcomeMenu extends Menu {
                     nextMenu = new AdminMainMenu("adminMainMenu" , this, loginResponse.getUsername()) ;
                 else
                     nextMenu = new MainMenu("mainMenu" , this, loginResponse.getUsername(),
-                            loginResponse.getRole(), loginResponse.getTeam()) ;
+                            loginResponse.getRole()) ;
             }else{
                 nextMenu = this ;
             }
