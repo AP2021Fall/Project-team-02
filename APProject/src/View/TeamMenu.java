@@ -77,7 +77,7 @@ public class TeamMenu extends Menu {
             System.out.println("promote username <username> rate <rate>");
             System.out.println("assign member task <taskId> username <username>");
             System.out.println("send notification <notification> username <username>");
-            System.out.println("send notification <notification> teammember <teammember>");
+            System.out.println("send notification <notification> teamName <teamName>");
         }
         execute2(team);
     }
