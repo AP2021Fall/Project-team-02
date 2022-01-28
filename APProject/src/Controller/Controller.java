@@ -603,7 +603,7 @@ public class Controller {
     public List<Message> showNotification(String username) {
         User user = userRepository.findByUsername(username);
         if (user != null) {
-            return messageRepository.findByReceiverIdAndType(user.getId(), MessageType.TEAM_LEADER);
+            return messageRepository.findByReceiverId(user.getId());
         }
         return null;
     }

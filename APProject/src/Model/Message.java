@@ -67,4 +67,12 @@ public class Message {
     public void setReceiverId(Integer receiverId) {
         this.receiverId = receiverId;
     }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "txt='" + txt + '\'' +
+                ", senderId=" + senderId +
+                '}';
+    }
 }

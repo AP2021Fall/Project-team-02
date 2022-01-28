@@ -168,11 +168,12 @@ public class TeamMenu extends Menu {
             }
             this.nextMenu = this;
             this.execute2(team);
-        } else if (inputParse2[0].trim().equalsIgnoreCase("notification") && inputParse2[3].trim().equalsIgnoreCase("username")) {
+        } else if (inputParse2[1].trim().equalsIgnoreCase("notification") && inputParse2[3].trim().equalsIgnoreCase("username")) {
             String response = controller.sendMessageToMember(username, team, inputParse2[4], inputParse2[2]);
+            System.out.println(response);
             this.nextMenu = this;
             this.execute2(team);
-        } else if (inputParse2[0].trim().equalsIgnoreCase("notification") && inputParse2[3].trim().equalsIgnoreCase("teamName")) {
+        } else if (inputParse2[1].trim().equalsIgnoreCase("notification") && inputParse2[3].trim().equalsIgnoreCase("teamName")) {
             String response = controller.sendMessageToTeam(username, inputParse2[4], inputParse2[2]);
             System.out.println(response);
             this.nextMenu = this;

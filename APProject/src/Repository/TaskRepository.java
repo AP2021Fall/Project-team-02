@@ -26,7 +26,7 @@ public class TaskRepository extends AbstractDataBaseConnector {
                         " categoryId INTEGER, " +
                         " description VARCHAR(255)," +
                         " priority VARCHAR(255)," +
-                        " creationDate INTEGER, " +
+                        " creationDate VARCHAR(255), " +
                         " deadLine VARCHAR(255)," +
                         " users VARCHAR(255)," +
                         " comments VARCHAR(255)" +

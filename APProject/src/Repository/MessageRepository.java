@@ -58,6 +58,10 @@ public class MessageRepository extends AbstractDataBaseConnector {
         return messages.stream().filter(m -> m.getReceiverId().equals(userId) && m.getType().equals(type)).collect(Collectors.toList());
     }
 
+    public List<Message> findByReceiverId(Integer userId) {
+        return messages.stream().filter(m -> m.getReceiverId().equals(userId)).collect(Collectors.toList());
+    }
+
     public Message createMessage(Message message) {
         message.setId(IdGenerator.getNewId());
         messages.add(message);
@@ -125,5 +129,6 @@ public class MessageRepository extends AbstractDataBaseConnector {
             e.printStackTrace();
         }
     }
+
 
 }
