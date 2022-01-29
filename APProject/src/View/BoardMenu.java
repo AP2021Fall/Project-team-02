@@ -8,12 +8,14 @@ import java.util.List;
 public class BoardMenu extends TeamMenu{
     private String team;
     private String selectedBoard;
+    public String username ;
 
     private Controller controller = new Controller();
 
     public BoardMenu(String name, Menu parent , String team, String username, String role) {
         super(name, parent, username, role);
         this.team = team;
+        this.username = username ;
     }
     public void show() {
         super.show();
@@ -34,13 +36,13 @@ public class BoardMenu extends TeamMenu{
             this.nextMenu = parent ;
         }
         else if(Regex.boardMenuCreate(input)) {
-            String response = controller.createBoard(getUsername(), team, inputParse[3]);
+            String response = controller.createBoard(username, team, inputParse[3]);
             if (response != null)
                 System.out.println(response);
             this.nextMenu = this ;
         }
         else if(Regex.boardMenuRemove(input)) {
-            String response = controller.removeBoard(getUsername(), team, inputParse[3]);
+            String response = controller.removeBoard(username, team, inputParse[3]);
             if (response != null)
                 System.out.println(response);
             this.nextMenu = this ;
@@ -54,31 +56,31 @@ public class BoardMenu extends TeamMenu{
             this.nextMenu = this ;
         }
         else if(Regex.boardShow(input)) {
-            ShowBoardResponse response = controller.showBoard(getUsername(), team, inputParse[3]);
+            ShowBoardResponse response = controller.showBoard(username, team, inputParse[3]);
             if (response != null){
                 response.print();
             }
             this.nextMenu = this ;
         }
         else if(Regex.boardShowDoneFail(input)) {
-            List<String> response = controller.showDoneFailedTasks(getUsername(), team, inputParse[5], inputParse[2]);
+            List<String> response = controller.showDoneFailedTasks(username, team, inputParse[5], inputParse[2]);
             response.forEach(System.out::println);
             this.nextMenu = this ;
         }
         else if(Regex.boardCategory(input)) {
-            String response = controller.addCategoryToBoard(getUsername(), team, inputParse[5], inputParse[3], null);
+            String response = controller.addCategoryToBoard(username, team, inputParse[5], inputParse[3], null);
             if (response != null)
                 System.out.println(response);
             this.nextMenu = this ;
         }
         else if(Regex.boardCategoryNext(input)) {
-            String response = controller.moveTaskToNextCategory(getUsername(), team, inputParse[6], inputParse[4]);
+            String response = controller.moveTaskToNextCategory(username, team, inputParse[6], inputParse[4]);
             if (response != null)
                 System.out.println(response);
             this.nextMenu = this ;
         }
         else if(Regex.boardForce(input)) {
-            String response = controller.forceUpdateTaskCategory(getUsername(), team, inputParse[7], inputParse[3], inputParse[5]);
+            String response = controller.forceUpdateTaskCategory(username, team, inputParse[7], inputParse[3], inputParse[5]);
             if (response != null)
                 System.out.println(response);
             this.nextMenu = this;
@@ -86,7 +88,7 @@ public class BoardMenu extends TeamMenu{
         else if(Regex.boardAssign(input)) {
             try {
                 int taskId = Integer.parseInt(inputParse[4]);
-                String response = controller.assignTaskToMember(getUsername(), team, inputParse[2], inputParse[6], taskId);
+                String response = controller.assignTaskToMember(username, team, inputParse[2], inputParse[6], taskId);
                 if (response != null)
                     System.out.println(response);
             }catch (Exception e){
@@ -97,7 +99,7 @@ public class BoardMenu extends TeamMenu{
         else if(Regex.boardAddTask(input)) {
             try {
                 int taskId = Integer.parseInt(inputParse[4]);
-                String response = controller.addTaskToBoard(getUsername(), team, inputParse[4], taskId);
+                String response = controller.addTaskToBoard(username, team, inputParse[4], taskId);
                 if (response != null) {
                     System.out.println(response);
                 }
@@ -107,7 +109,7 @@ public class BoardMenu extends TeamMenu{
             this.nextMenu = this ;
         }
         else if(Regex.boardDone(input)) {
-            String response = controller.doneBoard(getUsername(), team, inputParse[3]);
+            String response = controller.doneBoard(username, team, inputParse[3]);
             if (response != null)
                 System.out.println(response);
             this.nextMenu = this ;
@@ -115,7 +117,7 @@ public class BoardMenu extends TeamMenu{
         else if(Regex.boardCategoryColumn(input)) {
             try {
                 int index = Integer.parseInt(inputParse[4]);
-                String response = controller.updateCategoryColumn(getUsername(), team, inputParse[6], inputParse[2], index);
+                String response = controller.updateCategoryColumn(username, team, inputParse[6], inputParse[2], index);
                 if (response != null) {
                     System.out.println(response);
                 }

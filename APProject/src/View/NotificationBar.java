@@ -19,8 +19,7 @@ public class NotificationBar extends Menu{
         super.show();
         List<Message> messages = controller.showNotification(username);
         for (Message message : messages) {
-            System.out.println(message);
-
+            System.out.println(message) ;
         }
     }
 

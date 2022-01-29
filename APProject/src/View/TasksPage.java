@@ -24,7 +24,7 @@ public class TasksPage extends Menu {
             System.out.println("change priority:edit task id <id> priority <new priority>");
             System.out.println("change deadLine:edit task id <id> deadLine <new deadLine>");
             System.out.println("remove user(s) from task:edit task id <id> assignedUsers <username,username ..> remove");
-            System.out.println("add user(s) to task: edit task id <id> assignedUsers <username,username ..> add");
+            System.out.println("add user(s) to task:edit task id <id> assignedUsers <username,username ..> add");
         }
     }
 
