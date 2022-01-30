@@ -75,6 +75,7 @@ public class Controller {
 
                         taskRepository.update(task);
                         categoryRepository.update(firstCategory);
+                        System.out.println("task added successfully!");
                     }
                     return null;
                 } else {
@@ -130,7 +131,7 @@ public class Controller {
                     }
 
                     boardRepository.update(board);
-                    return null;
+                    return "category added successfully";
                 } else {
                     return "There is no board with this name";
                 }
@@ -297,6 +298,7 @@ public class Controller {
 
                             taskRepository.update(task);
                             userRepository.update(member);
+                            System.out.println("Member assigned successfully");
 
                         } else {
                             return "Invalid teammate";
@@ -324,8 +326,8 @@ public class Controller {
 
                     boardRepository.remove(board);
                     categoryRepository.removeByBoard(board.getId());
-                    List<Integer> taskIds = taskRepository.removeByBoard(board.getId());
-                    commentRepository.removeByTaskId(taskIds);
+//                    List<Integer> taskIds = taskRepository.removeByBoard(board.getId());
+//                    commentRepository.removeByTaskId(taskIds);
                     return null;
                 } else {
                     return "There is no board with this name";
@@ -362,11 +364,7 @@ public class Controller {
         if (user != null) {
             Task task = taskRepository.findById(taskId);
             if (task != null) {
-                if (user.getTeams().contains(task.getCategory().getBoard().getTeam())) {
                     return new ShowTaskResponse(task);
-                } else {
-                    return new ShowTaskResponse("403");
-                }
             }
             return new ShowTaskResponse("task not found");
 

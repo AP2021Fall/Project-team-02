@@ -124,7 +124,7 @@ public class TeamMenu extends Menu {
                     System.out.println(team
                             + ":id"
                             + task.getId()
-                            + ",creation date:" + task.getCategory()
+                            + ",creation date:" + task.getCreationDate()
                             + ",deadline:" + task.getDeadLine()
                             + ",assign to:" + Arrays.toString(task.getUsers().stream().map(User::getUsername).toArray())
                             + ",priority:" + task.getPriority());

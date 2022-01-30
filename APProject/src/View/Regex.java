@@ -177,12 +177,12 @@ public class Regex {
         return matcher.find() ;
     }
     public static boolean boardMenuRemove(String input) {
-        pattern = Pattern.compile("^(board remove name .+)$ , Pattern.CASE_INSENSITIVE");
+        pattern = Pattern.compile("^(board remove name .+)$" , Pattern.CASE_INSENSITIVE);
         matcher = pattern.matcher(input) ;
         return matcher.find() ;
     }
     public static boolean boardMenuSelect(String input) {
-        pattern = Pattern.compile("^(board select name .+)$ , Pattern.CASE_INSENSITIVE");
+        pattern = Pattern.compile("^(board select name .+)$" , Pattern.CASE_INSENSITIVE);
         matcher = pattern.matcher(input) ;
         return matcher.find() ;
     }

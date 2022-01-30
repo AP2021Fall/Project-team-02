@@ -12,7 +12,7 @@ public class BoardMenu extends TeamMenu{
 
     private Controller controller = new Controller();
 
-    public BoardMenu(String name, Menu parent , String team, String username, String role) {
+    public BoardMenu(String name, Menu parent , String username, String role, String team) {
         super(name, parent, username, role);
         this.team = team;
         this.username = username ;
@@ -98,7 +98,7 @@ public class BoardMenu extends TeamMenu{
         }
         else if(Regex.boardAddTask(input)) {
             try {
-                int taskId = Integer.parseInt(inputParse[4]);
+                int taskId = Integer.parseInt(inputParse[2]);
                 String response = controller.addTaskToBoard(username, team, inputParse[4], taskId);
                 if (response != null) {
                     System.out.println(response);
