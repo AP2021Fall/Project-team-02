@@ -14,6 +14,8 @@ import java.io.IOException;
 
 public class TeamLeaderDashboardController {
 
+    public String name = "Leader Dashboard";
+
     @FXML
     private Button Profile_Button;
 
@@ -39,12 +41,7 @@ public class TeamLeaderDashboardController {
     void onAction_LogoutButton(ActionEvent event) throws IOException {
         UserInfo.logout();
         AnchorPane logoutPage = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("Login.fxml"));
-        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        window.setTitle("Jira | Login");
-        window.setScene(new Scene(logoutPage));
-        window.centerOnScreen();
-        window.setResizable(false);
-        window.show();
+        showDashboard(event, logoutPage, "Jira | Login");
     }
 
     @FXML
@@ -67,10 +64,9 @@ public class TeamLeaderDashboardController {
 
     @FXML
     void onClick_Profile_Button(ActionEvent event) throws IOException {
-        System.out.println("profile");
-        System.out.println(UserInfo.getUsername());
-        System.out.println(UserInfo.getRole());
-
+        UserInfo.menuStack.add("TeamLeaderDashboard.fxml");
+        AnchorPane profilePage = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("ProfileDashboard.fxml"));
+        showDashboard(event, profilePage, name + " | profile" );
     }
 
     @FXML
@@ -84,5 +80,14 @@ public class TeamLeaderDashboardController {
         System.out.println("notification");
 
 
+    }
+
+    private void showDashboard(ActionEvent event, AnchorPane teamMemberDashboard, String title) {
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        window.setTitle(title);
+        window.setScene(new Scene(teamMemberDashboard));
+        window.centerOnScreen();
+        window.setResizable(false);
+        window.show();
     }
 }

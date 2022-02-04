@@ -2,13 +2,18 @@ package View.fx;
 
 import Model.User;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserInfo {
     public static String username;
     public static String role;
+    public static List<String> menuStack = new ArrayList<>();
 
     public static void logout(){
         UserInfo.username = null;
         UserInfo.role = null;
+        menuStack = new ArrayList<>();
     }
 
     public static void setData(String username, String role){
