@@ -68,7 +68,6 @@ public class TeamLeaderDashboardController {
     @FXML
     void onClick_Profile_Button(ActionEvent event) throws IOException {
         System.out.println("profile");
-
         System.out.println(UserInfo.getUsername());
         System.out.println(UserInfo.getRole());
 

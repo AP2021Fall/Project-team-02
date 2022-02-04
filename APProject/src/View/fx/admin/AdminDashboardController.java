@@ -59,7 +59,7 @@ public class AdminDashboardController implements Initializable {
         UserInfo.logout();
         AnchorPane loginPage = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("Login.fxml"));
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        window.setTitle("Jira | Login");
+        window.setTitle("Jira | َAdminMenu");
         window.setScene(new Scene(loginPage));
         window.centerOnScreen();
         window.setResizable(false);
