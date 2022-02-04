@@ -1,7 +1,6 @@
 package View.fx.signup;
 
 import Controller.Controller;
-import com.sun.deploy.util.StringUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -41,13 +40,7 @@ public class SignupController implements Initializable {
     @FXML
     void LoginAction(ActionEvent event) {
         try {
-            AnchorPane EmployeeHomePane = (AnchorPane) FXMLLoader.load(getClass().getResource("../login/login.fxml"));
-            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            window.setTitle("Sign up");
-            window.setScene(new Scene(EmployeeHomePane));
-            window.centerOnScreen();
-            window.setResizable(false);
-            window.show();
+            goToLoginPanel(event);
         } catch (Exception e) {
 
         }
@@ -66,10 +59,24 @@ public class SignupController implements Initializable {
         if (isNotEmpty(username) && isNotEmpty(email) && isNotEmpty(password) && isNotEmpty(confirmPassword)) {
             String response = controller.createUser(username, password, confirmPassword, email);
             JOptionPane.showMessageDialog(null, response);
+
+            if("user created successfully!".equals(response)){
+                goToLoginPanel(event);
+            }
         } else {
             JOptionPane.showMessageDialog(null, "Please Enter Fields");
         }
 
+    }
+
+    private void goToLoginPanel(ActionEvent event) throws IOException {
+        AnchorPane loginPage = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("Login.fxml"));
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        window.setTitle("Jira | Login");
+        window.setScene(new Scene(loginPage));
+        window.centerOnScreen();
+        window.setResizable(false);
+        window.show();
     }
 
     public boolean isNotEmpty(String input) {

@@ -5,6 +5,7 @@ import Controller.dto.LoginResponse;
 import Model.Role;
 import View.AdminMainMenu;
 import View.MainMenu;
+import View.fx.UserInfo;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -39,15 +40,10 @@ public class Login_Controller implements Initializable {
     @FXML
     void SignupAction(ActionEvent event) {
         try {
-            AnchorPane EmployeeHomePane = (AnchorPane) FXMLLoader.load(getClass().getResource("../signup/signup.fxml"));
-            Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            window.setTitle("Sign up");
-            window.setScene(new Scene(EmployeeHomePane));
-            window.centerOnScreen();
-            window.setResizable(false);
-            window.show();
+            AnchorPane signupPage = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("Signup.fxml"));
+            showDashboard(event, signupPage, "Jira | Sign up");
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
 
     }
@@ -58,19 +54,40 @@ public class Login_Controller implements Initializable {
 
         username = UsernameTextfield.getText().toString();
         password = PasswordTextField.getText().toString();
+
         if (isNotEmpty(username) && isNotEmpty(password)) {
             LoginResponse loginResponse = controller.loginUser(username, password);
             JOptionPane.showMessageDialog(null, loginResponse.getMessage());
 
             if (loginResponse.getMessage().equalsIgnoreCase("user logged in successfully!")) {
-                //	if (loginResponse.getRole().equals(Role.SYSTEM_ADMINISTRATOR))
-                // TODO: 2/3/2022 go to admin panel
-                //	else
-                // TODO: 2/3/2022  go to main panel
+                UserInfo.setData(loginResponse.getUsername(), loginResponse.getRole());
+                switch (loginResponse.getRole()) {
+                    case Role.SYSTEM_ADMINISTRATOR:
+                        AnchorPane adminDashboard = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("AdminDashboard.fxml"));
+                        showDashboard(event, adminDashboard, "Jira | Admin Dashboard");
+                        break;
+                    case Role.TEAM_LEADER:
+                        AnchorPane teamLeaderDashboard = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("TeamLeaderDashboard.fxml"));
+                        showDashboard(event, teamLeaderDashboard, "Jira | Team Leader Dashboard");
+                        break;
+                    case Role.TEAM_MEMBER:
+                        AnchorPane teamMemberDashboard = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("TeamMemberDashboard.fxml"));
+                        showDashboard(event, teamMemberDashboard, "Jira | Team Member Dashboard");
+                        break;
+                }
             }
         } else {
             JOptionPane.showMessageDialog(null, "Please Enter Fields");
         }
+    }
+
+    private void showDashboard(ActionEvent event, AnchorPane teamMemberDashboard, String title) {
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        window.setTitle(title);
+        window.setScene(new Scene(teamMemberDashboard));
+        window.centerOnScreen();
+        window.setResizable(false);
+        window.show();
     }
 
     public boolean isNotEmpty(String input) {
