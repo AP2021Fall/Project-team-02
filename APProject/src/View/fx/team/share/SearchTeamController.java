@@ -1,9 +1,10 @@
 package View.fx.team.share;
 
 import Controller.Controller;
-import Controller.dto.ChangePasswordResponse;
 import Controller.dto.ChangeUsernameResponse;
 import View.fx.UserInfo;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,7 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -19,20 +20,26 @@ import javafx.stage.Stage;
 import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 
-public class ResetUsernameController implements Initializable {
+public class SearchTeamController implements Initializable {
 
     private Controller controller = new Controller();
 
 	@FXML
-    private Button ResetButton;
+    private Button SearchButton;
 
     @FXML
-    private TextField NewUsername;
+    private TextField TeamName;
     
     @FXML
     private Button CancelButton;
+
+    @FXML
+    private ListView TeamListView;
+
 
     @FXML
     void onClick_CancelButton(ActionEvent event) throws IOException {
@@ -40,31 +47,32 @@ public class ResetUsernameController implements Initializable {
     }
 
     private void backToProfile(ActionEvent event) throws IOException {
-        System.out.println("testss");
+
         AnchorPane profileMenu = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("ProfileDashboard.fxml"));
 
         showDashboard(event, profileMenu, "Jira | Dashboard | Profile");
     }
 
     @FXML
-    void onClick_ResetButton(ActionEvent event) throws IOException {
+    void onClick_SearchButton(ActionEvent event) throws IOException {
 
-    	String newUsername = NewUsername.getText().toString();
+    	String teamName = TeamName.getText().toString();
 
-    	if (isNotEmpty(newUsername)){
-            ChangeUsernameResponse changeUsernameResponse = controller.changeUsername(UserInfo.getUsername(), newUsername);
-            if (changeUsernameResponse.isSuccessful()){
-                UserInfo.setUsername(changeUsernameResponse.getNewUsername());
+    	if (isNotEmpty(teamName)){
+            List<String> teamInfo = controller.showTeam(UserInfo.getUsername(), teamName);
+
+            if (teamInfo != null){
+                ObservableList<String> observableArrayList =
+                        FXCollections.observableArrayList(teamInfo);
+
+                TeamListView.setItems(observableArrayList);
             }else{
-                JOptionPane.showMessageDialog(null, changeUsernameResponse.getMessage());
-
+                JOptionPane.showMessageDialog(null, "team not found");
+                backToProfile(event);
             }
-            backToProfile(event);
         }else{
             JOptionPane.showMessageDialog(null, "Please Enter Fields");
         }
-
-
 
     }
 

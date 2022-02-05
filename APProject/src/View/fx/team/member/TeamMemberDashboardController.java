@@ -14,11 +14,10 @@ import java.io.IOException;
 
 public class TeamMemberDashboardController {
 
-    @FXML
-    private Button Profile_Button;
+    public String name = "Team Member Dashboard";
 
     @FXML
-    private Button Tasks_Button;
+    private Button Profile_Button;
 
     @FXML
     private Button Calender_Button;
@@ -45,12 +44,6 @@ public class TeamMemberDashboardController {
     }
 
     @FXML
-    void onClick_Tasks_Button(ActionEvent event) throws IOException {
-        System.out.println("tasks");
-
-    }
-
-    @FXML
     void onClick_Team_Button(ActionEvent event) throws IOException {
         System.out.println("team");
 
@@ -58,23 +51,36 @@ public class TeamMemberDashboardController {
 
     @FXML
     void onClick_Profile_Button(ActionEvent event) throws IOException {
-        System.out.println("profile");
-
-        System.out.println(UserInfo.getUsername());
-        System.out.println(UserInfo.getRole());
+        UserInfo.menuStack.add("TeamMemberDashboard.fxml");
+        AnchorPane profilePage = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("ProfileDashboard.fxml"));
+        showDashboard(event, profilePage, name + " | profile" );
 
     }
 
     @FXML
     void onClick_Calender_Button(ActionEvent event) throws IOException {
-        System.out.println("calender");
-
+        UserInfo.menuStack.add("TeamMemberDashboard.fxml");
+        AnchorPane profilePage = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("ShowCalender.fxml"));
+        showDashboard(event, profilePage, name + " | calender" );
     }
 
     @FXML
     void onClick_Notifications_Button(ActionEvent event) throws IOException {
-        System.out.println("notification");
+        UserInfo.menuStack.add("TeamMemberDashboard.fxml");
 
+        AnchorPane resetPassMenu = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("ShowNotificationsLists.fxml"));
 
+        showDashboard(event, resetPassMenu, name + "Notifications");
     }
+
+
+    private void showDashboard(ActionEvent event, AnchorPane teamMemberDashboard, String title) {
+        Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        window.setTitle(title);
+        window.setScene(new Scene(teamMemberDashboard));
+        window.centerOnScreen();
+        window.setResizable(false);
+        window.show();
+    }
+
 }

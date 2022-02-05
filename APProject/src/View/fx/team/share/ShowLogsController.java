@@ -1,6 +1,7 @@
 package View.fx.team.share;
 
 import Controller.Controller;
+import Model.Log;
 import Model.Message;
 import View.fx.UserInfo;
 import javafx.collections.FXCollections;
@@ -22,7 +23,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-public class ShowNotificationsController implements Initializable {
+public class ShowLogsController implements Initializable {
 
     private Controller controller = new Controller();
     
@@ -30,7 +31,7 @@ public class ShowNotificationsController implements Initializable {
     private Button BackButton;
 
     @FXML
-    private ListView notificationsListView;
+    private ListView logsListView;
 
     @FXML
     void onClick_BackButton(ActionEvent event) throws IOException {
@@ -38,24 +39,21 @@ public class ShowNotificationsController implements Initializable {
     }
 
     private void backToProfile(ActionEvent event) throws IOException {
-        int lastMenuIndex = UserInfo.menuStack.size() - 1;
-        AnchorPane lastMenu = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource(UserInfo.menuStack.get(lastMenuIndex)));
-        UserInfo.menuStack.remove(lastMenuIndex);
-        showDashboard(event, lastMenu, "Jira | Dashboard");
+        AnchorPane profileMenu = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("ProfileDashboard.fxml"));
+        showDashboard(event, profileMenu, "Jira | Dashboard | Profile");
     }
 
     @Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-        List<Message> messages = controller.showNotification(UserInfo.getUsername());
-        if (messages != null){
-            List<String> response = messages.stream().map(Message::getTxt).collect(Collectors.toList());
+        List<Log> logs = controller.showLog(UserInfo.getUsername());
+        if (logs != null){
 
+            List<String> response = logs.stream().map(Log::toString).collect(Collectors.toList());
             ObservableList<String> observableArrayList =
                     FXCollections.observableArrayList(response);
 
-            notificationsListView.setItems(observableArrayList);
+            logsListView.setItems(observableArrayList);
         }
-
 
     }
 
