@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AdminUsersDashboard">
+   <children>
+      <AnchorPane layoutX="3.0" prefHeight="674.0" prefWidth="922.0" style="-fx-background-color: white;">
+         <children>
+            <AnchorPane prefHeight="678.0" prefWidth="266.0" style="-fx-background-color: #257ca9;">
+               <children>
+                  <Button fx:id="NotificationButton" focusTraversable="false" layoutY="70.0" mnemonicParsing="false" onAction="#onAction_NotificationButton" prefHeight="69.0" prefWidth="266.0" style="-fx-background-color: #1F8FE8;" text="  Notification" textFill="WHITE">
+                     <font>
+                        <Font name="Trebuchet MS Bold" size="14.0" />
+                     </font>
+                     <opaqueInsets>
+                        <Insets bottom="5.0" left="55.0" right="5.0" top="32.0" />
+                     </opaqueInsets>
+                  </Button>
+                  <Button fx:id="UsersButton" defaultButton="true" layoutY="143.0" mnemonicParsing="false" onAction="#onAction_UsersButton" prefHeight="69.0" prefWidth="266.0" style="-fx-background-color: #1F8FE8;" text="Users" textFill="WHITE">
+                     <font>
+                        <Font name="Trebuchet MS Bold" size="14.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" />
+                     </graphic>
+                  </Button>
+                  <Button fx:id="ScoreBoardButton" defaultButton="true" layoutY="216.0" mnemonicParsing="false" onAction="#onAction_ScoreBoardButton" prefHeight="69.0" prefWidth="266.0" style="-fx-background-color: #1F8FE8;" text="Score Board" textFill="WHITE">
+                     <font>
+                        <Font name="Trebuchet MS Bold" size="14.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" />
+                     </graphic>
+                  </Button>
+                  <Button fx:id="TeamsButton" defaultButton="true" layoutY="289.0" mnemonicParsing="false" onAction="#onAction_TeamsButton" prefHeight="69.0" prefWidth="266.0" style="-fx-background-color: #1F8FE8;" text="Teams" textFill="WHITE">
+                     <font>
+                        <Font name="Trebuchet MS Bold" size="14.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" />
+                     </graphic>
+                  </Button>
+                  <Button fx:id="LogoutButton" defaultButton="true" layoutY="581.0" mnemonicParsing="false" onAction="#onAction_LogoutButton" prefHeight="69.0" prefWidth="266.0" style="-fx-background-color: #1F8FE8;" text="Logout" textFill="WHITE">
+                     <font>
+                        <Font name="Trebuchet MS Bold" size="14.0" />
+                     </font>
+                  </Button>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="60.0" layoutY="95.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@icons/dashboard.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="59.0" layoutY="168.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons/latesUser.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="60.0" layoutY="241.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons/latesTv.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="57.0" layoutY="313.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons/interview.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="64.0" layoutY="604.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@icons/latesLogout.png" />
+                     </image>
+                  </ImageView>
+                  <Button fx:id="showData" defaultButton="true" layoutX="1.0" layoutY="362.0" mnemonicParsing="false" onAction="#onAction_UsersButton" prefHeight="69.0" prefWidth="266.0" style="-fx-background-color: #1F8FE8;" text="Data" textFill="WHITE">
+                     <font>
+                        <Font name="Trebuchet MS Bold" size="14.0" />
+                     </font>
+                  </Button>
+                  <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="62.0" layoutY="385.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@icons/Data.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+            <HBox layoutX="266.0" layoutY="34.0" prefHeight="70.0" prefWidth="656.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="74.0" prefWidth="657.0" style="-fx-background-color: #257ca9;" text="Users Menu" textAlignment="CENTER" textFill="#f5eeee">
+                     <font>
+                        <Font name="Trebuchet MS Bold" size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <ImageView fitHeight="70.0" fitWidth="66.0" layoutX="856.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@icons/user(1).png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
