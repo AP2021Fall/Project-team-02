@@ -46,19 +46,20 @@ public class TeamLeaderDashboardController {
 
     @FXML
     void onClick_Tasks_Button(ActionEvent event) throws IOException {
-        System.out.println("tasks");
+        AnchorPane createTeam = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("EditTasks.fxml"));
+        showDashboard(event, createTeam, "Jira | Edit Tasks");
 
     }
 
     @FXML
     void onClick_Team_Button(ActionEvent event) throws IOException {
-        System.out.println("team");
-
+        System.out.println("team menu");
     }
 
     @FXML
     void onClick_Teams_Button(ActionEvent event) throws IOException {
-        System.out.println("teams");
+        AnchorPane createTeam = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("CreateTeam.fxml"));
+        showDashboard(event, createTeam, "Jira | Create Team");
 
     }
 
@@ -71,14 +72,18 @@ public class TeamLeaderDashboardController {
 
     @FXML
     void onClick_Calender_Button(ActionEvent event) throws IOException {
-        System.out.println("calender");
-
+        UserInfo.menuStack.add("TeamLeaderDashboard.fxml");
+        AnchorPane profilePage = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("ShowCalender.fxml"));
+        showDashboard(event, profilePage, name + " | calender" );
     }
 
     @FXML
     void onClick_Notifications_Button(ActionEvent event) throws IOException {
-        System.out.println("notification");
+        UserInfo.menuStack.add("TeamLeaderDashboard.fxml");
 
+        AnchorPane resetPassMenu = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("ShowNotificationsLists.fxml"));
+
+        showDashboard(event, resetPassMenu, name + "Notifications");
 
     }
 

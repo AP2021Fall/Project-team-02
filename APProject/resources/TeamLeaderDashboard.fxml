@@ -101,7 +101,7 @@
             <Font name="Trebuchet MS Bold" size="15.0" />
          </font>
       </Label>
-      <Label layoutX="730.0" layoutY="507.0" text="Teams list" textFill="#faf5f5">
+      <Label layoutX="730.0" layoutY="507.0" text="Create Team" textFill="#faf5f5">
          <font>
             <Font name="Trebuchet MS Bold" size="15.0" />
          </font>
