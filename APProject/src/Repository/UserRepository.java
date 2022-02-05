@@ -162,23 +162,27 @@ public class UserRepository extends AbstractDataBaseConnector {
 
             UserTable userTable = userTablesById.get(user.getId());
 
-            String[] messages = userTable.getMessages().split(",");
-            for (String messageIdStr : messages) {
-                try {
-                    Integer messageId = Integer.parseInt(messageIdStr);
-                    MessageRepository.messages.stream().filter(m -> m.getId().equals(messageId)).findAny().ifPresent(message -> user.getMessages().add(message));
-                } catch (Exception e) {
+            if (userTable.getMessages() != null) {
+                String[] messages = userTable.getMessages().split(",");
+                for (String messageIdStr : messages) {
+                    try {
+                        Integer messageId = Integer.parseInt(messageIdStr);
+                        MessageRepository.messages.stream().filter(m -> m.getId().equals(messageId)).findAny().ifPresent(message -> user.getMessages().add(message));
+                    } catch (Exception e) {
 //                    e.printStackTrace();
+                    }
                 }
             }
 
-            String[] logs = userTable.getLogs().split(",");
-            for (String logIdStr : logs) {
-                try {
-                    Integer logId = Integer.parseInt(logIdStr);
-                    LogRepository.logs.stream().filter(l -> l.getId().equals(logId)).findAny().ifPresent(log -> user.getLogs().add(log));
-                } catch (Exception e) {
+            if(userTable.getLogs() != null) {
+                String[] logs = userTable.getLogs().split(",");
+                for (String logIdStr : logs) {
+                    try {
+                        Integer logId = Integer.parseInt(logIdStr);
+                        LogRepository.logs.stream().filter(l -> l.getId().equals(logId)).findAny().ifPresent(log -> user.getLogs().add(log));
+                    } catch (Exception e) {
 //                    e.printStackTrace();
+                    }
                 }
             }
         }

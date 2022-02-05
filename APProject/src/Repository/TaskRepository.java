@@ -122,26 +122,29 @@ public class TaskRepository extends AbstractDataBaseConnector {
         for (Task task : tasksById.values()) {
             TaskTable taskTable = taskTablesById.get(task.getId());
 
-            String[] users = taskTable.getUsers().split(",");
-            for (String userIdStr : users) {
-                try{
-                    Integer userId = Integer.parseInt(userIdStr);
-                    User user = UserRepository.usersById.get(userId);
-                    task.getUsers().add(user);
-                    user.getTasks().add(task);
-                }catch (Exception e){
+            if(taskTable.getUsers() != null) {
+                String[] users = taskTable.getUsers().split(",");
+                for (String userIdStr : users) {
+                    try {
+                        Integer userId = Integer.parseInt(userIdStr);
+                        User user = UserRepository.usersById.get(userId);
+                        task.getUsers().add(user);
+                        user.getTasks().add(task);
+                    } catch (Exception e) {
 //                    e.printStackTrace();
+                    }
                 }
             }
-
-            String[] comments = taskTable.getComments().split(",");
-            for (String commentIdStr : comments) {
-                try{
-                    Integer commentId = Integer.parseInt(commentIdStr);
-                    Comment comment= CommentRepository.commentsById.get(commentId);
-                    task.getComments().add(comment);
-                }catch (Exception e){
+            if (taskTable.getComments() != null) {
+                String[] comments = taskTable.getComments().split(",");
+                for (String commentIdStr : comments) {
+                    try {
+                        Integer commentId = Integer.parseInt(commentIdStr);
+                        Comment comment = CommentRepository.commentsById.get(commentId);
+                        task.getComments().add(comment);
+                    } catch (Exception e) {
 //                    e.printStackTrace();
+                    }
                 }
             }
         }

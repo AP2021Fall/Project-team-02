@@ -129,66 +129,76 @@ public class TeamRepository extends AbstractDataBaseConnector {
                 }
             }
 
-            String[] members = teamTable.getMembers().split(",");
-            for (String memberIdStr : members) {
-                try {
-                    Integer memberId = Integer.parseInt(memberIdStr);
-                    User member = UserRepository.usersById.get(memberId);
-                    if (member != null) {
-                        team.getMembers().add(member);
-                        member.getTeams().add(team);
+            if (teamTable.getMembers() != null) {
+                String[] members = teamTable.getMembers().split(",");
+                for (String memberIdStr : members) {
+                    try {
+                        Integer memberId = Integer.parseInt(memberIdStr);
+                        User member = UserRepository.usersById.get(memberId);
+                        if (member != null) {
+                            team.getMembers().add(member);
+                            member.getTeams().add(team);
+                        }
+                    } catch (Exception e) {
+//                    e.printStackTrace();
                     }
-                } catch (Exception e) {
-//                    e.printStackTrace();
                 }
             }
 
-            String[] messages = teamTable.getMessages().split(",");
-            for (String messageIdStr : messages) {
-                try {
-                    Integer messageId = Integer.parseInt(messageIdStr);
-                    MessageRepository.messages.stream().filter(m -> m.getId().equals(messageId)).findAny().ifPresent(message -> team.getMessages().add(message));
-                } catch (Exception e) {
+            if(teamTable.getMessages() != null) {
+                String[] messages = teamTable.getMessages().split(",");
+                for (String messageIdStr : messages) {
+                    try {
+                        Integer messageId = Integer.parseInt(messageIdStr);
+                        MessageRepository.messages.stream().filter(m -> m.getId().equals(messageId)).findAny().ifPresent(message -> team.getMessages().add(message));
+                    } catch (Exception e) {
 //                    e.printStackTrace();
-                }
-            }
-
-            String[] tasks = teamTable.getTasks().split(",");
-            for (String taskIdStr : tasks) {
-                try {
-                    Integer taskId = Integer.parseInt(taskIdStr);
-                    Task task = TaskRepository.tasksById.get(taskId);
-                    if (task != null)
-                        team.getTasks().add(task);
-                } catch (Exception e) {
-//                    e.printStackTrace();
-                }
-            }
-
-            String[] usersScore = teamTable.getUsersScore().split(",");
-            for (int i = 1; i < usersScore.length; i += 2) {
-                try {
-
-                    Integer userId = Integer.parseInt(usersScore[i - 1]);
-                    Integer score = Integer.parseInt(usersScore[i]);
-
-                    team.getUsersScore().put(userId, score);
-                } catch (Exception e) {
-//                    e.printStackTrace();
-                }
-
-            }
-
-            String[] suspendMembers = teamTable.getSuspendMembers().split(",");
-            for (String memberIdStr : suspendMembers) {
-                try {
-                    Integer memberId = Integer.parseInt(memberIdStr);
-                    User member = UserRepository.usersById.get(memberId);
-                    if (member != null) {
-                        team.getSuspendMembers().add(member);
                     }
-                } catch (Exception e) {
+                }
+            }
+
+            if (teamTable.getTasks() != null) {
+                String[] tasks = teamTable.getTasks().split(",");
+                for (String taskIdStr : tasks) {
+                    try {
+                        Integer taskId = Integer.parseInt(taskIdStr);
+                        Task task = TaskRepository.tasksById.get(taskId);
+                        if (task != null)
+                            team.getTasks().add(task);
+                    } catch (Exception e) {
 //                    e.printStackTrace();
+                    }
+                }
+            }
+
+            if (teamTable.getUsersScore() != null) {
+                String[] usersScore = teamTable.getUsersScore().split(",");
+                for (int i = 1; i < usersScore.length; i += 2) {
+                    try {
+
+                        Integer userId = Integer.parseInt(usersScore[i - 1]);
+                        Integer score = Integer.parseInt(usersScore[i]);
+
+                        team.getUsersScore().put(userId, score);
+                    } catch (Exception e) {
+//                    e.printStackTrace();
+                    }
+
+                }
+            }
+
+            if (teamTable.getSuspendMembers() != null) {
+                String[] suspendMembers = teamTable.getSuspendMembers().split(",");
+                for (String memberIdStr : suspendMembers) {
+                    try {
+                        Integer memberId = Integer.parseInt(memberIdStr);
+                        User member = UserRepository.usersById.get(memberId);
+                        if (member != null) {
+                            team.getSuspendMembers().add(member);
+                        }
+                    } catch (Exception e) {
+//                    e.printStackTrace();
+                    }
                 }
             }
         }
