@@ -36,26 +36,26 @@
             <Image url="@icons/tasks.jpg" />
          </image>
       </ImageView>
-      <Button fx:id="Tasks_Button" alignment="BOTTOM_CENTER" defaultButton="true" layoutX="352.0" layoutY="121.0" mnemonicParsing="false" onAction="#onClick_Tasks_Button" opacity="0.2" prefHeight="186.0" prefWidth="240.0">
+      <Button fx:id="Calender_Button" alignment="BOTTOM_CENTER" defaultButton="true" layoutX="352.0" layoutY="121.0" mnemonicParsing="false" onAction="#onClick_Calender_Button" opacity="0.2" prefHeight="186.0" prefWidth="240.0">
          <font>
             <Font name="Trebuchet MS Bold" size="15.0" />
          </font>
       </Button>
-      <Label layoutX="429.0" layoutY="279.0" text="Tasks Menu" textFill="#faf8f8">
+      <Label layoutX="429.0" layoutY="279.0" text="Calender Menu" textFill="#faf8f8">
          <font>
             <Font name="Trebuchet MS Bold" size="15.0" />
          </font>
       </Label>
-      <ImageView fitHeight="150.0" fitWidth="240.0" layoutX="625.0" layoutY="120.0" pickOnBounds="true">
-         <image>
-            <Image url="@icons/calender.png" />
-         </image>
-      </ImageView>
-      <Button fx:id="Calender_Button" alignment="BOTTOM_CENTER" defaultButton="true" layoutX="625.0" layoutY="121.0" mnemonicParsing="false" onAction="#onClick_Calender_Button" opacity="0.2" prefHeight="186.0" prefWidth="240.0">
-         <font>
-            <Font name="Trebuchet MS Bold" size="15.0" />
-         </font>
-      </Button>
+<!--      <ImageView fitHeight="150.0" fitWidth="240.0" layoutX="625.0" layoutY="120.0" pickOnBounds="true">-->
+<!--         <image>-->
+<!--            <Image url="@icons/calender.png" />-->
+<!--         </image>-->
+<!--      </ImageView>-->
+<!--      <Button fx:id="Calender_Button" alignment="BOTTOM_CENTER" defaultButton="true" layoutX="625.0" layoutY="121.0" mnemonicParsing="false" onAction="#onClick_Calender_Button" opacity="0.2" prefHeight="186.0" prefWidth="240.0">-->
+<!--         <font>-->
+<!--            <Font name="Trebuchet MS Bold" size="15.0" />-->
+<!--         </font>-->
+<!--      </Button>-->
       <ImageView fitHeight="150.0" fitWidth="240.0" layoutX="67.0" layoutY="349.0" pickOnBounds="true">
          <image>
             <Image url="@icons/team.png" />
@@ -76,11 +76,11 @@
             <Font name="Trebuchet MS Bold" size="15.0" />
          </font>
       </Button>
-      <Label layoutX="700.0" layoutY="279.0" text="Calender Menu" textFill="#fdf7f7">
-         <font>
-            <Font name="Trebuchet MS Bold" size="15.0" />
-         </font>
-      </Label>
+<!--      <Label layoutX="700.0" layoutY="279.0" text="Calender Menu" textFill="#fdf7f7">-->
+<!--         <font>-->
+<!--            <Font name="Trebuchet MS Bold" size="15.0" />-->
+<!--         </font>-->
+<!--      </Label>-->
       <Label layoutX="142.0" layoutY="507.0" text="Team Menu" textFill="#f8f4f4">
          <font>
             <Font name="Trebuchet MS Bold" size="15.0" />
