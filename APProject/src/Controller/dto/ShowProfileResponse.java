@@ -18,6 +18,8 @@ public class ShowProfileResponse {
     }
 
     public String getFullName() {
+        if (fullName == null)
+            return " ";
         return fullName;
     }
 
@@ -26,6 +28,8 @@ public class ShowProfileResponse {
     }
 
     public String getUsername() {
+        if (username == null)
+            return " ";
         return username;
     }
 
@@ -34,6 +38,8 @@ public class ShowProfileResponse {
     }
 
     public String getBirthDate() {
+        if (birthDate == null)
+            return " ";
         return birthDate;
     }
 
@@ -42,6 +48,8 @@ public class ShowProfileResponse {
     }
 
     public String getEmail() {
+        if (email == null)
+            return " ";
         return email;
     }
 
@@ -50,6 +58,8 @@ public class ShowProfileResponse {
     }
 
     public String getRole() {
+        if (role == null)
+            return " ";
         return role;
     }
 
