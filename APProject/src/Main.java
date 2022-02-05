@@ -1,10 +1,16 @@
 
 import Repository.*;
-import View.WelcomeMenu;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Objects;
 
-public class Main {
+public class Main extends Application {
 
     static BoardRepository boardRepository = new BoardRepository();
     static CategoryRepository categoryRepository = new CategoryRepository();
@@ -15,20 +21,6 @@ public class Main {
     static TeamRepository teamRepository = new TeamRepository();
     static UserRepository userRepository = new UserRepository();
     static IdGenerator idGenerator = new IdGenerator();
-
-    public static void main(String[] args) {
-        try {
-            initTables();
-            getExistingDateFromDataBase();
-            fillRepositories();
-        }catch (Exception e){
-//            e.printStackTrace();
-        }
-
-        WelcomeMenu welcomeMenu = new WelcomeMenu("WelcomeMenu" , null) ;
-        welcomeMenu.show();
-        welcomeMenu.execute();
-    }
 
     private static void fillRepositories() {
         categoryRepository.convertTableToObject();
@@ -62,4 +54,29 @@ public class Main {
         idGenerator.creatTable();
     }
 
+    @Override
+    public void start(Stage primaryStage) throws IOException {
+        AnchorPane mainPane = (AnchorPane) FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("Login.fxml")));
+//        AnchorPane mainPane = (AnchorPane) FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("AdminTeams.fxml")));
+        primaryStage.setScene(new Scene(mainPane));
+        primaryStage.setTitle("Login");
+        primaryStage.setResizable(false);
+        primaryStage.show();
+    }
+
+
+    public static void main(String[] args) {
+        try {
+            initTables();
+            getExistingDateFromDataBase();
+            fillRepositories();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+//        WelcomeMenu welcomeMenu = new WelcomeMenu("WelcomeMenu" , null) ;
+//        welcomeMenu.show();
+//        welcomeMenu.execute();
+        launch(args);
+    }
 }
