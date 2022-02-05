@@ -48,11 +48,12 @@ public class ShowTeamsController implements Initializable {
     @Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
         List<String> teams = controller.showTeams(UserInfo.getUsername());
-//
-        ObservableList<String> observableArrayList =
-                FXCollections.observableArrayList(teams);
+        if (teams != null){
+            ObservableList<String> observableArrayList =
+                    FXCollections.observableArrayList(teams);
 
-        teamsListView.setItems(observableArrayList);
+            teamsListView.setItems(observableArrayList);
+        }
 
     }
 

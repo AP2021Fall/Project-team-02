@@ -37,6 +37,8 @@ public class ProfileDashboardController implements Initializable {
     @FXML
     private Button NotificationButton;
 
+    @FXML
+    private Button LogsButton;
 
     @FXML
     private Button BackButton;
@@ -92,11 +94,21 @@ public class ProfileDashboardController implements Initializable {
 
     @FXML
     void onAction_SearchTeamButton(ActionEvent event) throws IOException {
-        System.out.println("search teams");
+        AnchorPane resetPassMenu = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("SearchTeam.fxml"));
+
+        showDashboard(event, resetPassMenu, "Search Team");
+    }
+
+    @FXML
+    void onAction_LogsButton(ActionEvent event) throws IOException {
+        AnchorPane resetPassMenu = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("ShowLogsLists.fxml"));
+
+        showDashboard(event, resetPassMenu, "Logs List");
     }
 
     @FXML
     void onAction_NotificationsButton(ActionEvent event) throws IOException {
+        UserInfo.menuStack.add("ProfileDashboard.fxml");
         AnchorPane resetPassMenu = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("ShowNotificationsLists.fxml"));
 
         showDashboard(event, resetPassMenu, "Notifications");
