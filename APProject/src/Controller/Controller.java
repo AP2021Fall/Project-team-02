@@ -364,7 +364,7 @@ public class Controller {
         if (user != null) {
             Task task = taskRepository.findById(taskId);
             if (task != null) {
-                    return new ShowTaskResponse(task);
+                return new ShowTaskResponse(task);
             }
             return new ShowTaskResponse("task not found");
 
@@ -470,8 +470,8 @@ public class Controller {
         User user = userRepository.findByUsername(username);
         if (user != null) {
             Task task = taskRepository.findById(taskId);
-            if (task.getCategory() != null) {
-                if (user.getTeams().contains(task.getCategory().getBoard().getTeam()) && user.getLeader()) {
+            if (task != null) {
+                if (user.getTeams().stream().flatMap(t -> t.getTasks().stream()).anyMatch(t -> t.getId() == taskId) && Boolean.TRUE.equals(user.getLeader())) {
                     User targetUser = userRepository.findByUsername(targetUsername);
                     if (targetUser != null) {
                         task.getUsers().remove(targetUser);
@@ -495,8 +495,8 @@ public class Controller {
         User user = userRepository.findByUsername(username);
         if (user != null) {
             Task task = taskRepository.findById(taskId);
-            if (task.getCategory() != null) {
-                if (user.getTeams().contains(task.getCategory().getBoard().getTeam()) && user.getLeader()) {
+            if (task != null) {
+                if (user.getTeams().stream().flatMap(t -> t.getTasks().stream()).anyMatch(t -> t.getId() == taskId) && Boolean.TRUE.equals(user.getLeader())) {
                     User targetUser = userRepository.findByUsername(targetUsername);
                     if (targetUser != null) {
                         if (!task.getUsers().contains(targetUser)) {
@@ -522,8 +522,8 @@ public class Controller {
         User user = userRepository.findByUsername(username);
         if (user != null) {
             Task task = taskRepository.findById(taskId);
-            if (task.getCategory() != null) {
-                if (user.getTeams().contains(task.getCategory().getBoard().getTeam()) && user.getLeader()) {
+            if (task != null) {
+                if (user.getTeams().stream().flatMap(t -> t.getTasks().stream()).anyMatch(t -> t.getId() == taskId) && Boolean.TRUE.equals(user.getLeader())) {
                     SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM-DD|HH:mm");
                     dateFormat.setLenient(false);
                     try {
@@ -551,8 +551,8 @@ public class Controller {
         User user = userRepository.findByUsername(username);
         if (user != null) {
             Task task = taskRepository.findById(taskId);
-            if (task.getCategory() != null) {
-                if (user.getTeams().contains(task.getCategory().getBoard().getTeam()) && user.getLeader()) {
+            if (task != null) {
+                if (user.getTeams().stream().flatMap(t -> t.getTasks().stream()).anyMatch(t -> t.getId() == taskId) && Boolean.TRUE.equals(user.getLeader())) {
                     task.setPriority(priority);
                     taskRepository.update(task);
                     return "Priority updated successfully!";
@@ -568,8 +568,8 @@ public class Controller {
         User user = userRepository.findByUsername(username);
         if (user != null) {
             Task task = taskRepository.findById(taskId);
-            if (task.getCategory() != null) {
-                if (user.getTeams().contains(task.getCategory().getBoard().getTeam()) && user.getLeader()) {
+            if (task != null) {
+                if (user.getTeams().stream().flatMap(t -> t.getTasks().stream()).anyMatch(t -> t.getId() == taskId) && Boolean.TRUE.equals(user.getLeader())) {
                     task.setDescription(description);
                     taskRepository.update(task);
                     return "Description updated successfully!";
@@ -585,8 +585,8 @@ public class Controller {
         User user = userRepository.findByUsername(username);
         if (user != null) {
             Task task = taskRepository.findById(taskId);
-            if (task.getCategory() != null) {
-                if (user.getTeams().contains(task.getCategory().getBoard().getTeam()) && user.getLeader()) {
+            if (task != null) {
+                if (user.getTeams().stream().flatMap(t -> t.getTasks().stream()).anyMatch(t -> t.getId() == taskId) && Boolean.TRUE.equals(user.getLeader())) {
                     task.setTitle(title);
                     taskRepository.update(task);
                     return "Title updated successfully!";
@@ -1132,7 +1132,7 @@ public class Controller {
     public String createNewTeam(String username, String teamName) {
         User user = userRepository.findByUsername(username);
         if (user != null) {
-            if (user.getLeader()) {
+            if (Boolean.TRUE.equals(user.getLeader())) {
                 if (isValidTeamName(teamName)) {
                     Team existedTeam = teamRepository.findByTeamName(teamName);
                     if (existedTeam != null)
@@ -1160,7 +1160,7 @@ public class Controller {
         User user = userRepository.findByUsername(username);
         if (user != null) {
             List<String> sortedDeadlines = user.getTasks().stream()
-                    .filter(t -> !(t.isFailed() || t.isDone() || t.taskTimeFinished()))
+//                    .filter(t -> !(t.isFailed() || t.isDone() || t.taskTimeFinished()))
                     .map(Task::getDeadLine)
                     .sorted(String::compareTo)
                     .collect(Collectors.toList());
