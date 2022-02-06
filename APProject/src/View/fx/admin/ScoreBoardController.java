@@ -63,6 +63,7 @@ public class ScoreBoardController {
             showScoreBoard.setText("Team not Found!");
         }
     }
+    @FXML
     void onAction_ScoreBoardButton(ActionEvent event) throws IOException {
         AnchorPane adminScore = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("AdminScoreBoard.fxml")) ;
         showDashboard(event , adminScore , "Jira | Admin | ScoreBoard");

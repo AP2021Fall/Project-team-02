@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="674.0" prefWidth="922.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.fx.admin.AdminDashboardController">
+<AnchorPane prefHeight="674.0" prefWidth="922.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.fx.admin.AdminTeamsController">
    <children>
       <AnchorPane prefHeight="678.0" prefWidth="266.0" style="-fx-background-color: #257ca9;">
          <children>
@@ -102,19 +102,19 @@
             <Image url="@icons/user(1).png" />
          </image>
       </ImageView>
-      <TextField alignment="TOP_LEFT" layoutX="293.0" layoutY="129.0" prefHeight="339.0" prefWidth="586.0" promptText="Pending Teams :">
+      <TextField fx:id="pendingTeams" alignment="TOP_LEFT" layoutX="293.0" layoutY="129.0" prefHeight="339.0" prefWidth="586.0" promptText="Pending Teams :">
          <font>
             <Font size="16.0" />
          </font>
       </TextField>
-      <Button layoutX="746.0" layoutY="509.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="140.0" style="-fx-background-color: #1F8FE8;" text="Accept" textFill="WHITE" />
-      <Button layoutX="746.0" layoutY="570.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="140.0" style="-fx-background-color: #1F8FE8;" text="Reject" textFill="WHITE" />
-      <TextField layoutX="293.0" layoutY="509.0" prefHeight="36.0" prefWidth="417.0" promptText="team1,team2,.....">
+      <Button fx:id="accept" layoutX="746.0" layoutY="509.0" mnemonicParsing="false" onAction="#onAction_Accept" prefHeight="36.0" prefWidth="140.0" style="-fx-background-color: #1F8FE8;" text="Accept" textFill="WHITE" />
+      <Button fx:id="reject" layoutX="746.0" layoutY="570.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="140.0" style="-fx-background-color: #1F8FE8;" text="Reject" textFill="WHITE" />
+      <TextField fx:id="teamsAccept" layoutX="293.0" layoutY="509.0" prefHeight="36.0" prefWidth="417.0" promptText="team1,team2,.....">
          <font>
             <Font size="16.0" />
          </font>
       </TextField>
-      <TextField layoutX="293.0" layoutY="570.0" prefHeight="36.0" prefWidth="417.0" promptText="team1,team2,.....">
+      <TextField fx:id="teamsReject" layoutX="293.0" layoutY="570.0" onAction="#onAction_Reject" prefHeight="36.0" prefWidth="417.0" promptText="team1,team2,.....">
          <font>
             <Font size="16.0" />
          </font>

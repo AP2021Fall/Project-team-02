@@ -54,6 +54,7 @@ public class AdminTeamsController {
     @FXML
     private TextField teamsReject ;
 
+    @FXML
     void onAction_Accept(ActionEvent event) throws IOException {
         try {
             String teams, response;
@@ -66,6 +67,7 @@ public class AdminTeamsController {
         }
     }
 
+    @FXML
     void onAction_Reject(ActionEvent event) throws IOException {
         try {
             String teams , response;
@@ -77,6 +79,7 @@ public class AdminTeamsController {
             teamsAccept.setText("Error");
         }
     }
+    @FXML
     void onAction_ScoreBoardButton(ActionEvent event) throws IOException {
         AnchorPane adminScore = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("AdminScoreBoard.fxml")) ;
         showDashboard(event , adminScore , "Jira | Admin | ScoreBoard");

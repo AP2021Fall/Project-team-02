@@ -80,7 +80,7 @@ public class NotificationAdminController {
     }
 
     @FXML
-    void onAction_SendUserName(ActionEvent event) throws IOException {
+    void onAction_SendTeamName(ActionEvent event) throws IOException {
         try {
             String input , teamNames;
             input = MessageField.getText();
@@ -93,6 +93,7 @@ public class NotificationAdminController {
         }
     }
 
+    @FXML
     void onAction_ScoreBoardButton(ActionEvent event) throws IOException {
         AnchorPane adminScore = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("AdminScoreBoard.fxml")) ;
         showDashboard(event , adminScore , "Jira | Admin | ScoreBoard");
