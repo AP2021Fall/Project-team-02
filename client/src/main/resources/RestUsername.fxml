@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="286.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.fx.team.share.ResetUsernameController">
+   <children>
+      <Label alignment="CENTER" layoutY="-1.0" prefHeight="36.0" prefWidth="500.0" style="-fx-background-color: #1F8FE8;" text="RESET ACCOUNT USERNAME" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
+
+      <Label layoutX="70.0" layoutY="159.0" text="Enter New Username:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+
+      <Button fx:id="ResetButton" layoutX="251.0" layoutY="250.0" mnemonicParsing="false" onAction="#onClick_ResetButton" prefHeight="26.0" prefWidth="98.0" style="-fx-background-color: #1F8FE8;" text="RESET" textFill="#f2f2f2">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
+      <TextField fx:id="NewUsername" layoutX="256.0" layoutY="156.0" prefHeight="26.0" prefWidth="167.0" />
+      <Button fx:id="CancelButton" layoutX="141.0" layoutY="250.0" mnemonicParsing="false" onAction="#onClick_CancelButton" prefHeight="26.0" prefWidth="98.0" style="-fx-background-color: #1F8FE8;" text="CANCEL" textFill="#f2f2f2">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

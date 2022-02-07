@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<AnchorPane prefHeight="625.0" prefWidth="920.0" style="-fx-background-color: #2591c9;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.fx.signup.SignupController">
+   <children>
+      <ImageView fitHeight="600.0" fitWidth="500.0"  layoutX="40.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@icons/login.png" />
+         </image>
+      </ImageView>
+
+      <ImageView fitHeight="120.0" fitWidth="100.0" layoutX="683.0" layoutY="97.0" pickOnBounds="true"  preserveRatio="true">
+         <image>
+            <Image url="@icons/add-friend.jpg" />
+         </image>
+      </ImageView>
+
+      <TextField fx:id="UsernameTextfield" layoutX="634.0" layoutY="273.0" prefHeight="26.0" prefWidth="210.0" promptText="username" />
+      <TextField fx:id="EmailTextfield" layoutX="634.0" layoutY="323.0" prefHeight="26.0" prefWidth="210.0" promptText="email" />
+      <PasswordField fx:id="PasswordTextField" layoutX="634.0" layoutY="373.0" prefHeight="26.0" prefWidth="210.0" promptText="password" />
+      <PasswordField fx:id="PasswordConfirmTextField" layoutX="634.0" layoutY="423.0" prefHeight="26.0" prefWidth="210.0" promptText="password confirm" />
+      <Button layoutX="678.0" layoutY="515.0" mnemonicParsing="false" onAction="#SignupAction" prefHeight="30.0" prefWidth="112.0" style="-fx-background-color: #edeff2;" text="Sing up" textAlignment="CENTER">
+         <font>
+            <Font size="14.0" />
+         </font></Button>
+      <ImageView fitHeight="22.0" fitWidth="22.0" layoutX="595.0" layoutY="275.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@icons/user.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="22.0" fitWidth="22.0" layoutX="595.0" layoutY="325.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@icons/email.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="22.0" fitWidth="22.0" layoutX="595.0" layoutY="375.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@icons/password.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="22.0" fitWidth="22.0" layoutX="595.0" layoutY="425.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@icons/password.png" />
+         </image>
+      </ImageView>
+
+      <Hyperlink onAction="#LoginAction" layoutX="250.0" layoutY="515.0"  prefHeight="18.0" prefWidth="87.0" text="login" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="16.0" />
+         </font>
+      </Hyperlink>
+   </children>
+</AnchorPane>

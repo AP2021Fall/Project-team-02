@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<?import javafx.scene.control.ListView?>
+<AnchorPane prefHeight="500.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.fx.team.leader.LeaderNotificationController">
+   <children>
+      <Label alignment="CENTER" layoutY="-1.0" prefHeight="36.0" prefWidth="500.0" style="-fx-background-color: #1F8FE8;" text="NOTIFICATION PANEL" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
+
+      <Label layoutX="70.0" layoutY="50.0" text="Message:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="70.0" layoutY="100.0" text="Username:">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+
+
+      <TextField fx:id="MessageData" layoutX="180.0" layoutY="50.0" prefHeight="26.0" prefWidth="167.0" />
+      <TextField fx:id="UsernameData" layoutX="180.0" layoutY="100.0" prefHeight="26.0" prefWidth="167.0" />
+
+
+      <Button fx:id="SendToUserButton" layoutX="200.0" layoutY="200.0" mnemonicParsing="false" onAction="#onClick_UserButton" prefHeight="26.0" prefWidth="135.0" style="-fx-background-color: #1F8FE8;" text="SEND TO USER" textFill="#f2f2f2">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
+      <Button fx:id="SendToTeamButton" layoutX="200.0" layoutY="250.0" mnemonicParsing="false" onAction="#onClick_TeamButton" prefHeight="26.0" prefWidth="135.0" style="-fx-background-color: #1F8FE8;" text="SEND TO TEAM" textFill="#f2f2f2">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
+
+      <Button fx:id="BackButton" layoutX="200.0" layoutY="300.0" mnemonicParsing="false" onAction="#onClick_BackButton" prefHeight="26.0" prefWidth="135.0" style="-fx-background-color: #1F8FE8;" text="BACK" textFill="#f2f2f2">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Button>
+
+   </children>
+</AnchorPane>
