@@ -57,7 +57,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         AnchorPane mainPane = (AnchorPane) FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("Login.fxml")));
-//        AnchorPane mainPane = (AnchorPane) FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("AdminTeams.fxml")));
+//        AnchorPane mainPane = (AnchorPane) FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("LeaderBoard.fxml")));
         primaryStage.setScene(new Scene(mainPane));
         primaryStage.setTitle("Login");
         primaryStage.setResizable(false);
