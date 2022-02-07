@@ -60,19 +60,22 @@ public class ShowBoardResponse {
         this.tasks = tasks;
     }
 
-    public void print() {
-        System.out.println("Board name: " + boardName);
-        System.out.println("Board completion: " + completionPercentage);
-        System.out.println("Board failed: " + failedPercentage);
-        System.out.println("Board leader: " + leaderName);
-        System.out.println("Highest Priority:");
-        getTasksByPriority(TaskPriority.HIGHEST).stream().forEach(Task::print);
-        System.out.println("High Priority:");
-        getTasksByPriority(TaskPriority.HIGH).stream().forEach(Task::print);
-        System.out.println("Low Priority:");
-        getTasksByPriority(TaskPriority.LOW).stream().forEach(Task::print);
-        System.out.println("Lowest Priority:");
-        getTasksByPriority(TaskPriority.LOWEST).stream().forEach(Task::print);
+    public List<String> print() {
+        List<String> response = new ArrayList<>();
+        response.add("Board name: " + boardName);
+        response.add("Board completion: " + completionPercentage);
+        response.add("Board failed: " + failedPercentage);
+        response.add("Board leader: " + leaderName);
+        response.add("Highest Priority:");
+        getTasksByPriority(TaskPriority.HIGHEST).stream().forEach(t -> t.print(response));
+        response.add("High Priority:");
+        getTasksByPriority(TaskPriority.HIGH).stream().forEach(t -> t.print(response));
+        response.add("Low Priority:");
+        getTasksByPriority(TaskPriority.LOW).stream().forEach(t -> t.print(response));
+        response.add("Lowest Priority:");
+        getTasksByPriority(TaskPriority.LOWEST).stream().forEach(t -> t.print(response));
+
+        return response;
 
     }
 

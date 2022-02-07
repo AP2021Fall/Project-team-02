@@ -160,15 +160,16 @@ public class Task {
         }
     }
 
-    public void print(){
-        System.out.println("Title: " + title);
-        System.out.println("Category: " + category.getName());
-        System.out.println("Description; " + description);
-        System.out.println("Creation Date: " +creationDate);
-        System.out.println("Deadline: " + description);
+    public void print(List<String> response){
+        response.add("Title: " + title);
+        response.add("Category: " + category.getName());
+        response.add("Description; " + description);
+        response.add("Creation Date: " +creationDate);
+        response.add("Deadline: " + description);
         List<String> usernames = users.stream().map(User::getUsername).collect(Collectors.toList());
-        System.out.println("Assigned to:" + Arrays.toString(usernames.toArray()));
-        System.out.println("Status: " + category);
+        response.addAll(usernames);
+        response.add("Assigned to:" + Arrays.toString(usernames.toArray()));
+        response.add("Status: " + category);
     }
 
     public TaskTable getTable() {

@@ -346,7 +346,6 @@ public class Controller {
                 Optional<Board> teamBoard = team.getBoards().stream().filter(b -> b.getName().equals(boardName)).findAny();
                 if (teamBoard.isPresent())
                     return "There is already a board with this name";
-
                 Board board = new Board(boardName, team);
                 team.getBoards().add(board);
                 boardRepository.createBoard(board);
@@ -413,10 +412,13 @@ public class Controller {
 
             for (Message message : team.getMessages()) {
                 messages.add(message.getTxt());
-                usernames.add(userRepository.getById(message.getSenderId()).getUsername());
+                if (message.getSenderId() == 0) {
+                    usernames.add("admin");
+                } else
+                    usernames.add(userRepository.getById(message.getSenderId()).getUsername());
             }
 
-            if (messages.size() == 0)
+            if (messages.isEmpty())
                 return new ChatRoomResponse("no message yet");
 
             return new ChatRoomResponse(usernames, messages);
@@ -1141,6 +1143,16 @@ public class Controller {
                     Team team = new Team(teamName);
                     team.setLeader(user);
                     teamRepository.createTeam(team);
+
+                    Board doneBoard = new Board("done", team);
+                    team.getBoards().add(doneBoard);
+                    boardRepository.createBoard(doneBoard);
+
+                    Board failedBoard = new Board("failed", team);
+                    team.getBoards().add(failedBoard);
+                    boardRepository.createBoard(failedBoard);
+
+                    teamRepository.update(team);
                     user.getTeams().add(team);
                     userRepository.update(user);
 

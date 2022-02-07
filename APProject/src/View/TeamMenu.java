@@ -99,19 +99,19 @@ public class TeamMenu extends Menu {
         } else if (inputParse2[0].trim().equalsIgnoreCase("chatroom")) {
             this.nextMenu = new ChatRoom("chatroom", this, team, username, role);
         }else if (inputParse2[0].trim().equalsIgnoreCase("showTasks")) {
-                List<Task> tasks = controller.showAllTasks(username, team);
-                for (int i = 0; i < tasks.size(); i++) {
-                    Task task = tasks.get(i);
-                    System.out.println(i + 1
-                            + ".title: " + task.getTitle()
-                            +":id" + task.getId()
-                            + ",creation date:" + task.getCreationDate()
-                            +",deadline:" + task.getDeadLine()
-                            + ",assign to:" + Arrays.toString(task.getUsers().stream().map(User::getUsername).toArray())
-                            + ",priority:" + task.getPriority());
-                }
-                this.nextMenu = this;
-                this.execute2(team);
+            List<Task> tasks = controller.showAllTasks(username, team);
+            for (int i = 0; i < tasks.size(); i++) {
+                Task task = tasks.get(i);
+                System.out.println(i + 1
+                        + ".title: " + task.getTitle()
+                        +":id" + task.getId()
+                        + ",creation date:" + task.getCreationDate()
+                        +",deadline:" + task.getDeadLine()
+                        + ",assign to:" + Arrays.toString(task.getUsers().stream().map(User::getUsername).toArray())
+                        + ",priority:" + task.getPriority());
+            }
+            this.nextMenu = this;
+            this.execute2(team);
         } else if (inputParse2[1].trim().equalsIgnoreCase("task") && !inputParse2[0].trim().equalsIgnoreCase("create")) {
             try {
                 int taskId = Integer.parseInt(inputParse2[3]);
@@ -220,26 +220,18 @@ public class TeamMenu extends Menu {
             this.nextMenu = this;
             this.execute2(team);
         } else if (inputParse2[1].
-
                 trim().
-
                 equalsIgnoreCase("notification") && inputParse2[3].
-
                 trim().
-
                 equalsIgnoreCase("username")) {
             String response = controller.sendMessageToMember(username, team, inputParse2[4], inputParse2[2]);
             System.out.println(response);
             this.nextMenu = this;
             this.execute2(team);
         } else if (inputParse2[1].
-
                 trim().
-
                 equalsIgnoreCase("notification") && inputParse2[3].
-
                 trim().
-
                 equalsIgnoreCase("teamName")) {
             String response = controller.sendMessageToTeam(username, inputParse2[4], inputParse2[2]);
             System.out.println(response);
