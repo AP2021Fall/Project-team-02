@@ -2,6 +2,7 @@ package View.fx.team.share;
 
 import Controller.Controller;
 import Controller.dto.ShowCalenderResponse;
+import Model.Message;
 import View.fx.UserInfo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

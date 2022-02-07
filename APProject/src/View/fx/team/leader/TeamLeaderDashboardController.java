@@ -53,7 +53,10 @@ public class TeamLeaderDashboardController {
 
     @FXML
     void onClick_Team_Button(ActionEvent event) throws IOException {
-        System.out.println("team menu");
+        UserInfo.menuStack.add("TeamLeaderDashboard.fxml");
+        UserInfo.setTargetPanel("TeamDashboard.fxml");
+        AnchorPane profilePage = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("SelectTeam.fxml"));
+        showDashboard(event, profilePage, name + " | select team" );
     }
 
     @FXML
