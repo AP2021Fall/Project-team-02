@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="674.0" prefWidth="922.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.fx.admin.DataController">
+   <children>
+      <AnchorPane prefHeight="678.0" prefWidth="266.0" style="-fx-background-color: #257ca9;">
+         <children>
+            <Button fx:id="NotificationButton" focusTraversable="false" layoutY="72.0" mnemonicParsing="false" onAction="#onAction_NotificationButton" prefHeight="69.0" prefWidth="266.0" style="-fx-background-color: #1F8FE8;" text="  Notification" textFill="WHITE">
+               <font>
+                  <Font name="Trebuchet MS Bold" size="14.0" />
+               </font>
+               <opaqueInsets>
+                  <Insets bottom="5.0" left="55.0" right="5.0" top="32.0" />
+               </opaqueInsets>
+            </Button>
+            <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="56.0" layoutY="97.0" pickOnBounds="true">
+               <image>
+                  <Image url="@icons/dashboard.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="UsersButton" defaultButton="true" layoutY="148.0" mnemonicParsing="false" onAction="#onAction_UsersButton" prefHeight="69.0" prefWidth="266.0" style="-fx-background-color: #1F8FE8;" text="Users" textFill="WHITE">
+               <font>
+                  <Font name="Trebuchet MS Bold" size="14.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" />
+               </graphic>
+            </Button>
+            <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="56.0" layoutY="173.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@icons/latesUser.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="ScoreBoardButton" defaultButton="true" layoutY="224.0" mnemonicParsing="false" onAction="#onAction_ScoreBoardButton" prefHeight="69.0" prefWidth="266.0" style="-fx-background-color: #1F8FE8;" text="Score Board" textFill="WHITE">
+               <font>
+                  <Font name="Trebuchet MS Bold" size="14.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" />
+               </graphic>
+            </Button>
+            <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="56.0" layoutY="249.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@icons/latesTv.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="TeamsButton" defaultButton="true" layoutY="304.0" mnemonicParsing="false" onAction="#onAction_TeamsButton" prefHeight="70.0" prefWidth="266.0" style="-fx-background-color: #1F8FE8;" text="Teams" textFill="WHITE">
+               <font>
+                  <Font name="Trebuchet MS Bold" size="14.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" />
+               </graphic>
+            </Button>
+            <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="56.0" layoutY="329.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@icons/interview.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="showData" defaultButton="true" layoutY="381.0" mnemonicParsing="false" onAction="#onAction_UsersButton" prefHeight="69.0" prefWidth="266.0" style="-fx-background-color: #1F8FE8;" text="Data" textFill="WHITE">
+               <font>
+                  <Font name="Trebuchet MS Bold" size="14.0" />
+               </font>
+            </Button>
+            <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="54.0" layoutY="404.0" pickOnBounds="true">
+               <image>
+                  <Image url="@icons/Data.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="LogoutButton" defaultButton="true" layoutY="585.0" mnemonicParsing="false" onAction="#onAction_LogoutButton" prefHeight="69.0" prefWidth="266.0" style="-fx-background-color: #1F8FE8;" text="Logout" textFill="WHITE">
+               <font>
+                  <Font name="Trebuchet MS Bold" size="14.0" />
+               </font>
+            </Button>
+            <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="56.0" layoutY="610.0" pickOnBounds="true">
+               <image>
+                  <Image url="@icons/latesLogout.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+      <HBox layoutX="266.0" layoutY="34.0" prefHeight="70.0" prefWidth="656.0">
+         <children>
+            <Label alignment="CENTER" prefHeight="74.0" prefWidth="657.0" style="-fx-background-color: #257ca9;" text="App Data" textFill="#f5eeee">
+               <font>
+                  <Font name="Trebuchet MS Bold" size="20.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      <Label layoutX="302.0" layoutY="176.0" text="All Users :">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="602.0" layoutY="176.0" text="All Teams :">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="299.0" layoutY="127.0" text="App Detail :" textFill="#5e5c5c">
+         <font>
+            <Font name="Trebuchet MS Bold" size="20.0" />
+         </font>
+      </Label>
+      <Label layoutX="302.0" layoutY="225.0" text="Done Tasks :">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="602.0" layoutY="225.0" text="Fail Tasks :">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="302.0" layoutY="277.0" text="Best Users :">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="t1" layoutX="399.0" layoutY="176.0" />
+      <Label fx:id="t2" layoutX="705.0" layoutY="176.0" />
+      <Label fx:id="t3" layoutX="705.0" layoutY="225.0" />
+      <Label fx:id="t4" layoutX="399.0" layoutY="270.0" />
+      <Label fx:id="t5" layoutX="397.0" layoutY="225.0" />
+      <ImageView fitHeight="70.0" fitWidth="66.0" layoutX="856.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@icons/user(1).png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

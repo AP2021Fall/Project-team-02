@@ -1,24 +1,26 @@
 package View.fx.admin;
 
 import Controller.Controller;
+import Controller.dto.ScoreBoardResponse;
 import View.fx.UserInfo;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
-public class AdminDashboardController implements Initializable {
+public class ScoreBoardController {
     private Controller controller = new Controller();
-
     @FXML
     private Button showData ;
 
@@ -34,11 +36,33 @@ public class AdminDashboardController implements Initializable {
     @FXML
     private Button TeamsButton;
 
-
     @FXML
     private Button LogoutButton;
 
+    @FXML
+    private Button showScoreBoard;
 
+    @FXML
+    private TextField teamName;
+
+    @FXML
+    private TextField Scores;
+
+
+    @FXML
+    void onAction_ShowScoreBoard(ActionEvent event) throws IOException {
+        try {
+            String teamName1 ;
+            teamName1 = teamName.getText() ;
+            ScoreBoardResponse scoreBoardResponse = controller.showScoreBoard(teamName1) ;
+            Map<String, Integer> usersScore = new HashMap<>();
+            usersScore = scoreBoardResponse.getUsersScores() ;
+            showScoreBoard.setText(usersScore.toString());
+        }
+        catch (Exception e) {
+            showScoreBoard.setText("Team not Found!");
+        }
+    }
     @FXML
     void onAction_ScoreBoardButton(ActionEvent event) throws IOException {
         AnchorPane adminScore = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("AdminScoreBoard.fxml")) ;
@@ -53,7 +77,7 @@ public class AdminDashboardController implements Initializable {
 
     @FXML
     void onAction_UsersButton(ActionEvent event) throws IOException {
-       // to do
+        // to do
     }
 
     @FXML
@@ -63,7 +87,7 @@ public class AdminDashboardController implements Initializable {
     }
     @FXML
     void onAction_DataButton(ActionEvent event) throws  IOException{
-         AnchorPane adminScore = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("DataDashbord.fxml")) ;
+        AnchorPane adminScore = (AnchorPane) FXMLLoader.load(getClass().getClassLoader().getResource("DataDashbord.fxml")) ;
         showDashboard(event , adminScore , "Jira | Admin | Dashboard");
     }
     @FXML
@@ -79,10 +103,9 @@ public class AdminDashboardController implements Initializable {
 
     }
 
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
+    public void initialize(URL arg0, ResourceBundle arg1) {
         // I dont Know!
-	}
+    }
 
     private void showDashboard(ActionEvent event, AnchorPane teamMemberDashboard, String title) {
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -93,7 +116,3 @@ public class AdminDashboardController implements Initializable {
         window.show();
     }
 }
-
-
-
-
